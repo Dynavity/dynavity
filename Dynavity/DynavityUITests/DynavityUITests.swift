@@ -9,6 +9,8 @@ import XCTest
 
 class DynavityUITests: XCTestCase {
 
+    // TODO: Remove disabling of SwiftLint rules once tests are implemented.
+    // swiftlint:disable empty_xctest_method overridden_super_call
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
@@ -22,6 +24,7 @@ class DynavityUITests: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+    // swiftlint:enable empty_xctest_method overridden_super_call
 
     func testExample() throws {
         // UI tests must launch the application that they test.
