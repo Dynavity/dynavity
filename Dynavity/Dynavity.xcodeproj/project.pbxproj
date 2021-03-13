@@ -72,6 +72,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D386B52A25FCC23200D3132C /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		D386B52B25FCC23B00D3132C /* view */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
+		D386B52C25FCC24A00D3132C /* view-model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "view-model";
+			sourceTree = "<group>";
+		};
 		D3D5DD6225FCBC3C00143DAF = {
 			isa = PBXGroup;
 			children = (
@@ -95,6 +116,9 @@
 		D3D5DD6D25FCBC3C00143DAF /* Dynavity */ = {
 			isa = PBXGroup;
 			children = (
+				D386B52C25FCC24A00D3132C /* view-model */,
+				D386B52B25FCC23B00D3132C /* view */,
+				D386B52A25FCC23200D3132C /* model */,
 				D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */,
 				D3D5DD7025FCBC3C00143DAF /* ContentView.swift */,
 				D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */,
@@ -140,6 +164,7 @@
 				D3D5DD6725FCBC3C00143DAF /* Sources */,
 				D3D5DD6825FCBC3C00143DAF /* Frameworks */,
 				D3D5DD6925FCBC3C00143DAF /* Resources */,
+				D386B53325FCC3BB00D3132C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -253,6 +278,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D386B53325FCC3BB00D3132C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint autocorrect && swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D3D5DD6725FCBC3C00143DAF /* Sources */ = {
