@@ -13,6 +13,10 @@
 		D3D5DD7625FCBC3E00143DAF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7525FCBC3E00143DAF /* Preview Assets.xcassets */; };
 		D3D5DD8125FCBC3E00143DAF /* DynavityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD8025FCBC3E00143DAF /* DynavityTests.swift */; };
 		D3D5DD8C25FCBC3E00143DAF /* DynavityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD8B25FCBC3E00143DAF /* DynavityUITests.swift */; };
+		D3EB577625FE010300862503 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB577525FE010300862503 /* CanvasView.swift */; };
+		D3EB577F25FE01A100862503 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB577E25FE01A100862503 /* Canvas.swift */; };
+		D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */; };
+		D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +49,10 @@
 		D3D5DD8725FCBC3E00143DAF /* DynavityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DynavityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD8B25FCBC3E00143DAF /* DynavityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityUITests.swift; sourceTree = "<group>"; };
 		D3D5DD8D25FCBC3E00143DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3EB577525FE010300862503 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		D3EB577E25FE01A100862503 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementProtocol.swift; sourceTree = "<group>"; };
+		D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCanvasElement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +83,9 @@
 		D386B52A25FCC23200D3132C /* model */ = {
 			isa = PBXGroup;
 			children = (
+				D3EB577D25FE018D00862503 /* canvas */,
+				D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */,
+				D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -82,6 +93,7 @@
 		D386B52B25FCC23B00D3132C /* view */ = {
 			isa = PBXGroup;
 			children = (
+				D3EB577425FE00AD00862503 /* canvas */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -152,6 +164,22 @@
 				D3D5DD8D25FCBC3E00143DAF /* Info.plist */,
 			);
 			path = DynavityUITests;
+			sourceTree = "<group>";
+		};
+		D3EB577425FE00AD00862503 /* canvas */ = {
+			isa = PBXGroup;
+			children = (
+				D3EB577525FE010300862503 /* CanvasView.swift */,
+			);
+			path = canvas;
+			sourceTree = "<group>";
+		};
+		D3EB577D25FE018D00862503 /* canvas */ = {
+			isa = PBXGroup;
+			children = (
+				D3EB577E25FE01A100862503 /* Canvas.swift */,
+			);
+			path = canvas;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,8 +332,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
 				D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
+				D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */,
+				D3EB577625FE010300862503 /* CanvasView.swift in Sources */,
+				D3EB577F25FE01A100862503 /* Canvas.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
