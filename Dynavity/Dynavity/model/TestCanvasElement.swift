@@ -6,12 +6,12 @@ import CoreGraphics
  */
 struct TestCanvasElement: CanvasElementProtocol, Identifiable {
     typealias elementID = UUID
-    
-    var id: elementID = elementID()
+
+    var id = elementID()
     var position: CGPoint = .zero
     var text: String = "Test Canvas Element"
-    
+
     static func == (lhs: TestCanvasElement, rhs: TestCanvasElement) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
     }
 }

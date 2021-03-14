@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */; };
-		D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD7025FCBC3C00143DAF /* ContentView.swift */; };
 		D3D5DD7325FCBC3E00143DAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */; };
 		D3D5DD7625FCBC3E00143DAF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7525FCBC3E00143DAF /* Preview Assets.xcassets */; };
 		D3D5DD8125FCBC3E00143DAF /* DynavityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD8025FCBC3E00143DAF /* DynavityTests.swift */; };
@@ -39,7 +38,6 @@
 /* Begin PBXFileReference section */
 		D3D5DD6B25FCBC3C00143DAF /* Dynavity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynavity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityApp.swift; sourceTree = "<group>"; };
-		D3D5DD7025FCBC3C00143DAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3D5DD7525FCBC3E00143DAF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D3D5DD7725FCBC3E00143DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -132,7 +130,6 @@
 				D386B52B25FCC23B00D3132C /* view */,
 				D386B52A25FCC23200D3132C /* model */,
 				D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */,
-				D3D5DD7025FCBC3C00143DAF /* ContentView.swift */,
 				D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */,
 				D3D5DD7725FCBC3E00143DAF /* Info.plist */,
 				D3D5DD7425FCBC3E00143DAF /* Preview Content */,
@@ -333,7 +330,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
-				D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */,
 				D3EB577625FE010300862503 /* CanvasView.swift in Sources */,
