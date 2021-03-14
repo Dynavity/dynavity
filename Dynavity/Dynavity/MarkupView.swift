@@ -13,8 +13,9 @@ struct MarkupView: View {
     var body: some View {
         HStack {
             TextEditor(text: $viewModel.markupTextBlock.rawText)
+            Divider()
             WebView(rawHtml: viewModel.markupTextBlock.toHtml())
-        }
+        }.addCardOverlay().padding()
     }
 }
 
