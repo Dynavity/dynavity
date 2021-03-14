@@ -3,10 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B7FE818025FDEFF500411A05 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE817F25FDEFF500411A05 /* WebView.swift */; };
+		B7FE818B25FE05BB00411A05 /* MarkupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE818A25FE05BB00411A05 /* MarkupView.swift */; };
+		B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */; };
+		B7FE819625FE08D000411A05 /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = B7FE819525FE08D000411A05 /* Ink */; };
+		B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */; };
+		B7FE81B025FE37CF00411A05 /* MarkupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81AF25FE37CF00411A05 /* MarkupViewModel.swift */; };
 		D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */; };
 		D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD7025FCBC3C00143DAF /* ContentView.swift */; };
 		D3D5DD7325FCBC3E00143DAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */; };
@@ -33,6 +39,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B7FE817F25FDEFF500411A05 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WebView.swift; path = Dynavity/WebView.swift; sourceTree = SOURCE_ROOT; };
+		B7FE818A25FE05BB00411A05 /* MarkupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MarkupView.swift; path = Dynavity/MarkupView.swift; sourceTree = SOURCE_ROOT; };
+		B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HtmlRenderable.swift; path = Dynavity/model/HtmlRenderable.swift; sourceTree = SOURCE_ROOT; };
+		B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextBlock.swift; sourceTree = "<group>"; };
+		B7FE81AF25FE37CF00411A05 /* MarkupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MarkupViewModel.swift; path = Dynavity/model/MarkupViewModel.swift; sourceTree = SOURCE_ROOT; };
 		D3D5DD6B25FCBC3C00143DAF /* Dynavity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynavity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityApp.swift; sourceTree = "<group>"; };
 		D3D5DD7025FCBC3C00143DAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -52,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7FE819625FE08D000411A05 /* Ink in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +87,8 @@
 		D386B52A25FCC23200D3132C /* model */ = {
 			isa = PBXGroup;
 			children = (
+				B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */,
+				B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -82,6 +96,8 @@
 		D386B52B25FCC23B00D3132C /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B7FE817F25FDEFF500411A05 /* WebView.swift */,
+				B7FE818A25FE05BB00411A05 /* MarkupView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -89,6 +105,7 @@
 		D386B52C25FCC24A00D3132C /* view-model */ = {
 			isa = PBXGroup;
 			children = (
+				B7FE81AF25FE37CF00411A05 /* MarkupViewModel.swift */,
 			);
 			path = "view-model";
 			sourceTree = "<group>";
@@ -171,6 +188,9 @@
 			dependencies = (
 			);
 			name = Dynavity;
+			packageProductDependencies = (
+				B7FE819525FE08D000411A05 /* Ink */,
+			);
 			productName = Dynavity;
 			productReference = D3D5DD6B25FCBC3C00143DAF /* Dynavity.app */;
 			productType = "com.apple.product-type.application";
@@ -242,6 +262,9 @@
 				Base,
 			);
 			mainGroup = D3D5DD6225FCBC3C00143DAF;
+			packageReferences = (
+				B7FE819425FE08D000411A05 /* XCRemoteSwiftPackageReference "ink" */,
+			);
 			productRefGroup = D3D5DD6C25FCBC3C00143DAF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -305,7 +328,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */,
+				B7FE81B025FE37CF00411A05 /* MarkupViewModel.swift in Sources */,
+				B7FE818025FDEFF500411A05 /* WebView.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
+				B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */,
+				B7FE818B25FE05BB00411A05 /* MarkupView.swift in Sources */,
+				B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +647,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B7FE819425FE08D000411A05 /* XCRemoteSwiftPackageReference "ink" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnsundell/ink.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B7FE819525FE08D000411A05 /* Ink */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B7FE819425FE08D000411A05 /* XCRemoteSwiftPackageReference "ink" */;
+			productName = Ink;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D3D5DD6325FCBC3C00143DAF /* Project object */;
 }
