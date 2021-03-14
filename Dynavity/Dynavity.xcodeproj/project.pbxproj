@@ -16,6 +16,8 @@
 		D3EB577F25FE01A100862503 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB577E25FE01A100862503 /* Canvas.swift */; };
 		D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */; };
 		D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */; };
+		D3EB579425FE712300862503 /* CanvasElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB579325FE712300862503 /* CanvasElementView.swift */; };
+		D3EB579925FE749F00862503 /* CanvasElementMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB579825FE749F00862503 /* CanvasElementMapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		D3EB577E25FE01A100862503 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementProtocol.swift; sourceTree = "<group>"; };
 		D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCanvasElement.swift; sourceTree = "<group>"; };
+		D3EB579325FE712300862503 /* CanvasElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementView.swift; sourceTree = "<group>"; };
+		D3EB579825FE749F00862503 /* CanvasElementMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementMapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,8 @@
 			isa = PBXGroup;
 			children = (
 				D3EB577425FE00AD00862503 /* canvas */,
+				D3EB579325FE712300862503 /* CanvasElementView.swift */,
+				D3EB579825FE749F00862503 /* CanvasElementMapView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -332,7 +338,9 @@
 				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */,
+				D3EB579425FE712300862503 /* CanvasElementView.swift in Sources */,
 				D3EB577625FE010300862503 /* CanvasView.swift in Sources */,
+				D3EB579925FE749F00862503 /* CanvasElementMapView.swift in Sources */,
 				D3EB577F25FE01A100862503 /* Canvas.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

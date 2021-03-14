@@ -9,7 +9,11 @@ struct TestCanvasElement: CanvasElementProtocol, Identifiable {
 
     var id = elementID()
     var position: CGPoint = .zero
-    var text: String = "Test Canvas Element"
+    var text: String = ""
+
+    var visualID: String {
+        id.uuidString + "\(text.hashValue)"
+    }
 
     static func == (lhs: TestCanvasElement, rhs: TestCanvasElement) -> Bool {
         lhs.id == rhs.id

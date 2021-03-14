@@ -4,6 +4,10 @@ struct CanvasView: View {
     @ObservedObject var canvas: Canvas
 
     var body: some View {
+        ZStack {
+            Rectangle().fill(Color.blue)
+            CanvasElementMapView(elements: $canvas.canvasElements)
+        }
         Text("This is the canvas")
     }
 }
