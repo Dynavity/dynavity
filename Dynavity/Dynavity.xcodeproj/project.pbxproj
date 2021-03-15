@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B7FE818025FDEFF500411A05 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE817F25FDEFF500411A05 /* WebView.swift */; };
-		B7FE818B25FE05BB00411A05 /* MarkupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE818A25FE05BB00411A05 /* MarkupView.swift */; };
+		B72BE20425FF09EB0025C64D /* MarkupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */; };
+		B72BE20B25FF09FC0025C64D /* MarkupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20825FF09FC0025C64D /* MarkupView.swift */; };
+		B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20925FF09FC0025C64D /* WebView.swift */; };
+		B72BE20D25FF09FC0025C64D /* View+AddCardOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */; };
 		B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */; };
 		B7FE819625FE08D000411A05 /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = B7FE819525FE08D000411A05 /* Ink */; };
 		B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */; };
-		B7FE81B025FE37CF00411A05 /* MarkupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81AF25FE37CF00411A05 /* MarkupViewModel.swift */; };
-		B7FE81CE25FE495700411A05 /* View+AddCardOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81CD25FE495700411A05 /* View+AddCardOverlay.swift */; };
 		D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */; };
 		D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD7025FCBC3C00143DAF /* ContentView.swift */; };
 		D3D5DD7325FCBC3E00143DAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */; };
@@ -40,12 +40,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B7FE817F25FDEFF500411A05 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WebView.swift; path = Dynavity/WebView.swift; sourceTree = SOURCE_ROOT; };
-		B7FE818A25FE05BB00411A05 /* MarkupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MarkupView.swift; path = Dynavity/MarkupView.swift; sourceTree = SOURCE_ROOT; };
+		B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupViewModel.swift; sourceTree = "<group>"; };
+		B72BE20825FF09FC0025C64D /* MarkupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupView.swift; sourceTree = "<group>"; };
+		B72BE20925FF09FC0025C64D /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+AddCardOverlay.swift"; sourceTree = "<group>"; };
 		B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HtmlRenderable.swift; path = Dynavity/model/HtmlRenderable.swift; sourceTree = SOURCE_ROOT; };
 		B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextBlock.swift; sourceTree = "<group>"; };
-		B7FE81AF25FE37CF00411A05 /* MarkupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MarkupViewModel.swift; path = Dynavity/model/MarkupViewModel.swift; sourceTree = SOURCE_ROOT; };
-		B7FE81CD25FE495700411A05 /* View+AddCardOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "View+AddCardOverlay.swift"; path = "Dynavity/model/View+AddCardOverlay.swift"; sourceTree = SOURCE_ROOT; };
 		D3D5DD6B25FCBC3C00143DAF /* Dynavity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynavity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityApp.swift; sourceTree = "<group>"; };
 		D3D5DD7025FCBC3C00143DAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,9 +98,9 @@
 		D386B52B25FCC23B00D3132C /* view */ = {
 			isa = PBXGroup;
 			children = (
-				B7FE817F25FDEFF500411A05 /* WebView.swift */,
-				B7FE818A25FE05BB00411A05 /* MarkupView.swift */,
-				B7FE81CD25FE495700411A05 /* View+AddCardOverlay.swift */,
+				B72BE20825FF09FC0025C64D /* MarkupView.swift */,
+				B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */,
+				B72BE20925FF09FC0025C64D /* WebView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 		D386B52C25FCC24A00D3132C /* view-model */ = {
 			isa = PBXGroup;
 			children = (
-				B7FE81AF25FE37CF00411A05 /* MarkupViewModel.swift */,
+				B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */,
 			);
 			path = "view-model";
 			sourceTree = "<group>";
@@ -331,13 +331,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */,
-				B7FE81B025FE37CF00411A05 /* MarkupViewModel.swift in Sources */,
-				B7FE818025FDEFF500411A05 /* WebView.swift in Sources */,
+				B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */,
-				B7FE818B25FE05BB00411A05 /* MarkupView.swift in Sources */,
+				B72BE20425FF09EB0025C64D /* MarkupViewModel.swift in Sources */,
 				B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */,
-				B7FE81CE25FE495700411A05 /* View+AddCardOverlay.swift in Sources */,
+				B72BE20D25FF09FC0025C64D /* View+AddCardOverlay.swift in Sources */,
+				B72BE20B25FF09FC0025C64D /* MarkupView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
