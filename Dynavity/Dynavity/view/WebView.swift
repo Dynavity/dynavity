@@ -1,10 +1,3 @@
-//
-//  WebView.swift
-//  Dynavity
-//
-//  Created by Sebastian on 14/3/21.
-//
-
 import SwiftUI
 import WebKit
 
