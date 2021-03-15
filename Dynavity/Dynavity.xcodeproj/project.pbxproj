@@ -15,11 +15,16 @@
 		B7FE819625FE08D000411A05 /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = B7FE819525FE08D000411A05 /* Ink */; };
 		B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */; };
 		D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */; };
-		D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD7025FCBC3C00143DAF /* ContentView.swift */; };
 		D3D5DD7325FCBC3E00143DAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */; };
 		D3D5DD7625FCBC3E00143DAF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7525FCBC3E00143DAF /* Preview Assets.xcassets */; };
 		D3D5DD8125FCBC3E00143DAF /* DynavityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD8025FCBC3E00143DAF /* DynavityTests.swift */; };
 		D3D5DD8C25FCBC3E00143DAF /* DynavityUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD8B25FCBC3E00143DAF /* DynavityUITests.swift */; };
+		D3EB577625FE010300862503 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB577525FE010300862503 /* CanvasView.swift */; };
+		D3EB577F25FE01A100862503 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB577E25FE01A100862503 /* Canvas.swift */; };
+		D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */; };
+		D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */; };
+		D3EB579425FE712300862503 /* CanvasElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB579325FE712300862503 /* CanvasElementView.swift */; };
+		D3EB579925FE749F00862503 /* CanvasElementMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3EB579825FE749F00862503 /* CanvasElementMapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +53,6 @@
 		B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextBlock.swift; sourceTree = "<group>"; };
 		D3D5DD6B25FCBC3C00143DAF /* Dynavity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynavity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityApp.swift; sourceTree = "<group>"; };
-		D3D5DD7025FCBC3C00143DAF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D3D5DD7525FCBC3E00143DAF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D3D5DD7725FCBC3E00143DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -58,6 +62,12 @@
 		D3D5DD8725FCBC3E00143DAF /* DynavityUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DynavityUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD8B25FCBC3E00143DAF /* DynavityUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityUITests.swift; sourceTree = "<group>"; };
 		D3D5DD8D25FCBC3E00143DAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D3EB577525FE010300862503 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		D3EB577E25FE01A100862503 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementProtocol.swift; sourceTree = "<group>"; };
+		D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCanvasElement.swift; sourceTree = "<group>"; };
+		D3EB579325FE712300862503 /* CanvasElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementView.swift; sourceTree = "<group>"; };
+		D3EB579825FE749F00862503 /* CanvasElementMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasElementMapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +99,9 @@
 		D386B52A25FCC23200D3132C /* model */ = {
 			isa = PBXGroup;
 			children = (
+				D3EB577D25FE018D00862503 /* canvas */,
+				D3EB578625FE69B800862503 /* CanvasElementProtocol.swift */,
+				D3EB578B25FE6AC600862503 /* TestCanvasElement.swift */,
 				B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */,
 				B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */,
 			);
@@ -98,6 +111,9 @@
 		D386B52B25FCC23B00D3132C /* view */ = {
 			isa = PBXGroup;
 			children = (
+				D3EB577425FE00AD00862503 /* canvas */,
+				D3EB579325FE712300862503 /* CanvasElementView.swift */,
+				D3EB579825FE749F00862503 /* CanvasElementMapView.swift */,
 				B72BE20825FF09FC0025C64D /* MarkupView.swift */,
 				B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */,
 				B72BE20925FF09FC0025C64D /* WebView.swift */,
@@ -140,7 +156,6 @@
 				D386B52B25FCC23B00D3132C /* view */,
 				D386B52A25FCC23200D3132C /* model */,
 				D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */,
-				D3D5DD7025FCBC3C00143DAF /* ContentView.swift */,
 				D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */,
 				D3D5DD7725FCBC3E00143DAF /* Info.plist */,
 				D3D5DD7425FCBC3E00143DAF /* Preview Content */,
@@ -172,6 +187,22 @@
 				D3D5DD8D25FCBC3E00143DAF /* Info.plist */,
 			);
 			path = DynavityUITests;
+			sourceTree = "<group>";
+		};
+		D3EB577425FE00AD00862503 /* canvas */ = {
+			isa = PBXGroup;
+			children = (
+				D3EB577525FE010300862503 /* CanvasView.swift */,
+			);
+			path = canvas;
+			sourceTree = "<group>";
+		};
+		D3EB577D25FE018D00862503 /* canvas */ = {
+			isa = PBXGroup;
+			children = (
+				D3EB577E25FE01A100862503 /* Canvas.swift */,
+			);
+			path = canvas;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -330,7 +361,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3D5DD7125FCBC3C00143DAF /* ContentView.swift in Sources */,
+				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
+				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
+				D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */,
+				D3EB579425FE712300862503 /* CanvasElementView.swift in Sources */,
+				D3EB577625FE010300862503 /* CanvasView.swift in Sources */,
+				D3EB579925FE749F00862503 /* CanvasElementMapView.swift in Sources */,
+				D3EB577F25FE01A100862503 /* Canvas.swift in Sources */,
 				B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */,
