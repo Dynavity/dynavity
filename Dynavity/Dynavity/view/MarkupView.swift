@@ -5,9 +5,10 @@ struct MarkupView: View {
 
     var body: some View {
         HStack {
-            TextEditor(text: $viewModel.markupTextBlock.rawText)
+            TextEditor(text: $viewModel.markupTextBlock.text)
+                .font(.custom("Custom", size: viewModel.markupTextBlock.fontSize))
             Divider()
-            WebView(rawHtml: viewModel.markupTextBlock.toHtml())
+            WebView(rawHtml: viewModel.rawHtml)
         }.addCardOverlay().padding()
     }
 }

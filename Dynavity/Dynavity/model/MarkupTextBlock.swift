@@ -1,21 +1,20 @@
-import Ink
+import CoreGraphics
+import Foundation
 
-struct MarkupTextBlock {
-    private enum MarkupType {
-        case markdown
+struct MarkupTextBlock: TextBlock {
+    enum MarkupType: String {
+        case markdown, latex
     }
 
-    private let parser = MarkdownParser()
-    private let markupType: MarkupType = .markdown
-
-    var rawText: String = ""
-}
-
-extension MarkupTextBlock: HtmlRenderable {
-    func toHtml() -> String {
-        switch markupType {
-        case .markdown:
-            return parser.html(from: rawText)
-        }
+    var id = UUID()
+    var text: String = ""
+    var visualID: String {
+        id.uuidString + "\(text.hashValue)"
     }
+
+    // TODO: update these with actual values
+    var position: CGPoint = .zero
+    var fontSize: CGFloat = 14
+
+    let markupType: MarkupType = .latex
 }
