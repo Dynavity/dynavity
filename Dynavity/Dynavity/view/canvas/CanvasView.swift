@@ -7,7 +7,6 @@ struct CanvasView: View {
     @State var portalPosition: CGPoint = .zero
     @State var dragOffset: CGSize = .zero
     @State var isDragging: Bool = false
-    @State var isDraggingCanvas: Bool = false
 
     // For zoom interactions
     @State var zoomScale: CGFloat = 1.0
@@ -29,7 +28,7 @@ struct CanvasView: View {
                             handleDragChange(value, containerSize: geometry.size)
                         }
                         .onEnded { value in
-                                handleDragEnd(value)
+                            handleDragEnd(value)
                         })
             .gesture(MagnificationGesture()
                         .onChanged { value in
@@ -54,26 +53,17 @@ struct CanvasView_Previews: PreviewProvider {
 extension CanvasView {
     func handleDragChange(_ value: DragGesture.Value, containerSize: CGSize) {
         isDragging = true
-        // TODO: Add logic to determine dragging canvas or canvas element
-        isDraggingCanvas = true
-
-        if isDraggingCanvas {
-            dragOffset = value.translation
-        } else {
-            // TODO: Add handle canvas element translation
-        }
+        dragOffset = value.translation
     }
 
     func handleDragEnd(_ value: DragGesture.Value) {
         isDragging = false
         dragOffset = .zero
 
-        if isDraggingCanvas {
-            portalPosition = CGPoint(
-                x: portalPosition.x + value.translation.width,
-                y: portalPosition.y + value.translation.height
-            )
-        }
+        portalPosition = CGPoint(
+            x: portalPosition.x + value.translation.width,
+            y: portalPosition.y + value.translation.height
+        )
     }
 
     func scaledOffset(_ scale: CGFloat, initialValue: CGPoint) -> CGPoint {
