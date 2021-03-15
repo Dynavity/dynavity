@@ -11,7 +11,6 @@ struct CanvasElementView: View {
             .frame(width: CanvasElementView.width,
                    height: CanvasElementView.width,
                    alignment: .center)
-            .overlay(Text(element.text))
     }
 }
 
