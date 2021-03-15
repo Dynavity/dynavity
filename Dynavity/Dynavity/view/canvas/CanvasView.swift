@@ -4,12 +4,12 @@ struct CanvasView: View {
     @ObservedObject var viewModel = CanvasViewModel()
 
     // For drag interactions
-    @State var portalPosition: CGPoint = .zero
-    @State var dragOffset: CGSize = .zero
-    @State var isDragging: Bool = false
+    @State var portalPosition = CGPoint()
+    @State var dragOffset = CGSize()
+    @State var isDragging = false
 
     // For zoom interactions
-    @State var zoomScale: CGFloat = 1.0
+    @State var zoomScale = CGFloat(1.0)
     @State var initialZoomScale: CGFloat?
     @State var initialPortalPosition: CGPoint?
 
