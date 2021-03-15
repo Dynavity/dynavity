@@ -1,14 +1,8 @@
-//
-//  CanvasElementView.swift
-//  Dynavity
-//
-//  Created by Hans Sebastian Tirtaputra on 15/3/21.
-//
-
 import SwiftUI
 
 struct CanvasElementView: View {
-    static let width = CGFloat(150) // arbitrary value for now
+    // TODO: Change this once actual canvas elemnts are created, arbitrary for now
+    static let width = CGFloat(150)
     @State var element: CanvasElementProtocol
 
     var body: some View {
