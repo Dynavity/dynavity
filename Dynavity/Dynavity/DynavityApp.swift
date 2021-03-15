@@ -11,7 +11,7 @@ import SwiftUI
 struct DynavityApp: App {
     var body: some Scene {
         WindowGroup {
-            CanvasView()
+            SurfaceView()
         }
     }
 }
