@@ -1,10 +1,3 @@
-//
-//  View+AddCardOverlay.swift
-//  Dynavity
-//
-//  Created by Sebastian on 14/3/21.
-//
-
 import SwiftUI
 
 extension View {
