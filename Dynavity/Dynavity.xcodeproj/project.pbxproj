@@ -15,7 +15,6 @@
 		B7FE819625FE08D000411A05 /* Ink in Frameworks */ = {isa = PBXBuildFile; productRef = B7FE819525FE08D000411A05 /* Ink */; };
 		B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */; };
 		D3C0218825FF5B28005AA4EB /* CanvasViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0218725FF5B28005AA4EB /* CanvasViewModel.swift */; };
-		D3C0219925FF5E26005AA4EB /* SurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C0219825FF5E26005AA4EB /* SurfaceView.swift */; };
 		D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */; };
 		D3D5DD7325FCBC3E00143DAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */; };
 		D3D5DD7625FCBC3E00143DAF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3D5DD7525FCBC3E00143DAF /* Preview Assets.xcassets */; };
@@ -54,7 +53,6 @@
 		B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HtmlRenderable.swift; path = Dynavity/model/HtmlRenderable.swift; sourceTree = SOURCE_ROOT; };
 		B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextBlock.swift; sourceTree = "<group>"; };
 		D3C0218725FF5B28005AA4EB /* CanvasViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasViewModel.swift; sourceTree = "<group>"; };
-		D3C0219825FF5E26005AA4EB /* SurfaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurfaceView.swift; sourceTree = "<group>"; };
 		D3D5DD6B25FCBC3C00143DAF /* Dynavity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynavity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3D5DD6E25FCBC3C00143DAF /* DynavityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynavityApp.swift; sourceTree = "<group>"; };
 		D3D5DD7225FCBC3E00143DAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				D3EB577525FE010300862503 /* CanvasView.swift */,
-				D3C0219825FF5E26005AA4EB /* SurfaceView.swift */,
 			);
 			path = canvas;
 			sourceTree = "<group>";
@@ -367,7 +364,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D3C0219925FF5E26005AA4EB /* SurfaceView.swift in Sources */,
 				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */,
