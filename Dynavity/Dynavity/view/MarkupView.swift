@@ -50,7 +50,7 @@ struct MarkupView: View {
                 .opacity(opacity)
                 .foregroundColor(Color.UI.blue)
             }
-        }.background(Color.UI.background)
+        }.background(Color.UI.base2)
     }
 }
 
