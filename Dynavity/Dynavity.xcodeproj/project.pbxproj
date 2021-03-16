@@ -13,6 +13,7 @@
 		B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20925FF09FC0025C64D /* WebView.swift */; };
 		B72BE20D25FF09FC0025C64D /* View+AddCardOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */; };
 		B72BE22A25FF21640025C64D /* TextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE22925FF21640025C64D /* TextBlock.swift */; };
+		B73AA78A2600E20C0042B181 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AA7892600E20C0042B181 /* Color.swift */; };
 		B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */; };
 		B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */; };
 		D38457B32600EE3B0021A1FF /* Comparable+Clamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38457B22600EE3B0021A1FF /* Comparable+Clamp.swift */; };
@@ -54,6 +55,7 @@
 		B72BE20925FF09FC0025C64D /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+AddCardOverlay.swift"; sourceTree = "<group>"; };
 		B72BE22925FF21640025C64D /* TextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBlock.swift; sourceTree = "<group>"; };
+		B73AA7892600E20C0042B181 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HtmlRenderable.swift; path = "Dynavity/view-model/HtmlRenderable.swift"; sourceTree = SOURCE_ROOT; };
 		B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextBlock.swift; sourceTree = "<group>"; };
 		D38457B22600EE3B0021A1FF /* Comparable+Clamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamp.swift"; sourceTree = "<group>"; };
@@ -102,6 +104,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B73AA7882600E1EB0042B181 /* colors */ = {
+			isa = PBXGroup;
+			children = (
+				B73AA7892600E20C0042B181 /* Color.swift */,
+			);
+			path = colors;
+			sourceTree = "<group>";
+		};
 		D386B52A25FCC23200D3132C /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +128,7 @@
 		D386B52B25FCC23B00D3132C /* view */ = {
 			isa = PBXGroup;
 			children = (
+				B73AA7882600E1EB0042B181 /* colors */,
 				D3EB577425FE00AD00862503 /* canvas */,
 				D3EB579325FE712300862503 /* CanvasElementView.swift */,
 				D3EB579825FE749F00862503 /* CanvasElementMapView.swift */,
@@ -370,6 +381,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
+				B73AA78A2600E20C0042B181 /* Color.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				B72BE22A25FF21640025C64D /* TextBlock.swift in Sources */,
 				D3EB578725FE69B800862503 /* CanvasElementProtocol.swift in Sources */,
