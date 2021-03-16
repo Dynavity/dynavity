@@ -1,10 +1,3 @@
-//
-//  ToolbarView.swift
-//  Dynavity
-//
-//  Created by Ian Yong on 17/3/21.
-//
-
 import SwiftUI
 
 struct ToolbarView: View {
