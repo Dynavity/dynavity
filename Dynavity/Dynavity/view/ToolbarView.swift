@@ -61,6 +61,7 @@ struct ToolbarView: View {
         }
         .frame(height: height)
         .padding(padding)
+        .background(Color(UIColor.systemGray6))
     }
 }
 

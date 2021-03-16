@@ -13,6 +13,7 @@ struct DynavityApp: App {
         WindowGroup {
             VStack(spacing: 0.0) {
                 ToolbarView()
+                Divider()
                 CanvasView()
             }
         }
