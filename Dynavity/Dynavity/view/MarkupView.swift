@@ -10,22 +10,36 @@ struct MarkupView: View {
     @State var isViewSelected: Bool = true
 
     var body: some View {
-        HStack {
-            let isPlainText = viewModel.markupTextBlock.markupType == .plaintext
+        VStack {
+            HStack {
+                let isPlainText = viewModel.markupTextBlock.markupType == .plaintext
 
-            if isViewSelected || isPlainText {
-                TextEditor(text: $viewModel.markupTextBlock.text)
-                    .font(.custom("Custom", size: viewModel.markupTextBlock.fontSize))
+                if isViewSelected || isPlainText {
+                    TextEditor(text: $viewModel.markupTextBlock.text)
+                        .font(.custom("Custom", size: viewModel.markupTextBlock.fontSize))
+                }
+
+                // Show divider only when TextEditor and WebView are both shown
+                if isViewSelected && !isPlainText {
+                    Divider()
+                }
+
+                if !isPlainText {
+                    WebView(rawHtml: viewModel.rawHtml)
+                }
             }
 
-            // Show divider only when TextEditor and WebView are both shown
-            if isViewSelected && !isPlainText {
-                Divider()
-            }
+            HStack {
+                Spacer()
+                ForEach(MarkupTextBlock.MarkupType.allCases, id: \.self) { markupType in
+                    let opacity = markupType == viewModel.markupTextBlock.markupType ? 1.0 : 0.5
 
-            if !isPlainText {
-                WebView(rawHtml: viewModel.rawHtml)
-            }
+                    Button(markupType.displayName) {
+                        viewModel.markupTextBlock.markupType = markupType
+                    }.padding(.horizontal)
+                    .opacity(opacity)
+                }
+            }.background(Color.gray.opacity(0.5))
         }
         .addCardOverlay()
         .padding()
