@@ -3,7 +3,7 @@ import Foundation
 
 struct MarkupTextBlock: TextBlock {
     enum MarkupType: String {
-        case markdown, latex
+        case plaintext, markdown, latex
     }
 
     var id = UUID()
