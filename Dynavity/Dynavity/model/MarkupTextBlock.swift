@@ -29,3 +29,5 @@ struct MarkupTextBlock: TextBlock {
 
     var markupType: MarkupType = .plaintext
 }
+
+extension MarkupTextBlock: Equatable {}
