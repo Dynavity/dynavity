@@ -2,20 +2,31 @@ import SwiftUI
 import Combine
 
 class MarkupViewModel: ObservableObject, HtmlRenderable {
-    @Published var markupTextBlock = MarkupTextBlock() {
-        didSet {
-            // TODO: possibly implement some debouncing
-            convertTextToHtml()
-        }
-    }
+    private static let debounceDelay = 1.5
+
+    @Published var markupTextBlock = MarkupTextBlock()
     @Published var rawHtml: String = ""
 
+    // Responsible for triggering a request to external API when markUpTextBlock changes
     private var cancellationToken: AnyCancellable?
+    // Responsible for retrieving data from external API
+    private var requestCancellable: AnyCancellable?
 
-    private func convertTextToHtml() {
-        let text = markupTextBlock.text
+    init() {
+        // Introduces a debounce so that we don't send too many requests out.
+        // Implementation referenced from: https://stackoverflow.com/a/57365773
+        cancellationToken = AnyCancellable($markupTextBlock.removeDuplicates()
+                                            .debounce(for: .seconds(MarkupViewModel.debounceDelay),
+                                                      scheduler: RunLoop.main)
+                                            .sink { textBlock in
+                                                self.convertTextToHtml(text: textBlock.text,
+                                                                       inputFormat: textBlock.markupType)
+                                            }
+        )
+    }
 
-        guard markupTextBlock.markupType != .plaintext else {
+    private func convertTextToHtml(text: String, inputFormat: MarkupTextBlock.MarkupType) {
+        guard inputFormat != .plaintext else {
             rawHtml = text
             return
         }
@@ -23,7 +34,7 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
         let stringEncoding: String.Encoding = .utf8
         let request = constructURLRequest(with: text.data(using: stringEncoding))
 
-        cancellationToken = URLSession.shared.dataTaskPublisher(for: request).tryMap { data, response in
+        requestCancellable = URLSession.shared.dataTaskPublisher(for: request).tryMap { data, response in
             let httpResponse = response as? HTTPURLResponse
 
             guard httpResponse?.statusCode != 400,
