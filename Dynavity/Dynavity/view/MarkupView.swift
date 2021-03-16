@@ -10,7 +10,7 @@ struct MarkupView: View {
     @State var isViewSelected: Bool = true
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             textEditorAndPreview
             statusLine
         }
@@ -48,8 +48,9 @@ struct MarkupView: View {
                     viewModel.markupTextBlock.markupType = markupType
                 }.padding(.horizontal)
                 .opacity(opacity)
+                .foregroundColor(Color.UI.blue)
             }
-        }.background(Color.gray.opacity(0.5))
+        }.background(Color.UI.background)
     }
 }
 
