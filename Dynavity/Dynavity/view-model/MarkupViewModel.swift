@@ -15,6 +15,11 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
     private func convertTextToHtml() {
         let text = markupTextBlock.text
 
+        guard markupTextBlock.markupType != .plaintext else {
+            rawHtml = text
+            return
+        }
+
         let stringEncoding: String.Encoding = .utf8
         let request = constructURLRequest(with: text.data(using: stringEncoding))
 
@@ -23,8 +28,7 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
 
             guard httpResponse?.statusCode != 400,
                   let rawHtml = String(bytes: data, encoding: stringEncoding) else {
-                // Handle bad responses by returning whatever valid html we previously had
-                return self.rawHtml
+                return "Error: Invalid / unsupported syntax used."
             }
 
             return rawHtml
