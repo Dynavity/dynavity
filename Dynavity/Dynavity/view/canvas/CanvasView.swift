@@ -4,41 +4,45 @@ struct CanvasView: View {
     @ObservedObject var viewModel = CanvasViewModel()
 
     // For drag interactions
-    @State var portalPosition = CGPoint()
+    @State var viewPositionFromCentre = CGPoint()
     @State var dragOffset = CGSize()
     @State var isDragging = false
 
     // For zoom interactions
     @State var zoomScale = CGFloat(1.0)
     @State var initialZoomScale: CGFloat?
-    @State var initialPortalPosition: CGPoint?
+    @State var initialViewPositionFromCentre: CGPoint?
 
     var body: some View {
-        GeometryReader { geometry in
+        let dragGesture = DragGesture()
+            .onChanged { value in
+                handleDragChange(value)
+            }
+            .onEnded { value in
+                handleDragEnd(value)
+            }
+
+        let magnificationGesture = MagnificationGesture()
+            .onChanged { value in
+                handleScaleChange(value)
+            }
+            .onEnded { value in
+                handleScaleChange(value)
+                initialZoomScale = nil
+                initialViewPositionFromCentre = nil
+            }
+
+        GeometryReader { _ in
             ZStack {
                 Rectangle()
                 CanvasElementMapView(elements: $viewModel.canvas.canvasElements)
                     .scaleEffect(zoomScale)
-                    .offset(x: portalPosition.x + dragOffset.width,
-                            y: portalPosition.y + dragOffset.height)
+                    .offset(x: viewPositionFromCentre.x + dragOffset.width,
+                            y: viewPositionFromCentre.y + dragOffset.height)
                     .animation(.easeIn)
             }
-            .gesture(DragGesture()
-                        .onChanged { value in
-                            handleDragChange(value, containerSize: geometry.size)
-                        }
-                        .onEnded { value in
-                            handleDragEnd(value)
-                        })
-            .gesture(MagnificationGesture()
-                        .onChanged { value in
-                            handleScaleChange(value)
-                        }
-                        .onEnded { value in
-                            handleScaleChange(value)
-                            initialZoomScale = nil
-                            initialPortalPosition = nil
-                        })
+            .gesture(dragGesture)
+            .gesture(magnificationGesture)
         }
     }
 }
@@ -51,7 +55,7 @@ struct CanvasView_Previews: PreviewProvider {
 }
 
 extension CanvasView {
-    func handleDragChange(_ value: DragGesture.Value, containerSize: CGSize) {
+    func handleDragChange(_ value: DragGesture.Value) {
         isDragging = true
         dragOffset = value.translation
     }
@@ -60,9 +64,9 @@ extension CanvasView {
         isDragging = false
         dragOffset = .zero
 
-        portalPosition = CGPoint(
-            x: portalPosition.x + value.translation.width,
-            y: portalPosition.y + value.translation.height
+        viewPositionFromCentre = CGPoint(
+            x: viewPositionFromCentre.x + value.translation.width,
+            y: viewPositionFromCentre.y + value.translation.height
         )
     }
 
@@ -76,7 +80,7 @@ extension CanvasView {
         let minScale = CGFloat(0.1)
         let maxScale = CGFloat(2.0)
         let raw = scale.magnitude * (initialValue ?? maxScale)
-        let value = max(minScale, min(maxScale, raw))
+        let value = raw.clamped(to: minScale...maxScale)
         let didClamp = raw != value
         return (value, didClamp)
     }
@@ -84,14 +88,14 @@ extension CanvasView {
     func handleScaleChange(_ value: CGFloat) {
         if initialZoomScale == nil {
             initialZoomScale = zoomScale
-            initialPortalPosition = portalPosition
+            initialViewPositionFromCentre = viewPositionFromCentre
         }
 
         let clamped = clampedScale(value, initialValue: initialZoomScale)
         zoomScale = clamped.scale
         if !clamped.didClamp,
-           let point = initialPortalPosition {
-            portalPosition = scaledOffset(value, initialValue: point)
+           let point = initialViewPositionFromCentre {
+            viewPositionFromCentre = scaledOffset(value, initialValue: point)
         }
     }
 }
