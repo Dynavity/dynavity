@@ -65,6 +65,8 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
+        // Force the toolbar to be drawn over everything else.
+        .zIndex(.infinity)
     }
 }
 
