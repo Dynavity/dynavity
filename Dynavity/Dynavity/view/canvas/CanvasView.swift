@@ -35,6 +35,7 @@ struct CanvasView: View {
         GeometryReader { _ in
             ZStack {
                 Rectangle()
+                    .fill(Color.white)
                 CanvasElementMapView(elements: $viewModel.canvas.canvasElements)
                     .scaleEffect(zoomScale)
                     .offset(x: viewPositionFromCentre.x + dragOffset.width,
