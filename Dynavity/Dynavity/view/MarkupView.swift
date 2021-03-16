@@ -7,7 +7,7 @@ struct MarkupView: View {
     // The parent view containing this view should probably implement the logic for view selection.
     // Purpose of having this state is so that when the view is not selected, the text editor will not show
     // (except when it's displaying plain text)
-    @State var isViewSelected: Bool = true
+    @State var isViewSelected = true
 
     var body: some View {
         VStack(spacing: 0) {
