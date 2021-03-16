@@ -39,6 +39,9 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
         .assign(to: \.rawHtml, on: self)
     }
 
+    /// Constructs a POST request to https://pandoc.bilimedtech.com/ that seeks to convert
+    /// the current input format into html.
+    /// - Parameter data: The data that is to be sent in the body of the request (e.g. the raw text)
     private func constructURLRequest(with data: Data?) -> URLRequest {
         let inputFormat = markupTextBlock.markupType.rawValue
         let outputFormat = "html"
@@ -54,5 +57,4 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
 
         return request
     }
-
 }
