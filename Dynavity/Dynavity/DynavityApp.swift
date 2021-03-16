@@ -11,7 +11,7 @@ import SwiftUI
 struct DynavityApp: App {
     var body: some Scene {
         WindowGroup {
-            VStack {
+            VStack(spacing: 0.0) {
                 ToolbarView()
                 CanvasView()
             }

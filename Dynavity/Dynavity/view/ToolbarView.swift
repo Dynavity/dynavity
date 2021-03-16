@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ToolbarView: View {
-    private let height: CGFloat = 40.0
-    private let padding: CGFloat = 8.0
+    private let height: CGFloat = 25.0
+    private let padding: CGFloat = 10.0
 
     private var addButton: some View {
         Menu {
@@ -60,8 +60,7 @@ struct ToolbarView: View {
             addButton
         }
         .frame(height: height)
-        .padding(.leading, padding)
-        .padding(.trailing, padding)
+        .padding(padding)
     }
 }
 
