@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4BF91843260110E500815656 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF91842260110E500815656 /* ToolbarView.swift */; };
 		B72BE20425FF09EB0025C64D /* MarkupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */; };
 		B72BE20B25FF09FC0025C64D /* MarkupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20825FF09FC0025C64D /* MarkupView.swift */; };
 		B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20925FF09FC0025C64D /* WebView.swift */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4BF91842260110E500815656 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupViewModel.swift; sourceTree = "<group>"; };
 		B72BE20825FF09FC0025C64D /* MarkupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupView.swift; sourceTree = "<group>"; };
 		B72BE20925FF09FC0025C64D /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				D3EB579325FE712300862503 /* CanvasElementView.swift */,
 				D3EB579825FE749F00862503 /* CanvasElementMapView.swift */,
 				B72BE20825FF09FC0025C64D /* MarkupView.swift */,
+				4BF91842260110E500815656 /* ToolbarView.swift */,
 				B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */,
 				B72BE20925FF09FC0025C64D /* WebView.swift */,
 			);
@@ -381,6 +384,7 @@
 				B72BE20425FF09EB0025C64D /* MarkupViewModel.swift in Sources */,
 				B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */,
 				B72BE20D25FF09FC0025C64D /* View+AddCardOverlay.swift in Sources */,
+				4BF91843260110E500815656 /* ToolbarView.swift in Sources */,
 				B72BE20B25FF09FC0025C64D /* MarkupView.swift in Sources */,
 				D38457B32600EE3B0021A1FF /* Comparable+Clamp.swift in Sources */,
 			);
