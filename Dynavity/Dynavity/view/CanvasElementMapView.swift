@@ -12,7 +12,7 @@ struct CanvasElementMapView: View {
 
     var body: some View {
         ZStack {
-            ForEach(elements, id: \.visualID) { element in
+            ForEach(elements, id: \.id) { element in
                 CanvasElementView(element: element)
                     .offset(x: element.position.x, y: element.position.y)
             }
