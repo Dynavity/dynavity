@@ -21,6 +21,7 @@ struct CanvasElementMapView: View {
                         CanvasElementView(element: element)
                     }
                 }
+                .addCardOverlay()
                 .offset(x: element.position.x, y: element.position.y)
             }
         }

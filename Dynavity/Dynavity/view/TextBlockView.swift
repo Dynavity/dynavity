@@ -13,7 +13,6 @@ struct TextBlockView: View {
     var body: some View {
         TextEditor(text: $viewModel.textBlock.text)
             .font(.custom("Custom", size: viewModel.textBlock.fontSize))
-            .addCardOverlay()
             .padding()
     }
 }
