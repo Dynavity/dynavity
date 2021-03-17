@@ -1,28 +1,39 @@
-//
-//  MarkupTextBlock.swift
-//  Dynavity
-//
-//  Created by Sebastian on 14/3/21.
-//
+import CoreGraphics
+import Foundation
 
-import Ink
-
-struct MarkupTextBlock {
-    private enum MarkupType {
-        case markdown
+struct MarkupTextBlock: CanvasElementProtocol {
+    enum MarkupType: String {
+        case markdown, latex
     }
 
-    private let parser = MarkdownParser()
-    private let markupType: MarkupType = .markdown
+    var textBlock = TextBlock()
+    var markupType: MarkupType = .markdown
 
-    var rawText: String = ""
-}
-
-extension MarkupTextBlock: HtmlRenderable {
-    func toHtml() -> String {
-        switch markupType {
-        case .markdown:
-            return parser.html(from: rawText)
+    var id: UUID {
+        textBlock.id
+    }
+    var position: CGPoint {
+        get {
+            textBlock.position
+        }
+        set {
+            textBlock.position = newValue
         }
     }
+    var visualID: String {
+        textBlock.visualID
+    }
+    var text: String {
+        get {
+            textBlock.text
+        }
+        set {
+            textBlock.text = newValue
+        }
+    }
+    var fontSize: CGFloat {
+        textBlock.fontSize
+    }
 }
+
+extension MarkupTextBlock: Equatable {}
