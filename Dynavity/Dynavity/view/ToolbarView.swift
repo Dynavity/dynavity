@@ -4,6 +4,8 @@ struct ToolbarView: View {
     private let height: CGFloat = 25.0
     private let padding: CGFloat = 10.0
 
+    @State private var displayPhotoGallery = false
+
     private var addButton: some View {
         Menu {
             Button(action: {
@@ -12,7 +14,7 @@ struct ToolbarView: View {
                 Label("Camera", systemImage: "camera")
             }
             Button(action: {
-                // TODO: Implement photo import functionality.
+                displayPhotoGallery.toggle()
             }) {
                 Label("Photo Gallery", systemImage: "photo")
             }
@@ -60,6 +62,9 @@ struct ToolbarView: View {
         )
         // Force the toolbar to be drawn over everything else.
         .zIndex(.infinity)
+        .sheet(isPresented: $displayPhotoGallery) {
+            ImagePickerView()
+        }
     }
 }
 
