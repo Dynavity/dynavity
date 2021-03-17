@@ -1,10 +1,14 @@
 import SwiftUI
 
 struct ImageCanvasElementView: View {
-    var imageCanvasElement: ImageCanvasElement
+    @ObservedObject var viewModel: ImageCanvasElementViewModel
+
+    init(imageCanvasElement: ImageCanvasElement) {
+        self.viewModel = ImageCanvasElementViewModel(imageCanvasElement: imageCanvasElement)
+    }
 
     var body: some View {
-        Image(uiImage: imageCanvasElement.image)
+        Image(uiImage: viewModel.imageCanvasElement.image)
     }
 }
 
