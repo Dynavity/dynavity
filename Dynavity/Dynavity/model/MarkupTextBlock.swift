@@ -6,6 +6,9 @@ struct MarkupTextBlock: CanvasElementProtocol {
         case markdown, latex
     }
 
+    var textBlock = TextBlock()
+    var markupType: MarkupType = .markdown
+
     var id: UUID {
         textBlock.id
     }
@@ -31,9 +34,6 @@ struct MarkupTextBlock: CanvasElementProtocol {
     var fontSize: CGFloat {
         textBlock.fontSize
     }
-
-    var textBlock = TextBlock()
-    var markupType: MarkupType = .markdown
 }
 
 extension MarkupTextBlock: Equatable {}
