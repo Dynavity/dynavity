@@ -29,7 +29,7 @@ Assuming you are at the root directory of the repository,
 Warning: The following commands will overwrite whatever githooks you previously had for `post-checkout` and `post-merge`.
 
 ```sh
-echo '#!/bin/sh\n xcodegen --spec Dynavity/project.yml --use-cache' > .git/hooks/post-checkout
+echo -e '#!/bin/sh\nxcodegen --spec Dynavity/project.yml --use-cache' > .git/hooks/post-checkout
 
 chmod +x .git/hooks/post-checkout
 
