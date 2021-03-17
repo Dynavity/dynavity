@@ -8,11 +8,25 @@
 import SwiftUI
 
 struct CanvasElementMapView: View {
-    var viewModel: CanvasViewModel
+    @ObservedObject private var viewModel: CanvasViewModel
+    // Nested `@ObservedObject`s do not trigger updates, so we need to extract `canvas` out.
+    @ObservedObject private var canvas: Canvas
+
+    init(viewModel: CanvasViewModel) {
+        self.viewModel = viewModel
+        self.canvas = viewModel.canvas
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                viewModel.moveSelectedCanvasElement(to: value.location)
+            }
+    }
 
     var body: some View {
         ZStack {
-            ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
+            ForEach(canvas.canvasElements, id: \.id) { element in
                 // The group allows us to have common view modifiers.
                 Group {
                     if let imageCanvasElement = element as? ImageCanvasElement {
@@ -25,6 +39,7 @@ struct CanvasElementMapView: View {
                 .onTapGesture {
                     viewModel.select(canvasElement: element)
                 }
+                .gesture(dragGesture)
                 .offset(x: element.position.x, y: element.position.y)
             }
         }

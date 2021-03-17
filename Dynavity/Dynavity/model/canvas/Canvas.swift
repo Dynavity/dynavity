@@ -14,4 +14,12 @@ class Canvas: ObservableObject {
     func addElement(_ element: CanvasElementProtocol) {
         canvasElements.append(element)
     }
+
+    func repositionCanvasElement(id: UUID?, to location: CGPoint) {
+        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+
+        canvasElements[index].position = location
+    }
 }

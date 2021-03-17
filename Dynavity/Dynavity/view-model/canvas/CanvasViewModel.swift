@@ -32,6 +32,10 @@ class CanvasViewModel: ObservableObject {
         selectedCanvasElement = nil
     }
 
+    func moveSelectedCanvasElement(to location: CGPoint) {
+        canvas.repositionCanvasElement(id: selectedCanvasElement?.id, to: location)
+    }
+
     func addImageCanvasElement() {
         guard let image = selectedImage else {
             return
