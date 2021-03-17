@@ -3,7 +3,7 @@ import SwiftUI
 struct ImagePickerView: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIImagePickerController
 
-    @State private var selectedImage: UIImage?
+    @Binding var selectedImage: UIImage?
     @Environment(\.presentationMode) private var presentationMode
 
     func makeUIViewController(context: Context) -> UIImagePickerController {

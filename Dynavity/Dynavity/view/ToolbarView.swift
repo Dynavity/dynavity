@@ -61,8 +61,8 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
-        .sheet(isPresented: $displayPhotoGallery) {
-            ImagePickerView()
+        .sheet(isPresented: $displayPhotoGallery, onDismiss: viewModel.addImageCanvasElement) {
+            ImagePickerView(selectedImage: $viewModel.selectedImage)
         }
         // Force the toolbar to be drawn over everything else.
         .zIndex(.infinity)
