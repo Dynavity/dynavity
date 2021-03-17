@@ -15,18 +15,18 @@ One way to find this is by going to the Build settings and choosing your team, t
 
 3. Rename `Dynavity/settings.yml.sample` to `Dynavity/settings.yml`
 ```sh
-mv Dynavity/settings.yml.sample Dynavity/settings.yml
+cp Dynavity/settings.yml.sample Dynavity/settings.yml
 ```
 
 You can now generate your project settings by navigating to the directory containing `project.yml`, and executing `xcodegen`.
 
 ### Automating project files generation
 
-To automate the process, the following githooks can added so that the `xcodegen` command will be executed on checkouts / pulls.
-
-Assuming you are at the root directory of the repository,
+To automate the process, the following githooks can be added so that the `xcodegen` command will be executed on checkouts / pulls.
 
 Warning: The following commands will overwrite whatever githooks you previously had for `post-checkout` and `post-merge`.
+
+Assuming you are at the root directory of the repository, execute the following commands:
 
 ```sh
 echo -e '#!/bin/sh\nxcodegen --spec Dynavity/project.yml --use-cache' > .git/hooks/post-checkout
