@@ -60,11 +60,11 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
-        // Force the toolbar to be drawn over everything else.
-        .zIndex(.infinity)
         .sheet(isPresented: $displayPhotoGallery) {
             ImagePickerView()
         }
+        // Force the toolbar to be drawn over everything else.
+        .zIndex(.infinity)
     }
 }
 
