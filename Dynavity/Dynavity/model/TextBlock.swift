@@ -1,6 +1,16 @@
 import CoreGraphics
+import Foundation
 
-protocol TextBlock: CanvasElementProtocol {
-    var text: String { get set }
-    var fontSize: CGFloat { get set }
+struct TextBlock: CanvasElementProtocol {
+    // TODO: replace these with actual values
+    var id = UUID()
+    var position: CGPoint = .zero
+    var visualID: String {
+        id.uuidString + "\(text.hashValue)"
+    }
+
+    var text: String = ""
+    var fontSize: CGFloat = 14
 }
+
+extension TextBlock: Equatable {}

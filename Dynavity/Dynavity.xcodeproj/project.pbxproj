@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		4BF91843260110E500815656 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF91842260110E500815656 /* ToolbarView.swift */; };
-		B72BE20425FF09EB0025C64D /* MarkupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */; };
-		B72BE20B25FF09FC0025C64D /* MarkupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20825FF09FC0025C64D /* MarkupView.swift */; };
+		B72BE20425FF09EB0025C64D /* MarkupTextBlockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20325FF09EB0025C64D /* MarkupTextBlockViewModel.swift */; };
+		B72BE20B25FF09FC0025C64D /* MarkupTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20825FF09FC0025C64D /* MarkupTextBlockView.swift */; };
 		B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20925FF09FC0025C64D /* WebView.swift */; };
 		B72BE20D25FF09FC0025C64D /* View+AddCardOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */; };
 		B72BE22A25FF21640025C64D /* TextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B72BE22925FF21640025C64D /* TextBlock.swift */; };
 		B73AA78A2600E20C0042B181 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = B73AA7892600E20C0042B181 /* Color.swift */; };
+		B74460CF2601D39800FA375F /* TextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74460CE2601D39800FA375F /* TextBlockView.swift */; };
+		B74460D72601D3BF00FA375F /* TextBlockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74460D62601D3BF00FA375F /* TextBlockViewModel.swift */; };
 		B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */; };
 		B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */; };
 		D38457B32600EE3B0021A1FF /* Comparable+Clamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38457B22600EE3B0021A1FF /* Comparable+Clamp.swift */; };
@@ -50,12 +52,14 @@
 
 /* Begin PBXFileReference section */
 		4BF91842260110E500815656 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
-		B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupViewModel.swift; sourceTree = "<group>"; };
-		B72BE20825FF09FC0025C64D /* MarkupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupView.swift; sourceTree = "<group>"; };
+		B72BE20325FF09EB0025C64D /* MarkupTextBlockViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupTextBlockViewModel.swift; sourceTree = "<group>"; };
+		B72BE20825FF09FC0025C64D /* MarkupTextBlockView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkupTextBlockView.swift; sourceTree = "<group>"; };
 		B72BE20925FF09FC0025C64D /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+AddCardOverlay.swift"; sourceTree = "<group>"; };
 		B72BE22925FF21640025C64D /* TextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBlock.swift; sourceTree = "<group>"; };
 		B73AA7892600E20C0042B181 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		B74460CE2601D39800FA375F /* TextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBlockView.swift; sourceTree = "<group>"; };
+		B74460D62601D3BF00FA375F /* TextBlockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextBlockViewModel.swift; sourceTree = "<group>"; };
 		B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HtmlRenderable.swift; path = "Dynavity/view-model/HtmlRenderable.swift"; sourceTree = SOURCE_ROOT; };
 		B7FE81A225FE36AC00411A05 /* MarkupTextBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkupTextBlock.swift; sourceTree = "<group>"; };
 		D38457B22600EE3B0021A1FF /* Comparable+Clamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Comparable+Clamp.swift"; sourceTree = "<group>"; };
@@ -132,7 +136,8 @@
 				D3EB577425FE00AD00862503 /* canvas */,
 				D3EB579325FE712300862503 /* CanvasElementView.swift */,
 				D3EB579825FE749F00862503 /* CanvasElementMapView.swift */,
-				B72BE20825FF09FC0025C64D /* MarkupView.swift */,
+				B72BE20825FF09FC0025C64D /* MarkupTextBlockView.swift */,
+				B74460CE2601D39800FA375F /* TextBlockView.swift */,
 				4BF91842260110E500815656 /* ToolbarView.swift */,
 				B72BE20A25FF09FC0025C64D /* View+AddCardOverlay.swift */,
 				B72BE20925FF09FC0025C64D /* WebView.swift */,
@@ -144,7 +149,8 @@
 			isa = PBXGroup;
 			children = (
 				B7FE818F25FE067C00411A05 /* HtmlRenderable.swift */,
-				B72BE20325FF09EB0025C64D /* MarkupViewModel.swift */,
+				B72BE20325FF09EB0025C64D /* MarkupTextBlockViewModel.swift */,
+				B74460D62601D3BF00FA375F /* TextBlockViewModel.swift */,
 				D3C0218725FF5B28005AA4EB /* CanvasViewModel.swift */,
 			);
 			path = "view-model";
@@ -381,6 +387,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3EB578C25FE6AC600862503 /* TestCanvasElement.swift in Sources */,
+				B74460CF2601D39800FA375F /* TextBlockView.swift in Sources */,
 				B73AA78A2600E20C0042B181 /* Color.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				B72BE22A25FF21640025C64D /* TextBlock.swift in Sources */,
@@ -393,11 +400,12 @@
 				B72BE20C25FF09FC0025C64D /* WebView.swift in Sources */,
 				D3D5DD6F25FCBC3C00143DAF /* DynavityApp.swift in Sources */,
 				B7FE81A325FE36AC00411A05 /* MarkupTextBlock.swift in Sources */,
-				B72BE20425FF09EB0025C64D /* MarkupViewModel.swift in Sources */,
+				B72BE20425FF09EB0025C64D /* MarkupTextBlockViewModel.swift in Sources */,
 				B7FE819025FE067C00411A05 /* HtmlRenderable.swift in Sources */,
 				B72BE20D25FF09FC0025C64D /* View+AddCardOverlay.swift in Sources */,
 				4BF91843260110E500815656 /* ToolbarView.swift in Sources */,
-				B72BE20B25FF09FC0025C64D /* MarkupView.swift in Sources */,
+				B72BE20B25FF09FC0025C64D /* MarkupTextBlockView.swift in Sources */,
+				B74460D72601D3BF00FA375F /* TextBlockViewModel.swift in Sources */,
 				D38457B32600EE3B0021A1FF /* Comparable+Clamp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

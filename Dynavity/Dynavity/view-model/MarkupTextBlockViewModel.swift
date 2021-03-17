@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-class MarkupViewModel: ObservableObject, HtmlRenderable {
+class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
     private static let debounceDelay = 1.5
 
     @Published var markupTextBlock = MarkupTextBlock()
@@ -16,7 +16,7 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
         // Introduces a debounce so that we don't send too many requests out.
         // Implementation referenced from: https://stackoverflow.com/a/57365773
         cancellationToken = AnyCancellable($markupTextBlock.removeDuplicates()
-                                            .debounce(for: .seconds(MarkupViewModel.debounceDelay),
+                                            .debounce(for: .seconds(MarkupTextBlockViewModel.debounceDelay),
                                                       scheduler: RunLoop.main)
                                             .sink { textBlock in
                                                 self.convertTextToHtml(text: textBlock.text,
@@ -26,11 +26,6 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
     }
 
     private func convertTextToHtml(text: String, inputFormat: MarkupTextBlock.MarkupType) {
-        guard inputFormat != .plaintext else {
-            rawHtml = text
-            return
-        }
-
         let stringEncoding: String.Encoding = .utf8
         let request = constructURLRequest(with: text.data(using: stringEncoding))
 
@@ -44,7 +39,8 @@ class MarkupViewModel: ObservableObject, HtmlRenderable {
 
             return rawHtml
         }
-        .assertNoFailure() // only source of failure is due to invalid URL, which should have been validated
+        // Only source of failure is due to invalid URL, which should have been validated
+        .assertNoFailure()
         .receive(on: RunLoop.main)
         .eraseToAnyPublisher()
         .assign(to: \.rawHtml, on: self)
