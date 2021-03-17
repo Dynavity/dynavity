@@ -18,7 +18,6 @@ struct MarkupTextBlockView: View {
 
             WebView(rawHtml: viewModel.rawHtml)
         }
-        .addCardOverlay()
         .padding()
     }
 }

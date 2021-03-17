@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CanvasView: View {
-    @ObservedObject var viewModel = CanvasViewModel()
+    @ObservedObject var viewModel: CanvasViewModel
 
     // For drag interactions
     @State var viewPositionFromCentre = CGPoint()

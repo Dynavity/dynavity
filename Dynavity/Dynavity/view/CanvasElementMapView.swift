@@ -12,9 +12,17 @@ struct CanvasElementMapView: View {
 
     var body: some View {
         ZStack {
-            ForEach(elements, id: \.visualID) { element in
-                CanvasElementView(element: element)
-                    .offset(x: element.position.x, y: element.position.y)
+            ForEach(elements, id: \.id) { element in
+                // The group allows us to have common view modifiers.
+                Group {
+                    if let imageCanvasElement = element as? ImageCanvasElement {
+                        ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
+                    } else {
+                        CanvasElementView(element: element)
+                    }
+                }
+                .addCardOverlay()
+                .offset(x: element.position.x, y: element.position.y)
             }
         }
     }

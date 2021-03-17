@@ -1,18 +1,30 @@
 import SwiftUI
 
 struct ToolbarView: View {
+    private enum ActiveSheet: Identifiable {
+        case camera
+        case photoGallery
+
+        var id: Int {
+            hashValue
+        }
+    }
+
     private let height: CGFloat = 25.0
     private let padding: CGFloat = 10.0
+
+    @ObservedObject var viewModel: CanvasViewModel
+    @State private var activeSheet: ActiveSheet?
 
     private var addButton: some View {
         Menu {
             Button(action: {
-                // TODO: Implement photo taking functionality.
+                activeSheet = .camera
             }) {
                 Label("Camera", systemImage: "camera")
             }
             Button(action: {
-                // TODO: Implement photo import functionality.
+                activeSheet = .photoGallery
             }) {
                 Label("Photo Gallery", systemImage: "photo")
             }
@@ -58,6 +70,14 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
+        .sheet(item: $activeSheet, onDismiss: viewModel.addImageCanvasElement) { item in
+            switch item {
+            case .camera:
+                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .camera)
+            case .photoGallery:
+                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .photoLibrary)
+            }
+        }
         // Force the toolbar to be drawn over everything else.
         .zIndex(.infinity)
     }
@@ -65,6 +85,6 @@ struct ToolbarView: View {
 
 struct ToolbarView_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarView()
+        ToolbarView(viewModel: CanvasViewModel())
     }
 }
