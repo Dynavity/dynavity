@@ -13,7 +13,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
-
+        // Do nothing.
     }
 
     func makeCoordinator() -> Coordinator {

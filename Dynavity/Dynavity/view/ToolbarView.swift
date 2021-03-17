@@ -4,6 +4,7 @@ struct ToolbarView: View {
     private let height: CGFloat = 25.0
     private let padding: CGFloat = 10.0
 
+    @ObservedObject var viewModel: CanvasViewModel
     @State private var displayPhotoGallery = false
 
     private var addButton: some View {
@@ -70,6 +71,6 @@ struct ToolbarView: View {
 
 struct ToolbarView_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarView()
+        ToolbarView(viewModel: CanvasViewModel())
     }
 }
