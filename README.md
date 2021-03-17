@@ -33,7 +33,7 @@ echo -e '#!/bin/sh\nxcodegen --spec Dynavity/project.yml --use-cache' > .git/hoo
 
 chmod +x .git/hooks/post-checkout
 
-echo '#!/bin/sh\n xcodegen --spec Dynavity/project.yml --use-cache' > .git/hooks/post-merge
+echo -e '#!/bin/sh\nxcodegen --spec Dynavity/project.yml --use-cache' > .git/hooks/post-merge
 
 chmod +x .git/hooks/post-merge
 
