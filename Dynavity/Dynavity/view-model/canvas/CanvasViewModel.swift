@@ -9,7 +9,7 @@ import SwiftUI
 
 class CanvasViewModel: ObservableObject {
     @Published var canvas: Canvas
-    @Published var selectedCanvasElement: CanvasElementProtocol?
+    @Published var selectedCanvasElementId: UUID?
     @Published var selectedImage: UIImage?
 
     init(canvas: Canvas) {
@@ -21,19 +21,19 @@ class CanvasViewModel: ObservableObject {
     }
 
     func select(canvasElement: CanvasElementProtocol) {
-        if selectedCanvasElement?.id == canvasElement.id {
-            selectedCanvasElement = nil
+        if selectedCanvasElementId == canvasElement.id {
+            selectedCanvasElementId = nil
             return
         }
-        selectedCanvasElement = canvasElement
+        selectedCanvasElementId = canvasElement.id
     }
 
     func unselectCanvasElement() {
-        selectedCanvasElement = nil
+        selectedCanvasElementId = nil
     }
 
     func moveSelectedCanvasElement(to location: CGPoint) {
-        canvas.repositionCanvasElement(id: selectedCanvasElement?.id, to: location)
+        canvas.repositionCanvasElement(id: selectedCanvasElementId, to: location)
     }
 
     func addImageCanvasElement() {
