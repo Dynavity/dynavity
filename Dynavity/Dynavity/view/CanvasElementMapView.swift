@@ -13,8 +13,15 @@ struct CanvasElementMapView: View {
     var body: some View {
         ZStack {
             ForEach(elements, id: \.id) { element in
-                CanvasElementView(element: element)
-                    .offset(x: element.position.x, y: element.position.y)
+                // The group allows us to have common view modifiers.
+                Group {
+                    if let imageCanvasElement = element as? ImageCanvasElement {
+                        ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
+                    } else {
+                        CanvasElementView(element: element)
+                    }
+                }
+                .offset(x: element.position.x, y: element.position.y)
             }
         }
     }
