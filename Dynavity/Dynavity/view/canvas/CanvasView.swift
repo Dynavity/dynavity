@@ -36,7 +36,7 @@ struct CanvasView: View {
             ZStack {
                 Rectangle()
                     .fill(Color.white)
-                CanvasElementMapView(elements: $viewModel.canvas.canvasElements)
+                CanvasElementMapView(viewModel: viewModel)
                     .scaleEffect(zoomScale)
                     .offset(x: viewPositionFromCentre.x + dragOffset.width,
                             y: viewPositionFromCentre.y + dragOffset.height)
