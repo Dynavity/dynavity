@@ -92,7 +92,7 @@ iOSInjectionProject/
 .DS_Store
 
 # Ignore project files as we generate them with xcodegen 
-#[https://github.com/yonaskolb/XcodeGen
+# https://github.com/yonaskolb/XcodeGen
 *.xcodeproj/
 *.xcworkspace/
 settings.yml
