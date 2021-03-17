@@ -69,7 +69,6 @@ targets:
           DEVELOPMENT_ASSET_PATHS: '"Dynavity/Preview Content"'
           INFOPLIST_FILE: Dynavity/Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: 14.0
-          PRODUCT_BUNDLE_IDENTIFIER: cs3217.Dynavity
           PROVISIONING_PROFILE_SPECIFIER: 
           SWIFT_VERSION: 5.0
         Release:
@@ -79,7 +78,6 @@ targets:
           DEVELOPMENT_ASSET_PATHS: '"Dynavity/Preview Content"'
           INFOPLIST_FILE: Dynavity/Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: 14.0
-          PRODUCT_BUNDLE_IDENTIFIER: cs3217.Dynavity
           PROVISIONING_PROFILE_SPECIFIER: 
           SWIFT_VERSION: 5.0
     sources:
