@@ -28,6 +28,10 @@ class CanvasViewModel: ObservableObject {
         selectedCanvasElement = canvasElement
     }
 
+    func unselectCanvasElement() {
+        selectedCanvasElement = nil
+    }
+
     func addImageCanvasElement() {
         guard let image = selectedImage else {
             return

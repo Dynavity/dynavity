@@ -13,16 +13,25 @@ struct CanvasView: View {
     @State var initialZoomScale: CGFloat?
     @State var initialViewPositionFromCentre: CGPoint?
 
-    var body: some View {
-        let dragGesture = DragGesture()
+    private var tapGesture: some Gesture {
+        TapGesture(count: 1)
+            .onEnded { _ in
+                viewModel.unselectCanvasElement()
+            }
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
             .onChanged { value in
                 handleDragChange(value)
             }
             .onEnded { value in
                 handleDragEnd(value)
             }
+    }
 
-        let magnificationGesture = MagnificationGesture()
+    private var magnificationGesture: some Gesture {
+        MagnificationGesture()
             .onChanged { value in
                 handleScaleChange(value)
             }
@@ -31,7 +40,9 @@ struct CanvasView: View {
                 initialZoomScale = nil
                 initialViewPositionFromCentre = nil
             }
+    }
 
+    var body: some View {
         GeometryReader { _ in
             ZStack {
                 Rectangle()
@@ -42,6 +53,7 @@ struct CanvasView: View {
                             y: viewPositionFromCentre.y + dragOffset.height)
                     .animation(.easeIn)
             }
+            .gesture(tapGesture)
             .gesture(dragGesture)
             .gesture(magnificationGesture)
         }
