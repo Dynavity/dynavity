@@ -6,11 +6,6 @@ struct MainView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let dismissSideMenuTapGesture = TapGesture(count: 1)
-                .onEnded { _ in
-                    handleSideMenuTap()
-                }
-
             let dismissSideMenuDragGesture = DragGesture()
                 .onEnded { value in
                     handleSideMenuDrag(value)
@@ -23,6 +18,7 @@ struct MainView: View {
                     CanvasView(viewModel: canvasViewModel)
                 }
                 .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
+
                 .disabled(self.shouldShowMenu)
 
                 if self.shouldShowMenu {
@@ -34,7 +30,6 @@ struct MainView: View {
                 }
             }
             .gesture(dismissSideMenuDragGesture)
-            .gesture(dismissSideMenuTapGesture)
         }
     }
 
@@ -49,14 +44,6 @@ extension MainView {
         withAnimation {
             self.shouldShowMenu = false
         }
-    }
-
-    private func handleSideMenuTap() {
-        guard shouldShowMenu else {
-            return
-        }
-
-        dismissSideMenu()
     }
 
     private func handleSideMenuDrag(_ value: DragGesture.Value) {
