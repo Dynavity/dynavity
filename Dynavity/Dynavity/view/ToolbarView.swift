@@ -15,6 +15,7 @@ struct ToolbarView: View {
 
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
+    @Binding var shouldShowSideMenu: Bool
 
     private var addButton: some View {
         Menu {
@@ -60,7 +61,15 @@ struct ToolbarView: View {
     }
 
     var body: some View {
+
         HStack {
+            Button(action: {
+                withAnimation {
+                    shouldShowSideMenu = true
+                }
+            }) {
+                   Text("Show Menu")
+            }
             Spacer()
             addButton
         }
@@ -85,6 +94,6 @@ struct ToolbarView: View {
 
 struct ToolbarView_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarView(viewModel: CanvasViewModel())
+        ToolbarView(viewModel: CanvasViewModel(), shouldShowSideMenu: .constant(true))
     }
 }
