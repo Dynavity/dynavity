@@ -20,9 +20,6 @@ struct MarkupTextBlock: CanvasElementProtocol {
             textBlock.position = newValue
         }
     }
-    var visualID: String {
-        textBlock.visualID
-    }
     var text: String {
         get {
             textBlock.text
