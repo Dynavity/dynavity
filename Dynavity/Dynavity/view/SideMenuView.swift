@@ -1,26 +1,52 @@
 import SwiftUI
 
 struct SideMenuView: View {
+    @Binding var canvasName: String
+
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Image(systemName: "person")
-                    .foregroundColor(.gray)
-                    .imageScale(.large)
-                Text("Profile")
-                    .foregroundColor(.gray)
-                    .font(.headline)
-            }
+            SideMenuHeaderView(headerText: "Canvas Metadata")
+            SideMenuContentView(label: "Canvas Name",
+                                content: TextField("Enter Canvas Name", text: $canvasName)
+                                    .textFieldStyle(RoundedBorderTextFieldStyle()))
+            Divider()
+
             Spacer()
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(red: 32 / 255, green: 32 / 255, blue: 32 / 255))
+        .background(Color.UI.background)
+    }
+}
+
+private struct SideMenuHeaderView: View {
+    var headerText: String
+
+    var body: some View {
+        Text(headerText)
+            .font(.title3)
+            .bold()
+            .padding(.bottom)
+
+    }
+}
+
+private struct SideMenuContentView<Content: View>: View {
+    let label: String
+    let content: Content
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(label)
+                .font(.caption)
+                .fixedSize()
+            content
+        }
     }
 }
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView()
+        SideMenuView(canvasName: .constant("Cool Name"))
     }
 }

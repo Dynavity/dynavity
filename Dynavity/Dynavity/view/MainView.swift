@@ -22,7 +22,7 @@ struct MainView: View {
                 .disabled(self.shouldShowMenu)
 
                 if self.shouldShowMenu {
-                    SideMenuView()
+                    SideMenuView(canvasName: $canvasViewModel.canvas.name)
                         .frame(width: geometry.size.width / 3)
                         .transition(.move(edge: .trailing))
                         // Force the side menu to be drawn over everything else.
