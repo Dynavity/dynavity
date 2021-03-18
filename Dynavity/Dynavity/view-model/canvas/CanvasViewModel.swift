@@ -22,4 +22,8 @@ class CanvasViewModel: ObservableObject {
         // Reset the selected image.
         selectedImage = nil
     }
+
+    func addTextBlock() {
+        canvas.addElement(TextBlock())
+    }
 }

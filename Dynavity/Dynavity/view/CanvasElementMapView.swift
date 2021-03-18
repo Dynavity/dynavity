@@ -15,11 +15,15 @@ struct CanvasElementMapView: View {
             ForEach(elements, id: \.id) { element in
                 // The group allows us to have common view modifiers.
                 Group {
-                    if let imageCanvasElement = element as? ImageCanvasElement {
+                    switch element {
+                    case let imageCanvasElement as ImageCanvasElement:
                         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
-                    } else {
+                    case _ as TextBlock:
+                        TextBlockView()
+                    default:
                         CanvasElementView(element: element)
                     }
+
                 }
                 .addCardOverlay()
                 .offset(x: element.position.x, y: element.position.y)

@@ -39,7 +39,7 @@ struct ToolbarView: View {
                 Label("To-Do List", systemImage: "list.bullet.rectangle")
             }
             Button(action: {
-                // TODO: Implement text card.
+                viewModel.addTextBlock()
             }) {
                 Label("Text", systemImage: "note.text")
             }
