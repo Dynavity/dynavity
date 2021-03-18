@@ -18,14 +18,13 @@ struct CanvasElementMapView: View {
                     switch element {
                     case let imageCanvasElement as ImageCanvasElement:
                         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
-                    case _ as TextBlock:
-                        TextBlockView()
-                    case _ as MarkupTextBlock:
-                        MarkupTextBlockView()
+                    case let textBlock as TextBlock:
+                        TextBlockView(textBlock: textBlock)
+                    case let markupTextBlock as MarkupTextBlock:
+                        MarkupTextBlockView(markupTextBlock: markupTextBlock)
                     default:
                         CanvasElementView(element: element)
                     }
-
                 }
                 .addCardOverlay()
                 .offset(x: element.position.x, y: element.position.y)

@@ -12,7 +12,9 @@ class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
     // Responsible for retrieving data from external API
     private var requestCancellable: AnyCancellable?
 
-    init() {
+    init(markupTextBlock: MarkupTextBlock) {
+        self.markupTextBlock = markupTextBlock
+
         // Introduces a debounce so that we don't send too many requests out.
         // Implementation referenced from: https://stackoverflow.com/a/57365773
         cancellationToken = AnyCancellable($markupTextBlock.removeDuplicates()
