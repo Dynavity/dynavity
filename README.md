@@ -10,13 +10,13 @@ This project uses [XcodeGen](https://github.com/yonaskolb/XcodeGen) to generate 
 brew install XcodeGen
 ```
 
-2. Open `Dynavity/settings.yml.sample` and replace `DEVELOPMENT_TEAM` and `PRODUCT_BUNDLE_IDENTIFIER` with your Team ID and a unique product bundle identifier respectively.
-One way to get your Team ID is by going to the Build settings in Xcode, choosing your team, then viewing the source file of `project.pbxproj`.
-
-3. Rename `Dynavity/settings.yml.sample` to `Dynavity/settings.yml`
+2. Create a copy of `Dynavity/settings.yml.sample` named `Dynavity/settings.yml`.
 ```sh
 cp Dynavity/settings.yml.sample Dynavity/settings.yml
 ```
+
+3. Open `Dynavity/settings.yml` and replace `DEVELOPMENT_TEAM` and `PRODUCT_BUNDLE_IDENTIFIER` with your Team ID and a unique product bundle identifier respectively.
+One way to get your Team ID is by going to the Build settings in Xcode, choosing your team, then viewing the source file of `project.pbxproj`.
 
 You can now generate your project settings by navigating to the directory containing `project.yml`, and executing `xcodegen`.
 
