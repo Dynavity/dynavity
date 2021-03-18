@@ -49,7 +49,8 @@ struct ToolbarView: View {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
             Button(action: {
-                // TODO: Implement markup text card.
+                // TODO: Update this function to take in a markupType based on user input
+                viewModel.addMarkUpTextBlock(markupType: .markdown)
             }) {
                 Label("Markup", systemImage: "text.badge.star")
             }

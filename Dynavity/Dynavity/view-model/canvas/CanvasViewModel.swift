@@ -26,4 +26,8 @@ class CanvasViewModel: ObservableObject {
     func addTextBlock() {
         canvas.addElement(TextBlock())
     }
+
+    func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
+        canvas.addElement(MarkupTextBlock(markupType: markupType))
+    }
 }

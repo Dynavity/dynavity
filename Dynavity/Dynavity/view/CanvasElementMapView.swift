@@ -20,6 +20,8 @@ struct CanvasElementMapView: View {
                         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
                     case _ as TextBlock:
                         TextBlockView()
+                    case _ as MarkupTextBlock:
+                        MarkupTextBlockView()
                     default:
                         CanvasElementView(element: element)
                     }
