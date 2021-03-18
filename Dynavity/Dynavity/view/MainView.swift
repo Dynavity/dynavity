@@ -18,7 +18,6 @@ struct MainView: View {
                     CanvasView(viewModel: canvasViewModel)
                 }
                 .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
-
                 .disabled(self.shouldShowMenu)
 
                 if self.shouldShowMenu {

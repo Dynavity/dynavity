@@ -60,18 +60,22 @@ struct ToolbarView: View {
         }
     }
 
-    var body: some View {
-
-        HStack {
-            Button(action: {
-                withAnimation {
-                    shouldShowSideMenu = true
-                }
-            }) {
-                   Text("Show Menu")
+    private var sideMenuButton: some View {
+        Button(action: {
+            withAnimation {
+                shouldShowSideMenu = true
             }
+        }) {
+            Image(systemName: "ellipsis")
+        }
+    }
+
+    var body: some View {
+        HStack {
             Spacer()
             addButton
+            Spacer()
+            sideMenuButton
         }
         .frame(height: height)
         .padding(padding)
