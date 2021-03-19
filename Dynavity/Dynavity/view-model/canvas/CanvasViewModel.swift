@@ -10,6 +10,7 @@ import SwiftUI
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var selectedImage: UIImage?
+    @Published var selectedFile: URL?
 
     func addImageCanvasElement() {
         guard let image = selectedImage else {

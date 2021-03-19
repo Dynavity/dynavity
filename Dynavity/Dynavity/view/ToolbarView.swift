@@ -4,6 +4,7 @@ struct ToolbarView: View {
     private enum ActiveSheet: Identifiable {
         case camera
         case photoGallery
+        case pdfPicker
 
         var id: Int {
             hashValue
@@ -30,7 +31,7 @@ struct ToolbarView: View {
                 Label("Photo Gallery", systemImage: "photo")
             }
             Button(action: {
-                viewModel.addPdfCanvasElement()
+                activeSheet = .pdfPicker
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
@@ -90,6 +91,8 @@ struct ToolbarView: View {
                 ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .camera)
             case .photoGallery:
                 ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .photoLibrary)
+            case .pdfPicker:
+                DocumentPickerView(selectedFile: $viewModel.selectedFile, contentTypes: [.pdf])
             }
         }
         // Force the toolbar to be drawn over everything else.
