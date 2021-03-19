@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ToolbarView: View {
-    enum ActiveSheet: Identifiable {
+    private enum ActiveSheet: Identifiable {
         case camera
         case photoGallery
         case pdfPicker
@@ -15,22 +15,23 @@ struct ToolbarView: View {
     private let padding: CGFloat = 10.0
 
     @ObservedObject var viewModel: CanvasViewModel
+    @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
 
     private var addButton: some View {
         Menu {
             Button(action: {
-                viewModel.displayCamera()
+                activeSheet = .camera
             }) {
                 Label("Camera", systemImage: "camera")
             }
             Button(action: {
-                viewModel.displayPhotoGallery()
+                activeSheet = .photoGallery
             }) {
                 Label("Photo Gallery", systemImage: "photo")
             }
             Button(action: {
-                viewModel.displayPdfPicker()
+                activeSheet = .pdfPicker
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
@@ -84,7 +85,7 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
-        .sheet(item: $viewModel.activeSheet, onDismiss: viewModel.handleSheetDismiss) { item in
+        .sheet(item: $activeSheet) { item in
             switch item {
             case .camera:
                 ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .camera)

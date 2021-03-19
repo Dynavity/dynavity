@@ -35,7 +35,11 @@ struct DocumentPickerView: UIViewControllerRepresentable {
             _ picker: UIViewControllerType,
             didPickDocumentsAt urls: [URL]
         ) {
-            parent.selectedFile = urls[0]
+            guard let file = urls.first else {
+                return
+            }
+
+            parent.selectedFile = file
             parent.presentationMode.wrappedValue.dismiss()
         }
     }

@@ -34,10 +34,11 @@ struct ImagePickerView: UIViewControllerRepresentable {
             _ picker: UIViewControllerType,
             didFinishPickingMediaWithInfo info: [UIViewControllerType.InfoKey: Any]
         ) {
-            if let image = info[.originalImage] as? UIImage {
-                parent.selectedImage = image
+            guard let image = info[.originalImage] as? UIImage else {
+                return
             }
 
+            parent.selectedImage = image
             parent.presentationMode.wrappedValue.dismiss()
         }
     }
