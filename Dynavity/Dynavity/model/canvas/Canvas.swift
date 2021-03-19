@@ -1,9 +1,9 @@
 import Foundation
 import CoreGraphics
 
-class Canvas: ObservableObject {
-    @Published var canvasElements: [CanvasElementProtocol] = []
-    @Published var name: String = ""
+struct Canvas {
+    var canvasElements: [CanvasElementProtocol] = []
+    var name: String = ""
 
     init() {
         /// Starting center is now (x: 250000, y:  250000) 
@@ -13,7 +13,7 @@ class Canvas: ObservableObject {
         addElement(testElement2)
     }
 
-    func addElement(_ element: CanvasElementProtocol) {
+    mutating func addElement(_ element: CanvasElementProtocol) {
         canvasElements.append(element)
     }
 }

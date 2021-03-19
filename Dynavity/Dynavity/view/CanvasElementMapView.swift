@@ -15,9 +15,14 @@ struct CanvasElementMapView: View {
             ForEach(elements, id: \.id) { element in
                 // The group allows us to have common view modifiers.
                 Group {
-                    if let imageCanvasElement = element as? ImageCanvasElement {
+                    switch element {
+                    case let imageCanvasElement as ImageCanvasElement:
                         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
-                    } else {
+                    case let textBlock as TextBlock:
+                        TextBlockView(textBlock: textBlock)
+                    case let markupTextBlock as MarkupTextBlock:
+                        MarkupTextBlockView(markupTextBlock: markupTextBlock)
+                    default:
                         CanvasElementView(element: element)
                     }
                 }

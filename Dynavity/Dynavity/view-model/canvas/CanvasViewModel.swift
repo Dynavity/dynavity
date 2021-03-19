@@ -1,10 +1,3 @@
-//
-//  CanvasViewModel.swift
-//  Dynavity
-//
-//  Created by Hans Sebastian Tirtaputra on 15/3/21.
-//
-
 import SwiftUI
 import PencilKit
 
@@ -25,6 +18,14 @@ class CanvasViewModel: ObservableObject {
         selectedImage = nil
     }
 
+    func addTextBlock() {
+        canvas.addElement(TextBlock())
+    }
+
+    func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
+        canvas.addElement(MarkupTextBlock(markupType: markupType))
+    }
+    
     func storeAnnotation(_ drawing: PKDrawing) {
         annotationCanvas.drawing = drawing
     }
