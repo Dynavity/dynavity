@@ -26,9 +26,9 @@ struct MainView: View {
                         .transition(.move(edge: .trailing))
                         // Force the side menu to be drawn over everything else.
                         .zIndex(.infinity)
+                        .gesture(dismissSideMenuDragGesture)
                 }
             }
-            .gesture(dismissSideMenuDragGesture)
         }
     }
 
