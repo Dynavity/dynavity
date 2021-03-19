@@ -30,7 +30,7 @@ struct ToolbarView: View {
                 Label("Photo Gallery", systemImage: "photo")
             }
             Button(action: {
-                // TODO: Implement PDF import functionality.
+                viewModel.addPdfCanvasElement()
             }) {
                 Label("PDF", systemImage: "doc.text")
             }

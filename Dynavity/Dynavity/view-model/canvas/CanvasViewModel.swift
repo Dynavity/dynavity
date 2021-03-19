@@ -23,6 +23,16 @@ class CanvasViewModel: ObservableObject {
         selectedImage = nil
     }
 
+    func addPdfCanvasElement() {
+        // TODO: Remove temporary URL for testing.
+        guard let url = URL(string: "https://www.cs.cmu.edu/~avrim/451f11/lectures/lect1004.pdf") else {
+            return
+        }
+
+        let pdfCanvasElement = PDFCanvasElement(url: url)
+        canvas.addElement(pdfCanvasElement)
+    }
+
     func addTextBlock() {
         canvas.addElement(TextBlock())
     }
