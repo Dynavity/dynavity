@@ -16,7 +16,7 @@ struct Canvas {
         canvasElements.append(element)
     }
 
-    func repositionCanvasElement(id: UUID?, to location: CGPoint) {
+    mutating func repositionCanvasElement(id: UUID?, to location: CGPoint) {
         guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
             return
         }
