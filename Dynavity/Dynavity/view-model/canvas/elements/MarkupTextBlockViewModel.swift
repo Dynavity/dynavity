@@ -4,7 +4,7 @@ import Combine
 class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
     private static let debounceDelay = 1.5
 
-    @Published var markupTextBlock = MarkupTextBlock()
+    @Published var markupTextBlock: MarkupTextBlock
     @Published var rawHtml: String = ""
 
     // Responsible for triggering a request to external API when markUpTextBlock changes
