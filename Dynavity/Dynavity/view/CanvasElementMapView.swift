@@ -20,6 +20,8 @@ struct CanvasElementMapView: View {
                         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
                     case let textBlock as TextBlock:
                         TextBlockView(textBlock: textBlock)
+                    case let codeSnippet as CodeSnippet:
+                        CodeSnippetView(codeSnippet: codeSnippet)
                     case let markupTextBlock as MarkupTextBlock:
                         MarkupTextBlockView(markupTextBlock: markupTextBlock)
                     default:

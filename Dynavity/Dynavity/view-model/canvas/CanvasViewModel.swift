@@ -27,6 +27,10 @@ class CanvasViewModel: ObservableObject {
         canvas.addElement(TextBlock())
     }
 
+    func addCodeSnippet() {
+        canvas.addElement(CodeSnippet())
+    }
+
     func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
         canvas.addElement(MarkupTextBlock(markupType: markupType))
     }
