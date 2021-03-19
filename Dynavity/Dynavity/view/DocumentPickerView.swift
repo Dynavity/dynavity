@@ -10,6 +10,7 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> UIViewControllerType {
         let documentPicker = UIViewControllerType(forOpeningContentTypes: contentTypes, asCopy: true)
+        documentPicker.allowsMultipleSelection = false
         return documentPicker
     }
 
