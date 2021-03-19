@@ -4,17 +4,17 @@ struct ImagePickerView: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIImagePickerController
 
     @Binding var selectedImage: UIImage?
-    var sourceType: UIImagePickerController.SourceType
+    var sourceType: UIViewControllerType.SourceType
     @Environment(\.presentationMode) private var presentationMode
 
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let imagePicker = UIImagePickerController()
+    func makeUIViewController(context: Context) -> UIViewControllerType {
+        let imagePicker = UIViewControllerType()
         imagePicker.sourceType = sourceType
         imagePicker.delegate = context.coordinator
         return imagePicker
     }
 
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
         // Do nothing.
     }
 
@@ -31,8 +31,8 @@ struct ImagePickerView: UIViewControllerRepresentable {
         }
 
         func imagePickerController(
-            _ picker: UIImagePickerController,
-            didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
+            _ picker: UIViewControllerType,
+            didFinishPickingMediaWithInfo info: [UIViewControllerType.InfoKey: Any]
         ) {
             if let image = info[.originalImage] as? UIImage {
                 parent.selectedImage = image
