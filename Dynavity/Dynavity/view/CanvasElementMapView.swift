@@ -19,7 +19,7 @@ struct CanvasElementMapView: View {
                     case let imageCanvasElement as ImageCanvasElement:
                         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
                     case let pdfCanvasElement as PDFCanvasElement:
-                        PDFCanvasElementView(url: pdfCanvasElement.url)
+                        PDFCanvasElementView(pdfCanvasElement: pdfCanvasElement)
                     case let textBlock as TextBlock:
                         TextBlockView(textBlock: textBlock)
                     case let markupTextBlock as MarkupTextBlock:

@@ -4,11 +4,15 @@ import SwiftUI
 struct PDFCanvasElementView: UIViewRepresentable {
     typealias UIViewType = PDFView
 
-    let url: URL
+    @ObservedObject var viewModel: PDFCanvasElementViewModel
+
+    init(pdfCanvasElement: PDFCanvasElement) {
+        self.viewModel = PDFCanvasElementViewModel(pdfCanvasElement: pdfCanvasElement)
+    }
 
     func makeUIView(context: Context) -> UIViewType {
         let pdfView = PDFView()
-        pdfView.document = PDFDocument(url: url)
+        pdfView.document = PDFDocument(url: viewModel.pdfCanvasElement.url)
         pdfView.autoScales = true
         return pdfView
     }
