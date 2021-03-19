@@ -1,14 +1,11 @@
-//
-//  TextBlockView.swift
-//  Dynavity
-//
-//  Created by Sebastian on 17/3/21.
-//
-
 import SwiftUI
 
 struct TextBlockView: View {
-    @ObservedObject var viewModel = TextBlockViewModel()
+    @ObservedObject var viewModel: TextBlockViewModel
+
+    init(textBlock: TextBlock) {
+        self.viewModel = TextBlockViewModel(textBlock: textBlock)
+    }
 
     var body: some View {
         TextEditor(text: $viewModel.textBlock.text)
@@ -19,6 +16,6 @@ struct TextBlockView: View {
 
 struct TextBlockView_Previews: PreviewProvider {
     static var previews: some View {
-        TextBlockView()
+        TextBlockView(textBlock: TextBlock())
     }
 }

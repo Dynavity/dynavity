@@ -47,4 +47,12 @@ class CanvasViewModel: ObservableObject {
         // Reset the selected image.
         selectedImage = nil
     }
+
+    func addTextBlock() {
+        canvas.addElement(TextBlock())
+    }
+
+    func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
+        canvas.addElement(MarkupTextBlock(markupType: markupType))
+    }
 }

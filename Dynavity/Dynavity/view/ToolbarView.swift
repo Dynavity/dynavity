@@ -15,6 +15,7 @@ struct ToolbarView: View {
 
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
+    @Binding var shouldShowSideMenu: Bool
 
     private var addButton: some View {
         Menu {
@@ -39,7 +40,7 @@ struct ToolbarView: View {
                 Label("To-Do List", systemImage: "list.bullet.rectangle")
             }
             Button(action: {
-                // TODO: Implement text card.
+                viewModel.addTextBlock()
             }) {
                 Label("Text", systemImage: "note.text")
             }
@@ -49,7 +50,8 @@ struct ToolbarView: View {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
             Button(action: {
-                // TODO: Implement markup text card.
+                // TODO: Update this function to take in a markupType based on user input
+                viewModel.addMarkUpTextBlock(markupType: .markdown)
             }) {
                 Label("Markup", systemImage: "text.badge.star")
             }
@@ -59,10 +61,22 @@ struct ToolbarView: View {
         }
     }
 
+    private var sideMenuButton: some View {
+        Button(action: {
+            withAnimation {
+                shouldShowSideMenu = true
+            }
+        }) {
+            Image(systemName: "ellipsis")
+        }
+    }
+
     var body: some View {
         HStack {
             Spacer()
             addButton
+            Spacer()
+            sideMenuButton
         }
         .frame(height: height)
         .padding(padding)
@@ -85,6 +99,6 @@ struct ToolbarView: View {
 
 struct ToolbarView_Previews: PreviewProvider {
     static var previews: some View {
-        ToolbarView(viewModel: CanvasViewModel())
+        ToolbarView(viewModel: CanvasViewModel(), shouldShowSideMenu: .constant(true))
     }
 }
