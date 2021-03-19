@@ -25,7 +25,7 @@ class CanvasViewModel: ObservableObject {
     func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
         canvas.addElement(MarkupTextBlock(markupType: markupType))
     }
-    
+
     func storeAnnotation(_ drawing: PKDrawing) {
         annotationCanvas.drawing = drawing
     }
