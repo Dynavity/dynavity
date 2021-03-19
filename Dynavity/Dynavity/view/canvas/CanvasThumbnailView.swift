@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CanvasThumbnailView: View {
+    var canvasName: String
     var body: some View {
         VStack {
             // TODO: replace this with canvas thumbnail
@@ -8,13 +9,13 @@ struct CanvasThumbnailView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 70)
-            Text("Canvas Name")
+            Text(canvasName)
         }
     }
 }
 
 struct CanvasThumbnailView_Previews: PreviewProvider {
     static var previews: some View {
-        CanvasThumbnailView()
+        CanvasThumbnailView(canvasName: "")
     }
 }
