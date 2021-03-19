@@ -1,7 +1,7 @@
 import PDFKit
 import SwiftUI
 
-struct PDFKitView: UIViewRepresentable {
+struct PDFCanvasElementView: UIViewRepresentable {
     typealias UIViewType = PDFView
 
     let url: URL
