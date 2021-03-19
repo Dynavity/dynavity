@@ -26,7 +26,6 @@ class CanvasViewModel: ObservableObject {
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {
-        var annotationCanvas = AnnotationCanvas()
         annotationCanvas.drawing = drawing
     }
 }
