@@ -3,6 +3,7 @@ import CoreGraphics
 
 class Canvas: ObservableObject {
     @Published var canvasElements: [CanvasElementProtocol] = []
+    @Published var name: String = ""
 
     init() {
         let testElement1 = TestCanvasElement(position: CGPoint(x: -150, y: -150), text: "Test1")
