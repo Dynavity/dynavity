@@ -9,15 +9,9 @@ import SwiftUI
 
 @main
 struct DynavityApp: App {
-    @ObservedObject private var canvasViewModel = CanvasViewModel()
-
     var body: some Scene {
         WindowGroup {
-            VStack(spacing: 0.0) {
-                ToolbarView(viewModel: canvasViewModel)
-                Divider()
-                CanvasView(viewModel: canvasViewModel)
-            }
+            MainView()
         }
     }
 }

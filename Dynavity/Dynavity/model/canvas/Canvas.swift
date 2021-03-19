@@ -3,6 +3,7 @@ import CoreGraphics
 
 class Canvas: ObservableObject {
     @Published var canvasElements: [CanvasElementProtocol] = []
+    @Published var name: String = ""
 
     init() {
         /// Starting center is now (x: 250000, y:  250000) 
