@@ -3,7 +3,7 @@ import SwiftUI
 struct PDFCanvasElement: CanvasElementProtocol {
     var id = UUID()
     var position: CGPoint = .zero
-    var url: URL
+    var file: URL
 }
 
 // MARK: Equatable
