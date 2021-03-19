@@ -58,6 +58,7 @@ extension CanvasView: UIViewRepresentable {
         annotationCanvasView.contentSize = CGSize(width: maxContentSize, height: maxContentSize)
         annotationCanvasView.minimumZoomScale = CGFloat(0.1)
         annotationCanvasView.maximumZoomScale = CGFloat(2.0)
+        annotationCanvasView.bouncesZoom = false
 
         scrollToInitialContentOffset()
         showToolPicker()
