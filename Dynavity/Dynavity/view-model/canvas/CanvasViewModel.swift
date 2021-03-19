@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import PencilKit
 
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
+    @Published var annotationCanvas = AnnotationCanvas()
     @Published var selectedImage: UIImage?
 
     func addImageCanvasElement() {
@@ -21,5 +23,10 @@ class CanvasViewModel: ObservableObject {
 
         // Reset the selected image.
         selectedImage = nil
+    }
+
+    func storeAnnotation(_ drawing: PKDrawing) {
+        var annotationCanvas = AnnotationCanvas()
+        annotationCanvas.drawing = drawing
     }
 }

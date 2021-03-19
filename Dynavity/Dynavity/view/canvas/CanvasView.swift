@@ -29,6 +29,7 @@ extension CanvasView {
     }
 
     func saveAnnotationToModel() {
+        viewModel.storeAnnotation(annotationCanvasView.drawing)
     }
 
     func didZoom(to scale: CGFloat) {
