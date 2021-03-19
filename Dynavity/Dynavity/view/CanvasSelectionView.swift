@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CanvasSelectionView: View {
     @Binding var canvases: [String]
-    @Binding var searchQuery: String
+    @State var searchQuery: String = ""
 
     let columns = [
         GridItem(.flexible()),
@@ -11,26 +11,45 @@ struct CanvasSelectionView: View {
         GridItem(.flexible())
     ]
 
+    var filteredCanvases: [String] {
+        canvases.filter {
+            if searchQuery.isEmpty {
+                return true
+            }
+            return $0.lowercased().contains(self.searchQuery.lowercased())
+        }
+    }
+
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 200) {
-                let filteredCanvases = canvases.filter {
-                    if searchQuery.isEmpty {
-                        return true
-                    }
-                    return $0.lowercased().contains(self.searchQuery.lowercased())
+        NavigationView {
+            VStack {
+                SearchBar(text: $searchQuery)
+                    .padding()
+                ScrollView {
+                    canvasesGrid
                 }
-                ForEach(filteredCanvases, id: \.self) { canvas in
+            }
+            .navigationBarHidden(true)
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+
+    var canvasesGrid: some View {
+        LazyVGrid(columns: columns, spacing: 200) {
+            ForEach(self.filteredCanvases, id: \.self) { canvas in
+                NavigationLink(destination: MainView()
+                                .navigationBarHidden(true)
+                                .navigationBarBackButtonHidden(true)) {
                     CanvasThumbnailView(canvasName: canvas)
                 }
             }
-            .padding(.horizontal)
         }
+        .padding(.horizontal)
     }
 }
 
 struct CanvasSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        CanvasSelectionView(canvases: .constant([]), searchQuery: .constant(""))
+        CanvasSelectionView(canvases: .constant([]))
     }
 }
