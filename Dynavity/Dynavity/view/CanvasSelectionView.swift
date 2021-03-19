@@ -1,8 +1,7 @@
 import SwiftUI
 
 struct CanvasSelectionView: View {
-    // TODO: replace this with list of canvases
-    let data = (1...100).map { "Item \($0)" }
+    @Binding var canvases: [String]
 
     let columns = [
         GridItem(.flexible()),
@@ -14,8 +13,8 @@ struct CanvasSelectionView: View {
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 200) {
-                ForEach(data, id: \.self) { _ in
-                    CanvasThumbnailView()
+                ForEach(canvases, id: \.self) { canvas in
+                    CanvasThumbnailView(canvasName: canvas)
                 }
             }
             .padding(.horizontal)
@@ -25,6 +24,6 @@ struct CanvasSelectionView: View {
 
 struct CanvasSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        CanvasSelectionView()
+        CanvasSelectionView(canvases: .constant([]))
     }
 }
