@@ -9,6 +9,12 @@ import SwiftUI
 
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
+
+    // Sheets
+    @Published var activeSheet: ToolbarView.ActiveSheet?
+    private var lastActiveSheet: ToolbarView.ActiveSheet?
+
+    // Selected media
     @Published var selectedImage: UIImage?
     @Published var selectedFile: URL?
 
@@ -42,5 +48,36 @@ class CanvasViewModel: ObservableObject {
 
     func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
         canvas.addElement(MarkupTextBlock(markupType: markupType))
+    }
+}
+
+// MARK: Sheets
+extension CanvasViewModel {
+    func displayCamera() {
+        activeSheet = .camera
+        lastActiveSheet = .camera
+    }
+
+    func displayPhotoGallery() {
+        activeSheet = .photoGallery
+        lastActiveSheet = .photoGallery
+    }
+
+    func displayPdfPicker() {
+        activeSheet = .pdfPicker
+        lastActiveSheet = .pdfPicker
+    }
+
+    func handleSheetDismiss() {
+        switch lastActiveSheet {
+        case .camera:
+            addImageCanvasElement()
+        case .photoGallery:
+            addImageCanvasElement()
+        case .pdfPicker:
+            addPdfCanvasElement()
+        default:
+            assert(false, "When `handleSheetDismiss` is called, `lastActiveSheet` should not be `nil`.")
+        }
     }
 }
