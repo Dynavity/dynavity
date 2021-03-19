@@ -4,7 +4,7 @@ import Combine
 class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
     private static let debounceDelay = 1.5
 
-    @Published var markupTextBlock = MarkupTextBlock()
+    @Published var markupTextBlock: MarkupTextBlock
     @Published var rawHtml: String = ""
 
     // Responsible for triggering a request to external API when markUpTextBlock changes
@@ -12,7 +12,9 @@ class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
     // Responsible for retrieving data from external API
     private var requestCancellable: AnyCancellable?
 
-    init() {
+    init(markupTextBlock: MarkupTextBlock) {
+        self.markupTextBlock = markupTextBlock
+
         // Introduces a debounce so that we don't send too many requests out.
         // Implementation referenced from: https://stackoverflow.com/a/57365773
         cancellationToken = AnyCancellable($markupTextBlock.removeDuplicates()
