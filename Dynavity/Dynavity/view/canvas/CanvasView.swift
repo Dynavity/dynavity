@@ -79,7 +79,7 @@ extension CanvasView: UIViewRepresentable {
     }
 
     private func populateAnnotationCanvasView() {
-        let canvasElementMapView = CanvasElementMapView(elements: $viewModel.canvas.canvasElements)
+        let canvasElementMapView = CanvasElementMapView(viewModel: viewModel)
             .scaleEffect(zoomScale)
         let canvasElements = UIHostingController(rootView: canvasElementMapView)
 
