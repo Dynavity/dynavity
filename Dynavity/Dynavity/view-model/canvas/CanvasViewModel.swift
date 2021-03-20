@@ -4,18 +4,15 @@ import PencilKit
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
-    @Published var selectedImage: UIImage?
 
-    func addImageCanvasElement() {
-        guard let image = selectedImage else {
-            return
-        }
-
+    func addImageCanvasElement(from image: UIImage) {
         let imageCanvasElement = ImageCanvasElement(image: image)
         canvas.addElement(imageCanvasElement)
+    }
 
-        // Reset the selected image.
-        selectedImage = nil
+    func addPdfCanvasElement(from file: URL) {
+        let pdfCanvasElement = PDFCanvasElement(file: file)
+        canvas.addElement(pdfCanvasElement)
     }
 
     func addTextBlock() {
