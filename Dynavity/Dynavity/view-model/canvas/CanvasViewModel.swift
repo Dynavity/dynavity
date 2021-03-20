@@ -5,40 +5,14 @@ class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
 
-    // Selected media
-    @Published var selectedImage: UIImage? {
-        didSet {
-            addImageCanvasElement()
-        }
-    }
-    @Published var selectedFile: URL? {
-        didSet {
-            addPdfCanvasElement()
-        }
-    }
-
-    func addImageCanvasElement() {
-        guard let image = selectedImage else {
-            return
-        }
-
+    func addImageCanvasElement(from image: UIImage) {
         let imageCanvasElement = ImageCanvasElement(image: image)
         canvas.addElement(imageCanvasElement)
-
-        // Reset the selected image.
-        selectedImage = nil
     }
 
-    func addPdfCanvasElement() {
-        guard let file = selectedFile else {
-            return
-        }
-
+    func addPdfCanvasElement(from file: URL) {
         let pdfCanvasElement = PDFCanvasElement(file: file)
         canvas.addElement(pdfCanvasElement)
-
-        // Reset the selected file.
-        selectedFile = nil
     }
 
     func addTextBlock() {

@@ -4,7 +4,7 @@ import UniformTypeIdentifiers
 struct DocumentPickerView: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIDocumentPickerViewController
 
-    @Binding var selectedFile: URL?
+    let onFileSelected: (URL) -> Void
     let contentTypes: [UTType]
     @Environment(\.presentationMode) private var presentationMode
 
@@ -39,7 +39,7 @@ struct DocumentPickerView: UIViewControllerRepresentable {
                 return
             }
 
-            parent.selectedFile = file
+            parent.onFileSelected(file)
             parent.presentationMode.wrappedValue.dismiss()
         }
     }

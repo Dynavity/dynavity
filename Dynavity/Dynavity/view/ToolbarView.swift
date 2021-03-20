@@ -88,11 +88,11 @@ struct ToolbarView: View {
         .sheet(item: $activeSheet) { item in
             switch item {
             case .camera:
-                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .camera)
+                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .camera)
             case .photoGallery:
-                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .photoLibrary)
+                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .photoLibrary)
             case .pdfPicker:
-                DocumentPickerView(selectedFile: $viewModel.selectedFile, contentTypes: [.pdf])
+                DocumentPickerView(onFileSelected: viewModel.addPdfCanvasElement, contentTypes: [.pdf])
             }
         }
         // Force the toolbar to be drawn over everything else.

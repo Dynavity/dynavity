@@ -3,7 +3,7 @@ import SwiftUI
 struct ImagePickerView: UIViewControllerRepresentable {
     typealias UIViewControllerType = UIImagePickerController
 
-    @Binding var selectedImage: UIImage?
+    let onImageSelected: (UIImage) -> Void
     var sourceType: UIViewControllerType.SourceType
     @Environment(\.presentationMode) private var presentationMode
 
@@ -38,7 +38,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
                 return
             }
 
-            parent.selectedImage = image
+            parent.onImageSelected(image)
             parent.presentationMode.wrappedValue.dismiss()
         }
     }
