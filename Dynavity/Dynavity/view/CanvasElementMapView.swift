@@ -34,6 +34,10 @@ struct CanvasElementMapView: View {
         }
     }
 
+    private func isSelected(_ element: CanvasElementProtocol) -> Bool {
+        viewModel.selectedCanvasElementId == element.id
+    }
+
     var body: some View {
         ZStack {
             ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
@@ -44,8 +48,8 @@ struct CanvasElementMapView: View {
                         .onTapGesture {
                             viewModel.select(canvasElement: element)
                         }
-                        .gesture(dragGesture)
-                    if viewModel.selectedCanvasElementId == element.id {
+                        .gesture(isSelected(element) ? dragGesture : nil)
+                    if isSelected(element) {
                         SelectionOverlayView(element: element)
                             .allowsHitTesting(false)
                     }
