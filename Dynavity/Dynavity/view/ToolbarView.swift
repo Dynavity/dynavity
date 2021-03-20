@@ -70,7 +70,6 @@ struct ToolbarView: View {
                 Label("LaTeX", systemImage: "doc.richtext")
             }
         }
-
     }
 
     private var sideMenuButton: some View {
