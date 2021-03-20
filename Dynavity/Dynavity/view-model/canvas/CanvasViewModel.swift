@@ -10,8 +10,8 @@ class CanvasViewModel: ObservableObject {
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
 
-    var canvasOrigin: CGFloat {
-        canvasSize / 2.0
+    var canvasOrigin: CGPoint {
+        CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
     }
 
     init(canvasSize: CGFloat) {
@@ -40,21 +40,21 @@ class CanvasViewModel: ObservableObject {
     }
 
     func addImageCanvasElement(from image: UIImage) {
-        let imageCanvasElement = ImageCanvasElement(image: image)
+        let imageCanvasElement = ImageCanvasElement(position: canvasOrigin, image: image)
         canvas.addElement(imageCanvasElement)
     }
 
     func addPdfCanvasElement(from file: URL) {
-        let pdfCanvasElement = PDFCanvasElement(file: file)
+        let pdfCanvasElement = PDFCanvasElement(position: canvasOrigin, file: file)
         canvas.addElement(pdfCanvasElement)
     }
 
     func addTextBlock() {
-        canvas.addElement(TextBlock())
+        canvas.addElement(TextBlock(position: canvasOrigin))
     }
 
     func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
-        canvas.addElement(MarkupTextBlock(markupType: markupType))
+        canvas.addElement(MarkupTextBlock(position: canvasOrigin, markupType: markupType))
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {

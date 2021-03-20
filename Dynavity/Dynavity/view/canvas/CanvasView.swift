@@ -9,8 +9,8 @@ struct CanvasView: View {
             CanvasElementMapView(viewModel: viewModel)
                 .scaleEffect(viewModel.scaleFactor)
                 .offset(
-                    x: -(viewModel.canvasOrigin + viewModel.canvasCenterOffsetX),
-                    y: -(viewModel.canvasOrigin + viewModel.canvasCenterOffsetY)
+                    x: -(viewModel.canvasOrigin.x + viewModel.canvasCenterOffsetX),
+                    y: -(viewModel.canvasOrigin.y + viewModel.canvasCenterOffsetY)
                 )
         }
     }

@@ -6,8 +6,13 @@ struct MarkupTextBlock: CanvasElementProtocol {
         case markdown, latex
     }
 
-    var textBlock = TextBlock()
-    var markupType: MarkupType = .markdown
+    var textBlock: TextBlock
+    var markupType: MarkupType
+
+    init(position: CGPoint, markupType: MarkupType) {
+        self.textBlock = TextBlock(position: position)
+        self.markupType = markupType
+    }
 
     var id: UUID {
         textBlock.id

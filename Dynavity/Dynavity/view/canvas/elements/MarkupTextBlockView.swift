@@ -28,6 +28,6 @@ struct MarkupTextBlockView: View {
 
 struct MarkupTextBlockView_Previews: PreviewProvider {
     static var previews: some View {
-        MarkupTextBlockView(markupTextBlock: MarkupTextBlock())
+        MarkupTextBlockView(markupTextBlock: MarkupTextBlock(position: .zero, markupType: .markdown))
     }
 }

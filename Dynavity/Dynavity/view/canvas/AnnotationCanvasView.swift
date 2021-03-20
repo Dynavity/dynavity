@@ -34,8 +34,8 @@ extension AnnotationCanvasView {
     }
 
     func didScroll(to offset: CGPoint) {
-        viewModel.canvasCenterOffsetX = offset.x - viewModel.canvasOrigin
-        viewModel.canvasCenterOffsetY = offset.y - viewModel.canvasOrigin
+        viewModel.canvasCenterOffsetX = offset.x - viewModel.canvasOrigin.x
+        viewModel.canvasCenterOffsetY = offset.y - viewModel.canvasOrigin.y
     }
 }
 
@@ -59,10 +59,7 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.minimumZoomScale = CGFloat(0.1)
         annotationCanvasView.maximumZoomScale = CGFloat(2.0)
         annotationCanvasView.bouncesZoom = false
-        annotationCanvasView.contentOffset = CGPoint(
-            x: viewModel.canvasOrigin,
-            y: viewModel.canvasOrigin
-        )
+        annotationCanvasView.contentOffset = viewModel.canvasOrigin
 
         showToolPicker()
         return annotationCanvasView

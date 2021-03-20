@@ -13,7 +13,7 @@ struct ImageCanvasElementView: View {
 }
 
 struct ImageCanvasElementView_Previews: PreviewProvider {
-    static let imageCanvasElement = ImageCanvasElement(image: UIImage())
+    static let imageCanvasElement = ImageCanvasElement(position: .zero, image: UIImage())
 
     static var previews: some View {
         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)

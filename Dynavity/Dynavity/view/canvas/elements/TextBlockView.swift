@@ -16,6 +16,6 @@ struct TextBlockView: View {
 
 struct TextBlockView_Previews: PreviewProvider {
     static var previews: some View {
-        TextBlockView(textBlock: TextBlock())
+        TextBlockView(textBlock: TextBlock(position: .zero))
     }
 }
