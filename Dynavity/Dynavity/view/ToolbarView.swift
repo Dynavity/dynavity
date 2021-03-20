@@ -50,15 +50,25 @@ struct ToolbarView: View {
             }) {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
+            markupTextBlockButtons
+        }
+        label: {
+            Label("Add", systemImage: "plus")
+        }
+    }
+
+    private var markupTextBlockButtons: some View {
+        Group {
             Button(action: {
-                // TODO: Update this function to take in a markupType based on user input
                 viewModel.addMarkUpTextBlock(markupType: .markdown)
             }) {
                 Label("Markup", systemImage: "text.badge.star")
             }
-        }
-        label: {
-            Label("Add", systemImage: "plus")
+            Button(action: {
+                viewModel.addMarkUpTextBlock(markupType: .latex)
+            }) {
+                Label("LaTeX", systemImage: "doc.richtext")
+            }
         }
     }
 
