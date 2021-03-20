@@ -37,14 +37,20 @@ struct CanvasElementMapView: View {
     var body: some View {
         ZStack {
             ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
-                transformToView(element: element)
-                    .frame(width: element.width, height: element.height)
-                    .addCardOverlay()
-                    .onTapGesture {
-                        viewModel.select(canvasElement: element)
+                ZStack {
+                    transformToView(element: element)
+                        .frame(width: element.width, height: element.height)
+                        .addCardOverlay()
+                        .onTapGesture {
+                            viewModel.select(canvasElement: element)
+                        }
+                        .gesture(dragGesture)
+                    if viewModel.selectedCanvasElementId == element.id {
+                        SelectionOverlayView(element: element)
+                            .allowsHitTesting(false)
                     }
-                    .gesture(dragGesture)
-                    .offset(x: element.position.x, y: element.position.y)
+                }
+                .offset(x: element.position.x, y: element.position.y)
             }
         }
     }
