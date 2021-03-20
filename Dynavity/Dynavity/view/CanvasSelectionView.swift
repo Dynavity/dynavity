@@ -35,7 +35,7 @@ struct CanvasSelectionView: View {
     var body: some View {
         NavigationView {
             VStack {
-                editButtonGroup
+                actionButtonGroup
                 .padding()
                 ScrollView {
                     canvasesGrid
@@ -66,7 +66,7 @@ struct CanvasSelectionView: View {
         .padding(.horizontal)
     }
 
-    var editButtonGroup: some View {
+    var actionButtonGroup: some View {
         HStack {
             if isEditing {
                 Button("Done") {
@@ -78,12 +78,19 @@ struct CanvasSelectionView: View {
                 }) {
                     Image(systemName: "trash")
                 }.disabled(noCanvasSelected)
+                
                 SearchBar(text: $searchQuery)
             } else {
                 Button("Edit") {
                     toggleEditMode()
                 }
                 SearchBar(text: $searchQuery)
+                // TODO: Implement saving the newly created canvas to state & db
+                NavigationLink(destination: MainView()
+                                .navigationBarHidden(true)
+                                .navigationBarBackButtonHidden(true)) {
+                    Image(systemName: "doc.fill.badge.plus")
+                }
             }
         }
     }
