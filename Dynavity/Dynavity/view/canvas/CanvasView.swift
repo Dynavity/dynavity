@@ -76,7 +76,7 @@ extension CanvasView: UIViewRepresentable {
 
     private func initialiseCanvasElements() {
         let canvasElementMapView = CanvasElementMapView(
-            elements: $viewModel.canvas.canvasElements,
+            viewModel: viewModel,
             scaleFactor: $zoomScale
         )
         let canvasElements = UIHostingController(rootView: canvasElementMapView)
