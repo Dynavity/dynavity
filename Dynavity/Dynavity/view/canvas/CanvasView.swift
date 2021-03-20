@@ -34,8 +34,6 @@ extension CanvasView {
 
     func didZoom(to scale: CGFloat) {
         zoomScale = scale
-        cleanAnnotationCanvasView()
-        populateAnnotationCanvasView()
     }
 }
 
@@ -62,38 +60,27 @@ extension CanvasView: UIViewRepresentable {
 
         scrollToInitialContentOffset()
         showToolPicker()
+        initialiseCanvasElements()
         return annotationCanvasView
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        cleanAnnotationCanvasView()
-        populateAnnotationCanvasView()
-    }
-
-    private func cleanAnnotationCanvasView() {
-        annotationCanvasView.subviews.forEach {
-            if $0.accessibilityLabel == "CanvasElements" {
-                $0.removeFromSuperview()
-            }
-        }
-    }
-
-    private func populateAnnotationCanvasView() {
-        let canvasElementMapView = CanvasElementMapView(elements: $viewModel.canvas.canvasElements)
-            .scaleEffect(zoomScale)
-        let canvasElements = UIHostingController(rootView: canvasElementMapView)
-
-        /// To remove on only canvasElements when cleaning, other `UIView`s are necessary for `PKCanvasView` to draw
-        canvasElements.view.accessibilityLabel = "CanvasElements"
-
-        /// Draw all other `CanvasElementProtocol`s behind the annotations
-        annotationCanvasView.insertSubview(canvasElements.view, at: 0)
+        // Do nothing.
     }
 
     private func scrollToInitialContentOffset() {
         let centerOffsetX = (annotationCanvasView.contentSize.width - annotationCanvasView.frame.width) / 2
         let centerOffsetY = (annotationCanvasView.contentSize.height - annotationCanvasView.frame.height) / 2
         annotationCanvasView.contentOffset = CGPoint(x: centerOffsetX, y: centerOffsetY)
+    }
+
+    private func initialiseCanvasElements() {
+        let canvasElementMapView = CanvasElementMapView(
+            elements: $viewModel.canvas.canvasElements,
+            scaleFactor: $zoomScale
+        )
+        let canvasElements = UIHostingController(rootView: canvasElementMapView)
+        annotationCanvasView.insertSubview(canvasElements.view, at: 0)
     }
 
     func makeCoordinator() -> Coordinator {
