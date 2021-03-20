@@ -38,6 +38,7 @@ struct CanvasElementMapView: View {
         ZStack {
             ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
                 transformToView(element: element)
+                    .frame(width: element.width, height: element.height)
                     .addCardOverlay()
                     .onTapGesture {
                         viewModel.select(canvasElement: element)

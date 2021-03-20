@@ -25,6 +25,22 @@ struct MarkupTextBlock: CanvasElementProtocol {
             textBlock.position = newValue
         }
     }
+    var width: CGFloat {
+        get {
+            textBlock.width
+        }
+        set {
+            textBlock.width = newValue
+        }
+    }
+    var height: CGFloat {
+        get {
+            textBlock.height
+        }
+        set {
+            textBlock.height = newValue
+        }
+    }
     var text: String {
         get {
             textBlock.text
