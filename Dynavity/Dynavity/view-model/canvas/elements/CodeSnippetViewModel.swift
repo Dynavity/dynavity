@@ -85,7 +85,7 @@ class CodeSnippetViewModel: ObservableObject {
                 self.containerId = container
             }
         }
-        
+
         func identifyMessage(response: Result<URLSessionWebSocketTask.Message, Error>) {
             switch response {
             case .failure(let error):

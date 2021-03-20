@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CodeSnippetView: View {
     @ObservedObject var viewModel: CodeSnippetViewModel
-    
+
     init(codeSnippet: CodeSnippet) {
         self.viewModel = CodeSnippetViewModel(codeSnippet: codeSnippet)
     }
@@ -11,6 +11,9 @@ struct CodeSnippetView: View {
         HStack {
             VStack {
                 TextEditor(text: $viewModel.codeSnippet.programString)
+                    .font(.custom("Courier", size: viewModel.codeSnippet.fontSize))
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
                 Divider()
                 HStack {
                     Picker("Language", selection: $viewModel.codeSnippet.language) {
