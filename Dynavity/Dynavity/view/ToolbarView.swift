@@ -51,10 +51,14 @@ struct ToolbarView: View {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
             Button(action: {
-                // TODO: Update this function to take in a markupType based on user input
                 viewModel.addMarkUpTextBlock(markupType: .markdown)
             }) {
                 Label("Markup", systemImage: "text.badge.star")
+            }
+            Button(action: {
+                viewModel.addMarkUpTextBlock(markupType: .latex)
+            }) {
+                Label("LaTeX", systemImage: "doc.richtext")
             }
         }
         label: {
