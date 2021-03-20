@@ -41,6 +41,14 @@ struct MarkupTextBlock: CanvasElementProtocol {
             textBlock.height = newValue
         }
     }
+    var rotation: Double {
+        get {
+            textBlock.rotation
+        }
+        set {
+            textBlock.rotation = newValue
+        }
+    }
     var text: String {
         get {
             textBlock.text

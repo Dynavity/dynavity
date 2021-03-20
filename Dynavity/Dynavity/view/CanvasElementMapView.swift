@@ -54,6 +54,7 @@ struct CanvasElementMapView: View {
                             .allowsHitTesting(false)
                     }
                 }
+                .rotationEffect(.radians(element.rotation))
                 .offset(x: element.position.x, y: element.position.y)
             }
         }

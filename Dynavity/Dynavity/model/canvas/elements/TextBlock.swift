@@ -9,6 +9,7 @@ struct TextBlock: CanvasElementProtocol {
     var fontSize: CGFloat = 14
     var width: CGFloat = 500.0
     var height: CGFloat = 500.0
+    var rotation: Double = .zero
 }
 
 extension TextBlock: Equatable {}

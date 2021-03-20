@@ -11,6 +11,7 @@ struct TestCanvasElement: CanvasElementProtocol, Identifiable {
     var position: CGPoint = .zero
     var width: CGFloat = 100.0
     var height: CGFloat = 100.0
+    var rotation = Double.pi / 4.0
 
     static func == (lhs: TestCanvasElement, rhs: TestCanvasElement) -> Bool {
         lhs.id == rhs.id

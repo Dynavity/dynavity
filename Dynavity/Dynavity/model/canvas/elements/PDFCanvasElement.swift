@@ -6,6 +6,7 @@ struct PDFCanvasElement: CanvasElementProtocol {
     var file: URL
     var width: CGFloat = 500.0
     var height: CGFloat = 500.0
+    var rotation: Double = .zero
 }
 
 // MARK: Equatable

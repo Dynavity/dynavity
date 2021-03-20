@@ -6,6 +6,7 @@ struct ImageCanvasElement: CanvasElementProtocol {
     var image: UIImage
     var width: CGFloat
     var height: CGFloat
+    var rotation: Double = .zero
 
     init(position: CGPoint, image: UIImage) {
         self.position = position
