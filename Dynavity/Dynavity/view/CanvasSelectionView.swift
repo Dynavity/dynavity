@@ -1,8 +1,16 @@
 import SwiftUI
 
 struct CanvasSelectionView: View {
-    @Binding var canvases: [String]
+    struct CanvasDetail: Hashable {
+        var title: String
+        var isSelected: Bool
+    }
+
+    @Binding var canvases: [CanvasDetail]
     @State var searchQuery: String = ""
+    @State var isEditing = false
+    var toggleSelectedCanvas: (String) -> Void
+    var clearSelectedCanvases: () -> Void
 
     let columns = [
         GridItem(.flexible()),
@@ -11,20 +19,25 @@ struct CanvasSelectionView: View {
         GridItem(.flexible())
     ]
 
-    var filteredCanvases: [String] {
+    var filteredCanvases: [CanvasDetail] {
         canvases.filter {
             if searchQuery.isEmpty {
                 return true
             }
-            return $0.lowercased().contains(self.searchQuery.lowercased())
+        return $0.title.lowercased().contains(self.searchQuery.lowercased())
         }
     }
 
     var body: some View {
         NavigationView {
             VStack {
-                SearchBar(text: $searchQuery)
-                    .padding()
+                HStack {
+                    Button(isEditing ? "Done" : "Edit") {
+                        toggleEditMode()
+                    }
+                    SearchBar(text: $searchQuery)
+                }
+                .padding()
                 ScrollView {
                     canvasesGrid
                 }
@@ -37,10 +50,17 @@ struct CanvasSelectionView: View {
     var canvasesGrid: some View {
         LazyVGrid(columns: columns, spacing: 200) {
             ForEach(self.filteredCanvases, id: \.self) { canvas in
-                NavigationLink(destination: MainView()
-                                .navigationBarHidden(true)
-                                .navigationBarBackButtonHidden(true)) {
-                    CanvasThumbnailView(canvasName: canvas)
+                if isEditing {
+                    CanvasThumbnailView(canvasName: canvas.title, isSelected: canvas.isSelected)
+                        .onTapGesture {
+                            toggleSelectedCanvas(canvas.title)
+                        }
+                } else {
+                    NavigationLink(destination: MainView()
+                                    .navigationBarHidden(true)
+                                    .navigationBarBackButtonHidden(true)) {
+                        CanvasThumbnailView(canvasName: canvas.title, isSelected: canvas.isSelected)
+                    }
                 }
             }
         }
@@ -49,7 +69,21 @@ struct CanvasSelectionView: View {
 }
 
 struct CanvasSelectionView_Previews: PreviewProvider {
+    static func toggle(input: String) {}
+    static func clear() {}
     static var previews: some View {
-        CanvasSelectionView(canvases: .constant([]))
+        CanvasSelectionView(canvases: .constant([]),
+                            toggleSelectedCanvas: toggle,
+                            clearSelectedCanvases: clear)
+    }
+}
+
+extension CanvasSelectionView {
+    func toggleEditMode() {
+        isEditing.toggle()
+
+        if !isEditing {
+            clearSelectedCanvases()
+        }
     }
 }
