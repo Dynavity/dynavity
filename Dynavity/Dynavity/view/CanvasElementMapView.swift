@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CanvasElementMapView: View {
     @ObservedObject var viewModel: CanvasViewModel
-    @Binding var scaleFactor: CGFloat
 
     private var dragGesture: some Gesture {
         DragGesture()
@@ -44,7 +43,9 @@ struct CanvasElementMapView: View {
                 .offset(x: element.position.x, y: element.position.y)
             }
         }
-        .scaleEffect(scaleFactor)
+        // TODO: Re-enable this once scaling is fixed.
+        // .scaleEffect(viewModel.scaleFactor)
+        .scaleEffect(1.0)
     }
 }
 
@@ -53,6 +54,6 @@ struct CanvasElementMapView_Previews: PreviewProvider {
     @State static var scale: CGFloat = 1.0
 
     static var previews: some View {
-        CanvasElementMapView(viewModel: viewModel, scaleFactor: $scale)
+        CanvasElementMapView(viewModel: viewModel)
     }
 }

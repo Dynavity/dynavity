@@ -4,6 +4,7 @@ import PencilKit
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
+    @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
 
     init(canvas: Canvas) {
