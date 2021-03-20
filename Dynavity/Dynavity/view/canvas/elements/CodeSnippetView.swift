@@ -2,7 +2,7 @@ import SwiftUI
 
 struct CodeSnippetView: View {
     @ObservedObject var viewModel: CodeSnippetViewModel
-
+    
     init(codeSnippet: CodeSnippet) {
         self.viewModel = CodeSnippetViewModel(codeSnippet: codeSnippet)
     }
@@ -13,9 +13,16 @@ struct CodeSnippetView: View {
                 TextEditor(text: $viewModel.codeSnippet.programString)
                 Divider()
                 HStack {
+                    Picker("Language", selection: $viewModel.codeSnippet.language) {
+                        let languages = CodeSnippet.CodeLanguage.allCases
+                        ForEach(0 ..< languages.count) {
+                            Text(languages[$0].displayName)
+                        }
+                    }
                     Button(action: viewModel.runCode, label: {
                         Text("Run")
                     })
+                    .frame(maxWidth: .infinity)
                 }
             }
 

@@ -44,7 +44,7 @@ class CodeSnippetViewModel: ObservableObject {
         let launchBody = [
             "action": "launch",
             "mode": "compile",
-            "lang": "python", // TODO: change according to user input
+            "lang": codeSnippet.language.backendName,
             "prog": program
         ]
 
