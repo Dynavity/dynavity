@@ -2,9 +2,9 @@ import SwiftUI
 
 struct SelectionOverlayView: View {
     var element: CanvasElementProtocol
-    var viewModel: CanvasViewModel
+    @ObservedObject var viewModel: CanvasViewModel
 
-    private let rotationControlSize: CGFloat = 20.0
+    private let rotationControlSize: CGFloat = 25.0
     private let rotationControlHandleLength: CGFloat = 10.0
 
     private var rotationGesture: some Gesture {
@@ -28,7 +28,9 @@ struct SelectionOverlayView: View {
                 .frame(width: 1.0, height: rotationControlHandleLength)
         }
         .gesture(rotationGesture)
-        .offset(y: -(element.height + rotationControlSize + rotationControlHandleLength) / 2.0)
+        .offset(y: -(element.height * viewModel.scaleFactor + rotationControlSize + rotationControlHandleLength) / 2.0)
+        // Force the rotation control to be the same size regardless of scale factor.
+        .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
     var body: some View {
