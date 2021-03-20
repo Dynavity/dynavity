@@ -12,6 +12,27 @@ struct CanvasView: View {
     init(viewModel: CanvasViewModel) {
         self.viewModel = viewModel
     }
+
+    final class Coordinator: NSObject, PKCanvasViewDelegate {
+        var canvasView: CanvasView
+        let onChange: () -> Void
+
+        init(canvasView: CanvasView,
+             onChange: @escaping () -> Void) {
+            self.canvasView = canvasView
+            self.onChange = onChange
+        }
+
+        func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
+            if !canvasView.drawing.bounds.isEmpty {
+                onChange()
+            }
+        }
+
+        func scrollViewDidZoom(_ scrollView: UIScrollView) {
+            canvasView.didZoom(to: scrollView.zoomScale)
+        }
+    }
 }
 
 struct CanvasView_Previews: PreviewProvider {
@@ -86,28 +107,5 @@ extension CanvasView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(canvasView: self,
                     onChange: saveAnnotationToModel)
-    }
-}
-
-class Coordinator: NSObject {
-    var canvasView: CanvasView
-    let onChange: () -> Void
-
-    init(canvasView: CanvasView,
-         onChange: @escaping () -> Void) {
-        self.canvasView = canvasView
-        self.onChange = onChange
-    }
-}
-
-extension Coordinator: PKCanvasViewDelegate {
-    func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-        if !canvasView.drawing.bounds.isEmpty {
-            onChange()
-        }
-    }
-
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        canvasView.didZoom(to: scrollView.zoomScale)
     }
 }

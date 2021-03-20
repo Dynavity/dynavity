@@ -78,7 +78,7 @@ struct CanvasSelectionView: View {
                 }) {
                     Image(systemName: "trash")
                 }.disabled(noCanvasSelected)
-                
+
                 SearchBar(text: $searchQuery)
             } else {
                 Button("Edit") {
