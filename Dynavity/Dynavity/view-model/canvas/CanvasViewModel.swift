@@ -63,7 +63,7 @@ extension CanvasViewModel {
         selectedCanvasElementId = nil
     }
 
-    func moveSelectedCanvasElement(to location: CGPoint) {
-        canvas.repositionCanvasElement(id: selectedCanvasElementId, to: location)
+    func moveSelectedCanvasElement(by translation: CGSize) {
+        canvas.repositionCanvasElement(id: selectedCanvasElementId, by: translation)
     }
 }

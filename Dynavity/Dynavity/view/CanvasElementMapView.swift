@@ -13,7 +13,7 @@ struct CanvasElementMapView: View {
     private var dragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                viewModel.moveSelectedCanvasElement(to: value.location)
+                viewModel.moveSelectedCanvasElement(by: value.translation)
             }
     }
 

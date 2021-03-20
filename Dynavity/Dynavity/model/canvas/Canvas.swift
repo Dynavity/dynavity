@@ -17,11 +17,11 @@ struct Canvas {
         canvasElements.append(element)
     }
 
-    mutating func repositionCanvasElement(id: UUID?, to location: CGPoint) {
+    mutating func repositionCanvasElement(id: UUID?, by translation: CGSize) {
         guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
             return
         }
 
-        canvasElements[index].position = location
+        canvasElements[index].position += translation
     }
 }
