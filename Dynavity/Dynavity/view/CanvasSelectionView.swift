@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CanvasSelectionView: View {
+    // TODO: Use actual canvas model instead, this is a temporary substitute
     struct CanvasDetail: Hashable {
         var title: String
         var isSelected: Bool

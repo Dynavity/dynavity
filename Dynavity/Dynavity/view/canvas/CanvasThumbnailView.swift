@@ -5,20 +5,12 @@ struct CanvasThumbnailView: View {
     var isSelected: Bool
     var body: some View {
         VStack {
-            if isSelected {
-                // TODO: replace this with canvas thumbnail
-                Image(systemName: "doc")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 70)
-                    .overlay(checkSymbol)
-            } else {
-                // TODO: replace this with canvas thumbnail
-                Image(systemName: "doc")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 70)
-            }
+            // TODO: replace this with canvas thumbnail
+            Image(systemName: "doc")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 70)
+                .overlay(isSelected ? checkSymbol : nil)
             Text(canvasName)
         }
     }
