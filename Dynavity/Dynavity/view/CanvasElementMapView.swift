@@ -17,30 +17,33 @@ struct CanvasElementMapView: View {
             }
     }
 
+    private func transformToView(element: CanvasElementProtocol) -> some View {
+        Group {
+            switch element {
+            case let imageCanvasElement as ImageCanvasElement:
+                ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
+            case let pdfCanvasElement as PDFCanvasElement:
+                PDFCanvasElementView(pdfCanvasElement: pdfCanvasElement)
+            case let textBlock as TextBlock:
+                TextBlockView(textBlock: textBlock)
+            case let markupTextBlock as MarkupTextBlock:
+                MarkupTextBlockView(markupTextBlock: markupTextBlock)
+            default:
+                CanvasElementView(element: element)
+            }
+        }
+    }
+
     var body: some View {
         ZStack {
             ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
-                // The group allows us to have common view modifiers.
-                Group {
-                    switch element {
-                    case let imageCanvasElement as ImageCanvasElement:
-                        ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
-                    case let pdfCanvasElement as PDFCanvasElement:
-                        PDFCanvasElementView(pdfCanvasElement: pdfCanvasElement)
-                    case let textBlock as TextBlock:
-                        TextBlockView(textBlock: textBlock)
-                    case let markupTextBlock as MarkupTextBlock:
-                        MarkupTextBlockView(markupTextBlock: markupTextBlock)
-                    default:
-                        CanvasElementView(element: element)
+                transformToView(element: element)
+                    .addCardOverlay()
+                    .onTapGesture {
+                        viewModel.select(canvasElement: element)
                     }
-                }
-                .addCardOverlay()
-                .onTapGesture {
-                    viewModel.select(canvasElement: element)
-                }
-                .gesture(dragGesture)
-                .offset(x: element.position.x, y: element.position.y)
+                    .gesture(dragGesture)
+                    .offset(x: element.position.x, y: element.position.y)
             }
         }
     }
