@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ImageCanvasElement: CanvasElementProtocol {
     var id = UUID()
-    var position: CGPoint = .zero
+    var position: CGPoint = .canvasCenter
     var image: UIImage
 }
 

@@ -4,6 +4,7 @@ struct ToolbarView: View {
     private enum ActiveSheet: Identifiable {
         case camera
         case photoGallery
+        case pdfPicker
 
         var id: Int {
             hashValue
@@ -30,7 +31,7 @@ struct ToolbarView: View {
                 Label("Photo Gallery", systemImage: "photo")
             }
             Button(action: {
-                // TODO: Implement PDF import functionality.
+                activeSheet = .pdfPicker
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
@@ -84,12 +85,14 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
-        .sheet(item: $activeSheet, onDismiss: viewModel.addImageCanvasElement) { item in
+        .sheet(item: $activeSheet) { item in
             switch item {
             case .camera:
-                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .camera)
+                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .camera)
             case .photoGallery:
-                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .photoLibrary)
+                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .photoLibrary)
+            case .pdfPicker:
+                DocumentPickerView(onFileSelected: viewModel.addPdfCanvasElement, contentTypes: [.pdf])
             }
         }
         // Force the toolbar to be drawn over everything else.
