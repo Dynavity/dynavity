@@ -22,23 +22,10 @@ class CanvasViewModel: ObservableObject {
         // Arbitrarily large value for the "infinite" canvas.
         self.init(canvasSize: 500_000)
     }
+}
 
-    func select(canvasElement: CanvasElementProtocol) {
-        if selectedCanvasElementId == canvasElement.id {
-            selectedCanvasElementId = nil
-            return
-        }
-        selectedCanvasElementId = canvasElement.id
-    }
-
-    func unselectCanvasElement() {
-        selectedCanvasElementId = nil
-    }
-
-    func moveSelectedCanvasElement(to location: CGPoint) {
-        canvas.repositionCanvasElement(id: selectedCanvasElementId, to: location)
-    }
-
+// MARK: Adding of canvas elements
+extension CanvasViewModel {
     func addImageCanvasElement(from image: UIImage) {
         let imageCanvasElement = ImageCanvasElement(position: canvasOrigin, image: image)
         canvas.addElement(imageCanvasElement)
@@ -59,5 +46,24 @@ class CanvasViewModel: ObservableObject {
 
     func storeAnnotation(_ drawing: PKDrawing) {
         annotationCanvas.drawing = drawing
+    }
+}
+
+// MARK: Editing/deleting of canvas elements
+extension CanvasViewModel {
+    func select(canvasElement: CanvasElementProtocol) {
+        if selectedCanvasElementId == canvasElement.id {
+            selectedCanvasElementId = nil
+            return
+        }
+        selectedCanvasElementId = canvasElement.id
+    }
+
+    func unselectCanvasElement() {
+        selectedCanvasElementId = nil
+    }
+
+    func moveSelectedCanvasElement(to location: CGPoint) {
+        canvas.repositionCanvasElement(id: selectedCanvasElementId, to: location)
     }
 }
