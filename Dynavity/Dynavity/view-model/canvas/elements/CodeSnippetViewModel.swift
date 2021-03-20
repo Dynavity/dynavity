@@ -5,6 +5,7 @@ class CodeSnippetViewModel: ObservableObject {
     @Published var output: String = ""
 
     private var connection: URLSessionWebSocketTask
+    private var containerId: String = ""
 
     init(codeSnippet: CodeSnippet) {
         self.codeSnippet = codeSnippet
@@ -18,8 +19,26 @@ class CodeSnippetViewModel: ObservableObject {
 
     let endpointUrl = "wss://t8jfxu45v2.execute-api.us-east-2.amazonaws.com/production/"
 
+    func preprocessProgram(src: String) -> String {
+        let charsToReplace = [
+            ("\u{201c}", "\""),
+            ("\u{201d}", "\""),
+            ("\u{2018}", "'"),
+            ("\u{2019}", "'")
+        ]
+        var processed = src
+        charsToReplace.forEach {
+            processed = processed.replacingOccurrences(of: $0.0, with: $0.1)
+        }
+        return processed
+    }
+
     func runCode() {
-        let program = codeSnippet.programString
+        let program = preprocessProgram(src: codeSnippet.programString)
+        guard !program.isEmpty else {
+            // backend will not accept an empty program
+            return
+        }
         connection.resume()
         clearOutput()
         let launchBody = [
