@@ -43,9 +43,6 @@ struct CanvasElementMapView: View {
                 .offset(x: element.position.x, y: element.position.y)
             }
         }
-        // TODO: Re-enable this once scaling is fixed.
-        // .scaleEffect(viewModel.scaleFactor)
-        .scaleEffect(1.0)
     }
 }
 

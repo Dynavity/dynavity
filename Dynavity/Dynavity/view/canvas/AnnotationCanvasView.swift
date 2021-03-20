@@ -32,15 +32,17 @@ extension AnnotationCanvasView {
     func didZoom(to scale: CGFloat) {
         viewModel.scaleFactor = scale
     }
+
+    func didScroll(to offset: CGPoint) {
+        viewModel.canvasCenterOffsetX = offset.x - viewModel.canvasOrigin
+        viewModel.canvasCenterOffsetY = offset.y - viewModel.canvasOrigin
+    }
 }
 
 /// `PKCanvasView` is a `UIKit` view. To use it in SwiftUI,
 /// we need to wrap it in a `SwiftUI` view that conforms to UIViewRepresentable.
 extension AnnotationCanvasView: UIViewRepresentable {
     func makeUIView(context: Context) -> PKCanvasView {
-        // This simulates an "infinite" canvas
-        let maxContentSize = CGFloat(500_000)
-
         // For testing purposes on simulator, not necessary otherwise
         #if targetEnvironment(simulator)
         annotationCanvasView.drawingPolicy = .anyInput
@@ -50,24 +52,24 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.isOpaque = false
         annotationCanvasView.showsVerticalScrollIndicator = false
         annotationCanvasView.showsHorizontalScrollIndicator = false
-        annotationCanvasView.contentSize = CGSize(width: maxContentSize, height: maxContentSize)
+        annotationCanvasView.contentSize = CGSize(
+            width: viewModel.canvasSize,
+            height: viewModel.canvasSize
+        )
         annotationCanvasView.minimumZoomScale = CGFloat(0.1)
         annotationCanvasView.maximumZoomScale = CGFloat(2.0)
         annotationCanvasView.bouncesZoom = false
+        annotationCanvasView.contentOffset = CGPoint(
+            x: viewModel.canvasOrigin,
+            y: viewModel.canvasOrigin
+        )
 
-        scrollToInitialContentOffset()
         showToolPicker()
         return annotationCanvasView
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
         // Do nothing.
-    }
-
-    private func scrollToInitialContentOffset() {
-        let centerOffsetX = (annotationCanvasView.contentSize.width - annotationCanvasView.frame.width) / 2
-        let centerOffsetY = (annotationCanvasView.contentSize.height - annotationCanvasView.frame.height) / 2
-        annotationCanvasView.contentOffset = CGPoint(x: centerOffsetX, y: centerOffsetY)
     }
 
     func makeCoordinator() -> Coordinator {
@@ -96,5 +98,9 @@ extension Coordinator: PKCanvasViewDelegate {
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         annotationCanvasView.didZoom(to: scrollView.zoomScale)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        annotationCanvasView.didScroll(to: scrollView.contentOffset)
     }
 }

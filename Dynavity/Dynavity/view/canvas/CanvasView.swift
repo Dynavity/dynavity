@@ -7,7 +7,11 @@ struct CanvasView: View {
         ZStack {
             AnnotationCanvasView(viewModel: viewModel)
             CanvasElementMapView(viewModel: viewModel)
-                .offset(x: -250_000, y: -250_000)
+                .scaleEffect(viewModel.scaleFactor)
+                .offset(
+                    x: -(viewModel.canvasOrigin + viewModel.canvasCenterOffsetX),
+                    y: -(viewModel.canvasOrigin + viewModel.canvasCenterOffsetY)
+                )
         }
     }
 }

@@ -4,15 +4,23 @@ import PencilKit
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
+    @Published var canvasSize: CGFloat
+    @Published var canvasCenterOffsetX: CGFloat = 0.0
+    @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
 
-    init(canvas: Canvas) {
-        self.canvas = canvas
+    var canvasOrigin: CGFloat {
+        canvasSize / 2.0
+    }
+
+    init(canvasSize: CGFloat) {
+        self.canvasSize = canvasSize
     }
 
     convenience init() {
-        self.init(canvas: Canvas())
+        // Arbitrarily large value for the "infinite" canvas.
+        self.init(canvasSize: 500_000)
     }
 
     func select(canvasElement: CanvasElementProtocol) {
