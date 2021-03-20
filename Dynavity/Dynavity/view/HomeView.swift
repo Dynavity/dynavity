@@ -2,10 +2,11 @@ import SwiftUI
 
 struct HomeView: View {
     // TODO: replace this with list of actual canvases
-    @State var canvases: [String] = (1...100).map { "Canvas \($0)" }
+    var canvases: [CanvasSelectionView.CanvasDetail] = (1...100)
+        .map { CanvasSelectionView.CanvasDetail(title: "Canvas \($0)", isSelected: false) }
 
     var body: some View {
-        CanvasSelectionView(canvases: $canvases)
+        CanvasSelectionView(canvases: canvases)
     }
 }
 
