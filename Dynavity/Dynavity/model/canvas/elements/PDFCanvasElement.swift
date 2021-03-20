@@ -2,7 +2,7 @@ import SwiftUI
 
 struct PDFCanvasElement: CanvasElementProtocol {
     var id = UUID()
-    var position: CGPoint = .zero
+    var position: CGPoint = .canvasCenter
     var file: URL
 }
 
