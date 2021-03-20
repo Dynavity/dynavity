@@ -8,11 +8,8 @@
 import SwiftUI
 
 struct CanvasElementMapView: View {
-    @ObservedObject private var viewModel: CanvasViewModel
-
-    init(viewModel: CanvasViewModel) {
-        self.viewModel = viewModel
-    }
+    @ObservedObject var viewModel: CanvasViewModel
+    @Binding var scaleFactor: CGFloat
 
     private var dragGesture: some Gesture {
         DragGesture()
@@ -47,13 +44,15 @@ struct CanvasElementMapView: View {
                 .offset(x: element.position.x, y: element.position.y)
             }
         }
+        .scaleEffect(scaleFactor)
     }
 }
 
 struct CanvasElementMapView_Previews: PreviewProvider {
-    @State static var viewModel = CanvasViewModel(canvas: Canvas())
+    @ObservedObject static var viewModel = CanvasViewModel()
+    @State static var scale: CGFloat = 1.0
 
     static var previews: some View {
-        CanvasElementMapView(viewModel: viewModel)
+        CanvasElementMapView(viewModel: viewModel, scaleFactor: $scale)
     }
 }
