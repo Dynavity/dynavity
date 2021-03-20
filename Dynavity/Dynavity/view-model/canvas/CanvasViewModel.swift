@@ -64,6 +64,11 @@ extension CanvasViewModel {
     }
 
     func moveSelectedCanvasElement(by translation: CGSize) {
-        canvas.repositionCanvasElement(id: selectedCanvasElementId, by: translation)
+        canvas.moveCanvasElement(id: selectedCanvasElementId, by: translation)
+    }
+
+    func rotateSelectedCanvasElement(by translation: CGSize) {
+        let rotation = Double(atan(translation.height / translation.width))
+        canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
     }
 }

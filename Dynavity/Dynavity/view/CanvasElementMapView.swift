@@ -50,8 +50,7 @@ struct CanvasElementMapView: View {
                         }
                         .gesture(isSelected(element) ? dragGesture : nil)
                     if isSelected(element) {
-                        SelectionOverlayView(element: element)
-                            .allowsHitTesting(false)
+                        SelectionOverlayView(element: element, viewModel: viewModel)
                     }
                 }
                 .rotationEffect(.radians(element.rotation))

@@ -2,9 +2,17 @@ import SwiftUI
 
 struct SelectionOverlayView: View {
     var element: CanvasElementProtocol
+    var viewModel: CanvasViewModel
 
     private let rotationControlSize: CGFloat = 20.0
     private let rotationControlHandleLength: CGFloat = 10.0
+
+    private var rotationGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                viewModel.rotateSelectedCanvasElement(by: value.translation)
+            }
+    }
 
     private var rotationControl: some View {
         VStack(spacing: .zero) {
@@ -19,6 +27,7 @@ struct SelectionOverlayView: View {
                 .fill(Color.black)
                 .frame(width: 1.0, height: rotationControlHandleLength)
         }
+        .gesture(rotationGesture)
         .offset(y: -(element.height + rotationControlSize + rotationControlHandleLength) / 2.0)
     }
 
@@ -36,6 +45,6 @@ struct SelectionOverlayView: View {
 
 struct SelectionOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        SelectionOverlayView(element: TestCanvasElement())
+        SelectionOverlayView(element: TestCanvasElement(), viewModel: CanvasViewModel())
     }
 }
