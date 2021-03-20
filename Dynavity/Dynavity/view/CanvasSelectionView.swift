@@ -6,11 +6,9 @@ struct CanvasSelectionView: View {
         var isSelected: Bool
     }
 
-    @Binding var canvases: [CanvasDetail]
+    @State var canvases: [CanvasDetail]
     @State var searchQuery: String = ""
     @State var isEditing = false
-    var toggleSelectedCanvas: (String) -> Void
-    var clearSelectedCanvases: () -> Void
 
     let columns = [
         GridItem(.flexible()),
@@ -69,12 +67,8 @@ struct CanvasSelectionView: View {
 }
 
 struct CanvasSelectionView_Previews: PreviewProvider {
-    static func toggle(input: String) {}
-    static func clear() {}
     static var previews: some View {
-        CanvasSelectionView(canvases: .constant([]),
-                            toggleSelectedCanvas: toggle,
-                            clearSelectedCanvases: clear)
+        CanvasSelectionView(canvases: [])
     }
 }
 
@@ -84,6 +78,22 @@ extension CanvasSelectionView {
 
         if !isEditing {
             clearSelectedCanvases()
+        }
+    }
+
+    func toggleSelectedCanvas(_ title: String) {
+        canvases = canvases.map {
+            if $0.title == title {
+                return CanvasSelectionView.CanvasDetail(title: $0.title,
+                                                        isSelected: !$0.isSelected)
+            }
+            return $0
+        }
+    }
+
+    func clearSelectedCanvases() {
+        canvases = canvases.map {
+            CanvasSelectionView.CanvasDetail(title: $0.title, isSelected: false)
         }
     }
 }
