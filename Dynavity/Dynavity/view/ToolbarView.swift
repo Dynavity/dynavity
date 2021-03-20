@@ -50,6 +50,15 @@ struct ToolbarView: View {
             }) {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
+            markupTextBlockButtons
+        }
+        label: {
+            Label("Add", systemImage: "plus")
+        }
+    }
+
+    private var markupTextBlockButtons: some View {
+        Group {
             Button(action: {
                 viewModel.addMarkUpTextBlock(markupType: .markdown)
             }) {
@@ -61,9 +70,7 @@ struct ToolbarView: View {
                 Label("LaTeX", systemImage: "doc.richtext")
             }
         }
-        label: {
-            Label("Add", systemImage: "plus")
-        }
+
     }
 
     private var sideMenuButton: some View {
