@@ -26,15 +26,16 @@ struct CanvasSelectionView: View {
         }
     }
 
+    var noCanvasSelected: Bool {
+        canvases.allSatisfy {
+            !$0.isSelected
+        }
+    }
+
     var body: some View {
         NavigationView {
             VStack {
-                HStack {
-                    Button(isEditing ? "Done" : "Edit") {
-                        toggleEditMode()
-                    }
-                    SearchBar(text: $searchQuery)
-                }
+                editButtonGroup
                 .padding()
                 ScrollView {
                     canvasesGrid
@@ -63,6 +64,28 @@ struct CanvasSelectionView: View {
             }
         }
         .padding(.horizontal)
+    }
+
+    var editButtonGroup: some View {
+        HStack {
+            if isEditing {
+                Button("Done") {
+                    toggleEditMode()
+                }
+                Button(action: {
+                    deleteSelectedCanvases()
+                    toggleEditMode()
+                }) {
+                    Image(systemName: "trash")
+                }.disabled(noCanvasSelected)
+                SearchBar(text: $searchQuery)
+            } else {
+                Button("Edit") {
+                    toggleEditMode()
+                }
+                SearchBar(text: $searchQuery)
+            }
+        }
     }
 }
 
@@ -94,6 +117,15 @@ extension CanvasSelectionView {
     func clearSelectedCanvases() {
         canvases = canvases.map {
             CanvasSelectionView.CanvasDetail(title: $0.title, isSelected: false)
+        }
+    }
+
+    func deleteSelectedCanvases() {
+        canvases = canvases.compactMap {
+            if $0.isSelected {
+                return nil
+            }
+            return CanvasSelectionView.CanvasDetail(title: $0.title, isSelected: false)
         }
     }
 }
