@@ -19,15 +19,16 @@ struct SelectionOverlayView: View {
     private var halfHeight: CGFloat {
         element.height / 2.0
     }
-    private enum ResizeControl: CaseIterable {
+
+    enum ResizeControlAnchor: CaseIterable {
         case topLeftCorner
         case topRightCorner
         case bottomLeftCorner
         case bottomRightCorner
     }
 
-    private func getResizeControlPosition(_ resizeControl: ResizeControl) -> CGSize {
-        switch resizeControl {
+    private func getResizeControlPosition(_ anchor: ResizeControlAnchor) -> CGSize {
+        switch anchor {
         case .topLeftCorner:
             return CGSize(width: -halfWidth, height: -halfHeight)
         case .topRightCorner:
@@ -39,11 +40,10 @@ struct SelectionOverlayView: View {
         }
     }
 
-    private func getResizeControlGesture(_ resizeControl: ResizeControl) -> some Gesture {
+    private func getResizeControlGesture(_ anchor: ResizeControlAnchor) -> some Gesture {
         DragGesture()
             .onChanged { value in
-                // TODO: Implement this.
-                print(value.translation)
+                viewModel.resizeSelectedCanvasElement(by: value.translation, anchor: anchor)
             }
     }
 
@@ -76,7 +76,7 @@ struct SelectionOverlayView: View {
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
-    private func makeResizeControl(_ resizeControl: ResizeControl) -> some View {
+    private func makeResizeControl(_ resizeControl: ResizeControlAnchor) -> some View {
         Group {
             Rectangle()
                 .fill(Color.white)
@@ -104,7 +104,7 @@ struct SelectionOverlayView: View {
                        alignment: .center)
                 .allowsHitTesting(false)
             rotationControl
-            ForEach(ResizeControl.allCases, id: \.self) { corner in
+            ForEach(ResizeControlAnchor.allCases, id: \.self) { corner in
                 makeResizeControl(corner)
             }
         }

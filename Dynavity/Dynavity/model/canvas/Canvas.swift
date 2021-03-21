@@ -29,6 +29,14 @@ struct Canvas {
         canvasElements[index].move(by: translation)
     }
 
+    mutating func resizeCanvasElement(id: UUID?, by translation: CGSize) {
+        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+
+        canvasElements[index].resize(by: translation)
+    }
+
     mutating func rotateCanvasElement(id: UUID?, to rotation: Double) {
         guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
             return

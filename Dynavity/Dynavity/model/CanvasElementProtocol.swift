@@ -9,6 +9,7 @@ protocol CanvasElementProtocol {
     var rotation: Double { get set }
 
     mutating func move(by translation: CGSize)
+    mutating func resize(by translation: CGSize)
     mutating func rotate(to rotation: Double)
 }
 
@@ -16,6 +17,11 @@ protocol CanvasElementProtocol {
 extension CanvasElementProtocol {
     mutating func move(by translation: CGSize) {
         self.position += translation
+    }
+
+    mutating func resize(by translation: CGSize) {
+        self.width += translation.width
+        self.height += translation.height
     }
 
     mutating func rotate(to rotation: Double) {

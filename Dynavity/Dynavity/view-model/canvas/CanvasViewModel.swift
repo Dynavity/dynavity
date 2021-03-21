@@ -67,6 +67,25 @@ extension CanvasViewModel {
         canvas.moveCanvasElement(id: selectedCanvasElementId, by: translation)
     }
 
+    func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
+        let resizeTranslation: CGSize = {
+            switch anchor {
+            case .topLeftCorner:
+                return CGSize(width: -translation.width, height: -translation.height)
+            case .topRightCorner:
+                return CGSize(width: translation.width, height: -translation.height)
+            case .bottomLeftCorner:
+                return CGSize(width: -translation.width, height: translation.height)
+            case .bottomRightCorner:
+                return translation
+            }
+        }()
+        canvas.resizeCanvasElement(id: selectedCanvasElementId, by: resizeTranslation)
+
+        let centerTranslation = translation / 2.0
+        canvas.moveCanvasElement(id: selectedCanvasElementId, by: centerTranslation)
+    }
+
     func rotateSelectedCanvasElement(by translation: CGSize) {
         // Prevent excessive spinning when dragging near the center of the canvas element.
         let deadZone: CGFloat = 15.0
