@@ -68,7 +68,20 @@ extension CanvasViewModel {
     }
 
     func rotateSelectedCanvasElement(by translation: CGSize) {
-        let rotation = Double(atan(translation.height / translation.width))
+        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+            return
+        }
+
+        let currentRotation = element.rotation
+        let rotatedTranslationX = translation.width * CGFloat(cos(currentRotation))
+            - translation.height * CGFloat(sin(currentRotation))
+        let rotatedTranslationY = translation.width * CGFloat(sin(currentRotation))
+            + translation.height * CGFloat(cos(currentRotation))
+
+        // Transform the rotation angle from the x-axis to the y-axis.
+        let rotationOffset = Double.pi / 2.0
+        let rotation = Double(atan2(rotatedTranslationY, rotatedTranslationX)) + rotationOffset
+
         canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
     }
 }

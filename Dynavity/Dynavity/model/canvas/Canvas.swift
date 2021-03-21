@@ -17,6 +17,10 @@ struct Canvas {
         canvasElements.append(element)
     }
 
+    func getElementBy(id: UUID?) -> CanvasElementProtocol? {
+        canvasElements.first(where: { $0.id == id })
+    }
+
     mutating func moveCanvasElement(id: UUID?, by translation: CGSize) {
         guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
             return

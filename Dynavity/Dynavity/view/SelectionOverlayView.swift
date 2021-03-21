@@ -7,17 +7,17 @@ struct SelectionOverlayView: View {
     private let rotationControlSize: CGFloat = 25.0
     private let rotationControlHandleLength: CGFloat = 10.0
 
-    private var rotationOffset: CGFloat {
+    private var rotationControlOffset: CGFloat {
         -(element.height * viewModel.scaleFactor + rotationControlSize + rotationControlHandleLength) / 2.0
     }
 
     private var rotationGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                // TODO: Fix this.
-                let translation = value.translation
-                let offsetTranslation = CGSize(width: translation.width, height: translation.height + rotationOffset)
-                viewModel.rotateSelectedCanvasElement(by: offsetTranslation)
+                // Calculate the translation with respect to the center of the canvas element.
+                var translationsFromCenter = value.translation
+                translationsFromCenter.height += rotationControlOffset
+                viewModel.rotateSelectedCanvasElement(by: translationsFromCenter)
             }
     }
 
@@ -35,7 +35,7 @@ struct SelectionOverlayView: View {
                 .frame(width: 1.0, height: rotationControlHandleLength)
         }
         .gesture(rotationGesture)
-        .offset(y: rotationOffset)
+        .offset(y: rotationControlOffset)
         // Force the rotation control to be the same size regardless of scale factor.
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
