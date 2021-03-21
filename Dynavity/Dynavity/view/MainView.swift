@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainView: View {
     @ObservedObject private var canvasViewModel = CanvasViewModel()
-    @State var shouldShowMenu = false
+    @State private var shouldShowMenu = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -27,8 +27,7 @@ struct MainView: View {
                         // Force the side menu to be drawn over everything else.
                         .zIndex(.infinity)
                 }
-            }
-            .gesture(dismissSideMenuDragGesture)
+            }.gesture(shouldShowMenu ? dismissSideMenuDragGesture : nil)
         }
     }
 

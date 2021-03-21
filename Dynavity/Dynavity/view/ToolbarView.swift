@@ -4,6 +4,7 @@ struct ToolbarView: View {
     private enum ActiveSheet: Identifiable {
         case camera
         case photoGallery
+        case pdfPicker
 
         var id: Int {
             hashValue
@@ -30,15 +31,17 @@ struct ToolbarView: View {
                 Label("Photo Gallery", systemImage: "photo")
             }
             Button(action: {
-                // TODO: Implement PDF import functionality.
+                activeSheet = .pdfPicker
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
+            /*
             Button(action: {
                 // TODO: Implement to-do list card.
             }) {
                 Label("To-Do List", systemImage: "list.bullet.rectangle")
             }
+            */
             Button(action: {
                 viewModel.addTextBlock()
             }) {
@@ -49,15 +52,25 @@ struct ToolbarView: View {
             }) {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
-            Button(action: {
-                // TODO: Update this function to take in a markupType based on user input
-                viewModel.addMarkUpTextBlock(markupType: .markdown)
-            }) {
-                Label("Markup", systemImage: "text.badge.star")
-            }
+            markupTextBlockButtons
         }
         label: {
             Label("Add", systemImage: "plus")
+        }
+    }
+
+    private var markupTextBlockButtons: some View {
+        Group {
+            Button(action: {
+                viewModel.addMarkUpTextBlock(markupType: .markdown)
+            }) {
+                Label("Markdown", systemImage: "text.badge.star")
+            }
+            Button(action: {
+                viewModel.addMarkUpTextBlock(markupType: .latex)
+            }) {
+                Label("LaTeX", systemImage: "doc.richtext")
+            }
         }
     }
 
@@ -84,12 +97,14 @@ struct ToolbarView: View {
             Color(UIColor.systemGray6)
                 .edgesIgnoringSafeArea(.top)
         )
-        .sheet(item: $activeSheet, onDismiss: viewModel.addImageCanvasElement) { item in
+        .sheet(item: $activeSheet) { item in
             switch item {
             case .camera:
-                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .camera)
+                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .camera)
             case .photoGallery:
-                ImagePickerView(selectedImage: $viewModel.selectedImage, sourceType: .photoLibrary)
+                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .photoLibrary)
+            case .pdfPicker:
+                DocumentPickerView(onFileSelected: viewModel.addPdfCanvasElement, contentTypes: [.pdf])
             }
         }
         // Force the toolbar to be drawn over everything else.

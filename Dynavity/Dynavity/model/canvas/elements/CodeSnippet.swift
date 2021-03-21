@@ -2,10 +2,11 @@ import CoreGraphics
 import Foundation
 
 struct CodeSnippet: CanvasElementProtocol {
-    var textBlock = TextBlock()
+    var textBlock: TextBlock
     var language = CodeLanguage.python
 
-    init() {
+    init(position: CGPoint) {
+        self.textBlock = TextBlock(position: position)
         resetCodeTemplate()
     }
 
@@ -80,6 +81,33 @@ struct CodeSnippet: CanvasElementProtocol {
         }
         set {
             textBlock.position = newValue
+        }
+    }
+
+    var width: CGFloat {
+        get {
+            textBlock.width
+        }
+        set {
+            textBlock.width = newValue
+        }
+    }
+
+    var height: CGFloat {
+        get {
+            textBlock.height
+        }
+        set {
+            textBlock.height = newValue
+        }
+    }
+
+    var rotation: Double {
+        get {
+            textBlock.rotation
+        }
+        set {
+            textBlock.rotation = newValue
         }
     }
 

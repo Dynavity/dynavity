@@ -43,6 +43,6 @@ struct CodeSnippetView: View {
 
 struct CodeSnippetView_Previews: PreviewProvider {
     static var previews: some View {
-        CodeSnippetView(codeSnippet: CodeSnippet())
+        CodeSnippetView(codeSnippet: CodeSnippet(position: .zero))
     }
 }

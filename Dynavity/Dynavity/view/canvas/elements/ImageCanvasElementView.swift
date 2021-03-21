@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct ImageCanvasElementView: View {
-    @ObservedObject var viewModel: ImageCanvasElementViewModel
+    @StateObject private var viewModel: ImageCanvasElementViewModel
 
     init(imageCanvasElement: ImageCanvasElement) {
-        self.viewModel = ImageCanvasElementViewModel(imageCanvasElement: imageCanvasElement)
+        self._viewModel = StateObject(wrappedValue: ImageCanvasElementViewModel(imageCanvasElement: imageCanvasElement))
     }
 
     var body: some View {
@@ -13,7 +13,7 @@ struct ImageCanvasElementView: View {
 }
 
 struct ImageCanvasElementView_Previews: PreviewProvider {
-    static let imageCanvasElement = ImageCanvasElement(image: UIImage())
+    static let imageCanvasElement = ImageCanvasElement(position: .zero, image: UIImage())
 
     static var previews: some View {
         ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
