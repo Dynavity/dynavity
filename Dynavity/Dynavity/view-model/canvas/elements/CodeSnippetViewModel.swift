@@ -45,16 +45,10 @@ class CodeSnippetViewModel: ObservableObject {
 
     func listenForOutput() {
         func processTextResponse(text: String) {
-            guard let data = text.data(using: .utf8) else {
-                return
-            }
-            guard let jsonAny = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                return
-            }
-            guard let jsonDict = jsonAny as? [String: String] else {
-                return
-            }
-            guard let container = jsonDict["containerId"] else {
+            guard let data = text.data(using: .utf8),
+                  let jsonAny = try? JSONSerialization.jsonObject(with: data, options: []),
+                  let jsonDict = jsonAny as? [String: String],
+                  let container = jsonDict["containerId"] else {
                 return
             }
             if let output = jsonDict["output"] {
