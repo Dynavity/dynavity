@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MainView: View {
     @ObservedObject private var canvasViewModel = CanvasViewModel()
-    @State var shouldShowMenu = false
+    @State private var shouldShowMenu = false
 
     var body: some View {
         GeometryReader { geometry in

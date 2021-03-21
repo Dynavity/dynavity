@@ -8,8 +8,8 @@ struct CanvasSelectionView: View {
     }
 
     @State var canvases: [CanvasDetail]
-    @State var searchQuery: String = ""
-    @State var isEditing = false
+    @State private var searchQuery: String = ""
+    @State private var isEditing = false
 
     let columns = [
         GridItem(.flexible()),

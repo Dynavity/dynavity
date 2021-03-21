@@ -4,7 +4,7 @@ import SwiftUI
 struct PDFCanvasElementView: UIViewRepresentable {
     typealias UIViewType = PDFView
 
-    @StateObject var viewModel: PDFCanvasElementViewModel
+    @StateObject private var viewModel: PDFCanvasElementViewModel
 
     init(pdfCanvasElement: PDFCanvasElement) {
         self._viewModel = StateObject(wrappedValue:
