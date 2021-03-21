@@ -10,6 +10,10 @@ class CanvasViewModel: ObservableObject {
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
 
+    // Reposition drag gesture
+    private var dragStartLocation: CGPoint?
+    private var element: CanvasElementProtocol?
+
     var canvasOrigin: CGPoint {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
     }
@@ -73,8 +77,8 @@ extension CanvasViewModel {
         canvas.moveCanvasElement(id: selectedCanvasElementId, by: rotatedTranslation)
     }
 
-    func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
-        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+    private func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
+        guard var element = element else {
             return
         }
 
@@ -90,11 +94,13 @@ extension CanvasViewModel {
                 return translation
             }
         }()
-        canvas.resizeCanvasElement(id: selectedCanvasElementId, by: resizeTranslation)
+        element.resize(by: resizeTranslation)
 
         let rotation = element.rotation
         let centerTranslation = translation.rotate(by: CGFloat(rotation)) / 2.0
-        canvas.moveCanvasElement(id: selectedCanvasElementId, by: centerTranslation)
+        element.move(by: centerTranslation)
+
+        canvas.replaceElement(element)
     }
 
     func rotateSelectedCanvasElement(by translation: CGSize) {
@@ -116,5 +122,32 @@ extension CanvasViewModel {
         let rotation = Double(atan2(rotatedTranslation.height, rotatedTranslation.width)) + rotationOffset
 
         canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
+    }
+}
+
+// MARK: Reposition drag gesture
+extension CanvasViewModel {
+    func handleDragChange(_ value: DragGesture.Value, anchor: SelectionOverlayView.ResizeControlAnchor) {
+        if dragStartLocation == nil {
+            guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+                return
+            }
+            dragStartLocation = value.startLocation
+            self.element = element
+        }
+
+        guard let dragStartLocation = dragStartLocation,
+              let element = element else {
+            return
+        }
+
+        let translation: CGSize = value.location - dragStartLocation
+        let rotatedTranslation = translation.rotate(by: -CGFloat(element.rotation))
+        resizeSelectedCanvasElement(by: rotatedTranslation, anchor: anchor)
+    }
+
+    func handleDragEnd() {
+        dragStartLocation = nil
+        element = nil
     }
 }

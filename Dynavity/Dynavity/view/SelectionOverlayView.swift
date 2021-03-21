@@ -43,9 +43,13 @@ struct SelectionOverlayView: View {
     }
 
     private func getResizeControlGesture(_ anchor: ResizeControlAnchor) -> some Gesture {
-        DragGesture()
+        // Global coordinate space is necessary to accurately track translations.
+        DragGesture(coordinateSpace: .global)
             .onChanged { value in
-                viewModel.resizeSelectedCanvasElement(by: value.translation, anchor: anchor)
+                viewModel.handleDragChange(value, anchor: anchor)
+            }
+            .onEnded { _ in
+                viewModel.handleDragEnd()
             }
     }
 
