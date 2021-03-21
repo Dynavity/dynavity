@@ -22,7 +22,7 @@ struct Canvas {
             return
         }
 
-        canvasElements[index].position += translation
+        canvasElements[index].move(by: translation)
     }
 
     mutating func rotateCanvasElement(id: UUID?, to rotation: Double) {
@@ -30,6 +30,6 @@ struct Canvas {
             return
         }
 
-        canvasElements[index].rotation = rotation
+        canvasElements[index].rotate(to: rotation)
     }
 }
