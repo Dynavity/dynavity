@@ -68,6 +68,12 @@ extension CanvasViewModel {
     }
 
     func rotateSelectedCanvasElement(by translation: CGSize) {
+        // Prevent excessive spinning when dragging near the center of the canvas element.
+        let deadZone: CGFloat = 15.0
+        guard abs(translation.height) > deadZone else {
+            return
+        }
+
         guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
             return
         }
