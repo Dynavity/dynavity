@@ -18,17 +18,32 @@ struct SelectionOverlayView: View {
     private var halfHeight: CGFloat {
         element.height / 2.0
     }
-    private var topLeftCorner: CGSize {
-        CGSize(width: -halfWidth, height: -halfHeight)
+    private enum ResizeControl: CaseIterable {
+        case topLeftCorner
+        case topRightCorner
+        case bottomLeftCorner
+        case bottomRightCorner
     }
-    private var topRightCorner: CGSize {
-        CGSize(width: halfWidth, height: -halfHeight)
+
+    private func getResizeControlPosition(_ resizeControl: ResizeControl) -> CGSize {
+        switch resizeControl {
+        case .topLeftCorner:
+            return CGSize(width: -halfWidth, height: -halfHeight)
+        case .topRightCorner:
+            return CGSize(width: halfWidth, height: -halfHeight)
+        case .bottomLeftCorner:
+            return CGSize(width: -halfWidth, height: halfHeight)
+        case .bottomRightCorner:
+            return CGSize(width: halfWidth, height: halfHeight)
+        }
     }
-    private var bottomLeftCorner: CGSize {
-        CGSize(width: -halfWidth, height: halfHeight)
-    }
-    private var bottomRightCorner: CGSize {
-        CGSize(width: halfWidth, height: halfHeight)
+
+    private func getResizeControlGesture(_ resizeControl: ResizeControl) -> some Gesture {
+        DragGesture()
+            .onChanged { value in
+                // TODO: Implement this.
+                print(value.translation)
+            }
     }
 
     private var rotationGesture: some Gesture {
@@ -60,13 +75,15 @@ struct SelectionOverlayView: View {
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
-    private var resizeControl: some View {
+    private func makeResizeControl(_ resizeControl: ResizeControl) -> some View {
         Rectangle()
             .fill(Color.white)
             .frame(width: resizeControlSize, height: resizeControlSize)
             .border(Color.blue, width: resizeControlSize * resizeControlBorderPercentage)
             // Force the resize control to be the same size regardless of scale factor.
             .scaleEffect(1.0 / viewModel.scaleFactor)
+            .offset(getResizeControlPosition(resizeControl))
+            .gesture(getResizeControlGesture(resizeControl))
     }
 
     var body: some View {
@@ -78,14 +95,9 @@ struct SelectionOverlayView: View {
                        alignment: .center)
                 .allowsHitTesting(false)
             rotationControl
-            resizeControl
-                .offset(topLeftCorner)
-            resizeControl
-                .offset(topRightCorner)
-            resizeControl
-                .offset(bottomLeftCorner)
-            resizeControl
-                .offset(bottomRightCorner)
+            ForEach(ResizeControl.allCases, id: \.self) { corner in
+                makeResizeControl(corner)
+            }
         }
     }
 }
