@@ -9,6 +9,8 @@ struct SelectionOverlayView: View {
     private let resizeControlSize: CGFloat = 15.0
     private let resizeControlBorderPercentage: CGFloat = 0.1
     private let resizeControlHitboxScale: CGFloat = 2.0
+    private let selectionOutlineWidth: CGFloat = 2.0
+    private let overlayColor = Color.blue
 
     private var rotationControlOffset: CGFloat {
         -(element.height * viewModel.scaleFactor + rotationControlSize + rotationControlHandleLength) / 2.0
@@ -47,6 +49,17 @@ struct SelectionOverlayView: View {
             }
     }
 
+    private var outline: some View {
+        Rectangle()
+            .fill(Color.clear)
+            // Force the border to be the same size regardless of scale factor.
+            .border(overlayColor, width: selectionOutlineWidth / viewModel.scaleFactor)
+            .frame(width: element.width,
+                   height: element.height,
+                   alignment: .center)
+            .allowsHitTesting(false)
+    }
+
     private var rotationGesture: some Gesture {
         DragGesture()
             .onChanged { value in
@@ -64,10 +77,11 @@ struct SelectionOverlayView: View {
                     .fill(Color.white)
                 Image(systemName: "arrow.triangle.2.circlepath.circle")
                     .resizable()
+                    .foregroundColor(overlayColor)
             }
             .frame(width: rotationControlSize, height: rotationControlSize)
             Rectangle()
-                .fill(Color.black)
+                .fill(overlayColor)
                 .frame(width: 1.0, height: rotationControlHandleLength)
         }
         .gesture(rotationGesture)
@@ -81,7 +95,7 @@ struct SelectionOverlayView: View {
             Rectangle()
                 .fill(Color.white)
                 .frame(width: resizeControlSize, height: resizeControlSize)
-                .border(Color.blue, width: resizeControlSize * resizeControlBorderPercentage)
+                .border(overlayColor, width: resizeControlSize * resizeControlBorderPercentage)
         }
         // Make hitbox of resize control slightly larger.
         .frame(
@@ -97,12 +111,7 @@ struct SelectionOverlayView: View {
 
     var body: some View {
         ZStack {
-            Rectangle()
-                .fill(Color.green)
-                .frame(width: element.width,
-                       height: element.height,
-                       alignment: .center)
-                .allowsHitTesting(false)
+            outline
             rotationControl
             ForEach(ResizeControlAnchor.allCases, id: \.self) { corner in
                 makeResizeControl(corner)
