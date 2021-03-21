@@ -18,22 +18,8 @@ class CodeSnippetViewModel: ObservableObject {
         self.connection = connection
     }
 
-    func preprocessProgram(src: String) -> String {
-        let charsToReplace = [
-            ("\u{201c}", "\""),
-            ("\u{201d}", "\""),
-            ("\u{2018}", "'"),
-            ("\u{2019}", "'")
-        ]
-        var processed = src
-        charsToReplace.forEach {
-            processed = processed.replacingOccurrences(of: $0.0, with: $0.1)
-        }
-        return processed
-    }
-
     func runCode() {
-        let program = preprocessProgram(src: codeSnippet.programString)
+        let program = codeSnippet.programString
         guard !program.isEmpty else {
             // backend will not accept an empty program
             return
@@ -115,5 +101,9 @@ class CodeSnippetViewModel: ObservableObject {
 
     func resetCodeTemplate() {
         codeSnippet.resetCodeTemplate()
+    }
+
+    func convertQuotes() {
+        codeSnippet.convertQuotes()
     }
 }

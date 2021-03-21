@@ -14,6 +14,9 @@ struct CodeSnippetView: View {
                     .font(.custom("Courier", size: viewModel.codeSnippet.fontSize))
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
+                    .onChange(of: viewModel.codeSnippet.programString) {_ in
+                        viewModel.convertQuotes()
+                    }
                 Divider()
                 HStack {
                     Picker("Language", selection: $viewModel.codeSnippet.language) {
@@ -21,10 +24,10 @@ struct CodeSnippetView: View {
                             Text($0.displayName).tag($0)
                         }
                     }
+                    .pickerStyle(SegmentedPickerStyle())
                     .onChange(of: viewModel.codeSnippet.language) {_ in
                         viewModel.resetCodeTemplate()
                     }
-                    .pickerStyle(SegmentedPickerStyle())
                     Button(action: viewModel.runCode, label: {
                         Text("Run")
                     })

@@ -99,4 +99,18 @@ struct CodeSnippet: CanvasElementProtocol {
     mutating func resetCodeTemplate() {
         textBlock.text = language.template
     }
+
+    mutating func convertQuotes() {
+        let charsToReplace = [
+            ("\u{201c}", "\""),
+            ("\u{201d}", "\""),
+            ("\u{2018}", "'"),
+            ("\u{2019}", "'")
+        ]
+        var processed = textBlock.text
+        charsToReplace.forEach {
+            processed = processed.replacingOccurrences(of: $0.0, with: $0.1)
+        }
+        textBlock.text = processed
+    }
 }
