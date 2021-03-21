@@ -98,14 +98,11 @@ extension CanvasViewModel {
         }
 
         let currentRotation = element.rotation
-        let rotatedTranslationX = translation.width * CGFloat(cos(currentRotation))
-            - translation.height * CGFloat(sin(currentRotation))
-        let rotatedTranslationY = translation.width * CGFloat(sin(currentRotation))
-            + translation.height * CGFloat(cos(currentRotation))
+        let rotatedTranslation = translation.rotate(by: CGFloat(currentRotation))
 
         // Transform the rotation angle from the x-axis to the y-axis.
         let rotationOffset = Double.pi / 2.0
-        let rotation = Double(atan2(rotatedTranslationY, rotatedTranslationX)) + rotationOffset
+        let rotation = Double(atan2(rotatedTranslation.height, rotatedTranslation.width)) + rotationOffset
 
         canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
     }
