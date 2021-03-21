@@ -164,7 +164,7 @@ extension CanvasViewModel {
             return
         }
 
-        let translation: CGSize = value.location - dragStartLocation
+        let translation: CGSize = (value.location - dragStartLocation) / scaleFactor
         let rotatedTranslation = translation.rotate(by: -CGFloat(element.rotation))
         resizeSelectedCanvasElement(by: rotatedTranslation, anchor: anchor)
     }
