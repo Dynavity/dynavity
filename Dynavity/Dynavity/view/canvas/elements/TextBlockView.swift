@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct TextBlockView: View {
-    @ObservedObject var viewModel: TextBlockViewModel
+    @StateObject private var viewModel: TextBlockViewModel
 
     init(textBlock: TextBlock) {
-        self.viewModel = TextBlockViewModel(textBlock: textBlock)
+        self._viewModel = StateObject(wrappedValue: TextBlockViewModel(textBlock: textBlock))
     }
 
     var body: some View {

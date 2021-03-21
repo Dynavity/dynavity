@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct ImageCanvasElementView: View {
-    @ObservedObject var viewModel: ImageCanvasElementViewModel
+    @StateObject private var viewModel: ImageCanvasElementViewModel
 
     init(imageCanvasElement: ImageCanvasElement) {
-        self.viewModel = ImageCanvasElementViewModel(imageCanvasElement: imageCanvasElement)
+        self._viewModel = StateObject(wrappedValue: ImageCanvasElementViewModel(imageCanvasElement: imageCanvasElement))
     }
 
     var body: some View {

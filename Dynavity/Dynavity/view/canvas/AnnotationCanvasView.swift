@@ -3,8 +3,8 @@ import PencilKit
 
 struct AnnotationCanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
-    @State var annotationCanvasView = PKCanvasWrapperView()
-    @State var toolPicker = PKToolPicker()
+    @State private var annotationCanvasView = PKCanvasWrapperView()
+    @State private var toolPicker = PKToolPicker()
 
     init(viewModel: CanvasViewModel) {
         self.viewModel = viewModel
