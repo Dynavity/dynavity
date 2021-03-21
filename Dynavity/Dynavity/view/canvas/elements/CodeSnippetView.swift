@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct CodeSnippetView: View {
-    @ObservedObject var viewModel: CodeSnippetViewModel
+    @StateObject var viewModel: CodeSnippetViewModel
 
     init(codeSnippet: CodeSnippet) {
-        self.viewModel = CodeSnippetViewModel(codeSnippet: codeSnippet)
+        self._viewModel = StateObject(wrappedValue: CodeSnippetViewModel(codeSnippet: codeSnippet))
     }
 
     var body: some View {
@@ -20,8 +20,10 @@ struct CodeSnippetView: View {
                         let languages = CodeSnippet.CodeLanguage.allCases
                         ForEach(0 ..< languages.count) {
                             Text(languages[$0].displayName)
+                                .tag(languages[$0])
                         }
                     }
+                    .pickerStyle(SegmentedPickerStyle())
                     Button(action: viewModel.runCode, label: {
                         Text("Run")
                     })
