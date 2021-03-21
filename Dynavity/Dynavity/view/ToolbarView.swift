@@ -35,18 +35,20 @@ struct ToolbarView: View {
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
+            /*
             Button(action: {
                 // TODO: Implement to-do list card.
             }) {
                 Label("To-Do List", systemImage: "list.bullet.rectangle")
             }
+            */
             Button(action: {
                 viewModel.addTextBlock()
             }) {
                 Label("Text", systemImage: "note.text")
             }
             Button(action: {
-                // TODO: Implement code block card.
+                viewModel.addCodeSnippet()
             }) {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }

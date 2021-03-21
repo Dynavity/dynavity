@@ -44,6 +44,10 @@ extension CanvasViewModel {
         canvas.addElement(TextBlock(position: canvasOrigin))
     }
 
+    func addCodeSnippet() {
+        canvas.addElement(CodeSnippet(position: canvasOrigin))
+    }
+
     func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
         canvas.addElement(MarkupTextBlock(position: canvasOrigin, markupType: markupType))
     }
