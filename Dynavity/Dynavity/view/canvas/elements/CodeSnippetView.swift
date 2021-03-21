@@ -17,10 +17,8 @@ struct CodeSnippetView: View {
                 Divider()
                 HStack {
                     Picker("Language", selection: $viewModel.codeSnippet.language) {
-                        let languages = CodeSnippet.CodeLanguage.allCases
-                        ForEach(0 ..< languages.count) {
-                            Text(languages[$0].displayName)
-                                .tag(languages[$0])
+                        ForEach(CodeSnippet.CodeLanguage.allCases) {
+                            Text($0.displayName).tag($0)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())

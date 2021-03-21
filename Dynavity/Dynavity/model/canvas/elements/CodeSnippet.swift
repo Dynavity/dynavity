@@ -5,11 +5,24 @@ struct CodeSnippet: CanvasElementProtocol {
     var textBlock = TextBlock()
     var language = CodeLanguage.python
 
-    enum CodeLanguage: String, CaseIterable {
+    enum CodeLanguage: Int, CaseIterable, Identifiable {
         case python, java, c, javascript
 
-        var backendName: String {
+        var id: Int {
             self.rawValue
+        }
+
+        var backendName: String {
+            switch self {
+            case .python:
+                return "python"
+            case .java:
+                return "java"
+            case .c:
+                return "c"
+            case .javascript:
+                return "javascript"
+            }
         }
 
         var displayName: String {
@@ -29,6 +42,7 @@ struct CodeSnippet: CanvasElementProtocol {
     var id: UUID {
         textBlock.id
     }
+
     var position: CGPoint {
         get {
             textBlock.position
@@ -37,6 +51,7 @@ struct CodeSnippet: CanvasElementProtocol {
             textBlock.position = newValue
         }
     }
+
     var programString: String {
         get {
             textBlock.text
@@ -45,6 +60,7 @@ struct CodeSnippet: CanvasElementProtocol {
             textBlock.text = newValue
         }
     }
+
     var fontSize: CGFloat {
         textBlock.fontSize
     }
