@@ -85,8 +85,9 @@ class CodeSnippetViewModel: ObservableObject {
                 @unknown default:
                     fatalError("Unknown message type")
                 }
+                // continue listening for output only on success
+                self.listenForOutput()
             }
-            self.listenForOutput()
         }
         connection.receive(completionHandler: identifyMessage)
     }
