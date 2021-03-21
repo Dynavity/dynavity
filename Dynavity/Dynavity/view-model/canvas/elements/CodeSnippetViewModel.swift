@@ -10,14 +10,13 @@ class CodeSnippetViewModel: ObservableObject {
     init(codeSnippet: CodeSnippet) {
         self.codeSnippet = codeSnippet
 
+        let endpointUrl = "wss://t8jfxu45v2.execute-api.us-east-2.amazonaws.com/production/"
         guard let url = URL(string: endpointUrl) else {
             fatalError("Endpoint URL is an invalid constant")
         }
         let connection = URLSession(configuration: .default).webSocketTask(with: url)
         self.connection = connection
     }
-
-    let endpointUrl = "wss://t8jfxu45v2.execute-api.us-east-2.amazonaws.com/production/"
 
     func preprocessProgram(src: String) -> String {
         let charsToReplace = [
@@ -114,7 +113,7 @@ class CodeSnippetViewModel: ObservableObject {
         output = ""
     }
 
-    private func tearDownConnection() {
-        connection.cancel()
+    func resetCodeTemplate() {
+        codeSnippet.resetCodeTemplate()
     }
 }

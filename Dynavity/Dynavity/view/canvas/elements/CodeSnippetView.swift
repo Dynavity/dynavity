@@ -21,6 +21,9 @@ struct CodeSnippetView: View {
                             Text($0.displayName).tag($0)
                         }
                     }
+                    .onChange(of: viewModel.codeSnippet.language) {_ in
+                        viewModel.resetCodeTemplate()
+                    }
                     .pickerStyle(SegmentedPickerStyle())
                     Button(action: viewModel.runCode, label: {
                         Text("Run")
@@ -28,7 +31,6 @@ struct CodeSnippetView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-
             Divider()
             Text(viewModel.output)
         }

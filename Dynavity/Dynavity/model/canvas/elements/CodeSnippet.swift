@@ -5,6 +5,10 @@ struct CodeSnippet: CanvasElementProtocol {
     var textBlock = TextBlock()
     var language = CodeLanguage.python
 
+    init() {
+        resetCodeTemplate()
+    }
+
     enum CodeLanguage: Int, CaseIterable, Identifiable {
         case python, java, c, javascript
 
@@ -37,6 +41,33 @@ struct CodeSnippet: CanvasElementProtocol {
                 return "Javascript"
             }
         }
+
+        var template: String {
+            switch self {
+            case .python:
+                return "# Your program here\n"
+            case .java:
+                return """
+                    public class Program {
+                        public static void main(String[] args) {
+                            // Your program here
+                        }
+                    }
+                    """
+            case .c:
+                return """
+                    #include <stdio.h>
+                    #include <stdlib.h>
+
+                    int main(void) {
+                        // Your program here
+                        return 0;
+                    }
+                    """
+            case .javascript:
+                return "// Your program here\n"
+            }
+        }
     }
 
     var id: UUID {
@@ -63,5 +94,9 @@ struct CodeSnippet: CanvasElementProtocol {
 
     var fontSize: CGFloat {
         textBlock.fontSize
+    }
+
+    mutating func resetCodeTemplate() {
+        textBlock.text = language.template
     }
 }
