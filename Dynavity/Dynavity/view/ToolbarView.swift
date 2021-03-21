@@ -62,7 +62,7 @@ struct ToolbarView: View {
             Button(action: {
                 viewModel.addMarkUpTextBlock(markupType: .markdown)
             }) {
-                Label("Markup", systemImage: "text.badge.star")
+                Label("Markdown", systemImage: "text.badge.star")
             }
             Button(action: {
                 viewModel.addMarkUpTextBlock(markupType: .latex)
