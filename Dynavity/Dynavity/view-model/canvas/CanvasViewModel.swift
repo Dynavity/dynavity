@@ -78,7 +78,8 @@ extension CanvasViewModel {
     }
 
     private func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
-        guard var element = element else {
+        guard var element = element,
+              let originalElement = self.element else {
             return
         }
 
@@ -96,8 +97,30 @@ extension CanvasViewModel {
         }()
         element.resize(by: resizeTranslation)
 
+        var clampedTranslation = translation
+        // Clamp x-axis if necessary.
+        if element.width == element.minimumWidth {
+            let actualWidth = originalElement.width + resizeTranslation.width
+            let widthDelta = element.minimumWidth - actualWidth
+            if anchor == .topLeftCorner || anchor == .bottomLeftCorner {
+                clampedTranslation.width -= widthDelta
+            } else {
+                clampedTranslation.width += widthDelta
+            }
+        }
+        // Clamp y-axis if necessary.
+        if element.height == element.minimumHeight {
+            let actualHeight = originalElement.height + resizeTranslation.height
+            let heightDelta = element.minimumHeight - actualHeight
+            if anchor == .topLeftCorner || anchor == .topRightCorner {
+                clampedTranslation.height -= heightDelta
+            } else {
+                clampedTranslation.height += heightDelta
+            }
+        }
+
         let rotation = element.rotation
-        let centerTranslation = translation.rotate(by: CGFloat(rotation)) / 2.0
+        let centerTranslation = clampedTranslation.rotate(by: CGFloat(rotation)) / 2.0
         element.move(by: centerTranslation)
 
         canvas.replaceElement(element)
