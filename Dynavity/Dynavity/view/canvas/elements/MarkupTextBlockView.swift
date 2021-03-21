@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MarkupTextBlockView: View {
-    @ObservedObject var viewModel: MarkupTextBlockViewModel
+    @StateObject private var viewModel: MarkupTextBlockViewModel
 
     // TODO: This is set to "selected" for now.
     // The parent view containing this view should probably implement the logic for view selection.
@@ -9,7 +9,8 @@ struct MarkupTextBlockView: View {
     @State var isViewSelected = true
 
     init(markupTextBlock: MarkupTextBlock) {
-        self.viewModel = MarkupTextBlockViewModel(markupTextBlock: markupTextBlock)
+        self._viewModel = StateObject(wrappedValue:
+                                        MarkupTextBlockViewModel(markupTextBlock: markupTextBlock))
     }
 
     var body: some View {
