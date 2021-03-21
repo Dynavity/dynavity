@@ -74,6 +74,10 @@ extension CanvasViewModel {
     }
 
     func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
+        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+            return
+        }
+
         let resizeTranslation: CGSize = {
             switch anchor {
             case .topLeftCorner:
@@ -88,7 +92,8 @@ extension CanvasViewModel {
         }()
         canvas.resizeCanvasElement(id: selectedCanvasElementId, by: resizeTranslation)
 
-        let centerTranslation = translation / 2.0
+        let rotation = element.rotation
+        let centerTranslation = translation.rotate(by: CGFloat(rotation)) / 2.0
         canvas.moveCanvasElement(id: selectedCanvasElementId, by: centerTranslation)
     }
 
