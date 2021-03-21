@@ -5,6 +5,14 @@ struct CodeSnippet: CanvasElementProtocol {
     var textBlock: TextBlock
     var language = CodeLanguage.python
 
+    var minimumWidth: CGFloat {
+        60.0
+    }
+
+    var minimumHeight: CGFloat {
+        60.0
+    }
+
     init(position: CGPoint) {
         self.textBlock = TextBlock(position: position)
         resetCodeTemplate()

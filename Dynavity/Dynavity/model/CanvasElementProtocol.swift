@@ -7,6 +7,8 @@ protocol CanvasElementProtocol {
     var width: CGFloat { get set }
     var height: CGFloat { get set }
     var rotation: Double { get set }
+    var minimumWidth: CGFloat { get }
+    var minimumHeight: CGFloat { get }
 
     mutating func move(by translation: CGSize)
     mutating func resize(by translation: CGSize)
