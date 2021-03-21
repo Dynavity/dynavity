@@ -8,6 +8,7 @@ struct SelectionOverlayView: View {
     private let rotationControlHandleLength: CGFloat = 10.0
     private let resizeControlSize: CGFloat = 15.0
     private let resizeControlBorderPercentage: CGFloat = 0.1
+    private let resizeControlHitboxScale: CGFloat = 2.0
 
     private var rotationControlOffset: CGFloat {
         -(element.height * viewModel.scaleFactor + rotationControlSize + rotationControlHandleLength) / 2.0
@@ -76,14 +77,22 @@ struct SelectionOverlayView: View {
     }
 
     private func makeResizeControl(_ resizeControl: ResizeControl) -> some View {
-        Rectangle()
-            .fill(Color.white)
-            .frame(width: resizeControlSize, height: resizeControlSize)
-            .border(Color.blue, width: resizeControlSize * resizeControlBorderPercentage)
-            // Force the resize control to be the same size regardless of scale factor.
-            .scaleEffect(1.0 / viewModel.scaleFactor)
-            .offset(getResizeControlPosition(resizeControl))
-            .gesture(getResizeControlGesture(resizeControl))
+        Group {
+            Rectangle()
+                .fill(Color.white)
+                .frame(width: resizeControlSize, height: resizeControlSize)
+                .border(Color.blue, width: resizeControlSize * resizeControlBorderPercentage)
+        }
+        // Make hitbox of resize control slightly larger.
+        .frame(
+            width: resizeControlSize * resizeControlHitboxScale,
+            height: resizeControlSize * resizeControlHitboxScale
+        )
+        .contentShape(Rectangle())
+        // Force the resize control to be the same size regardless of scale factor.
+        .scaleEffect(1.0 / viewModel.scaleFactor)
+        .offset(getResizeControlPosition(resizeControl))
+        .gesture(getResizeControlGesture(resizeControl))
     }
 
     var body: some View {
