@@ -9,31 +9,50 @@ import SwiftUI
 
 struct CanvasElementMapView: View {
     @ObservedObject var viewModel: CanvasViewModel
-    @Binding var scaleFactor: CGFloat
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                viewModel.moveSelectedCanvasElement(by: value.translation)
+            }
+    }
+
+    private func transformToView(element: CanvasElementProtocol) -> some View {
+        Group {
+            switch element {
+            case let imageCanvasElement as ImageCanvasElement:
+                ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
+            case let pdfCanvasElement as PDFCanvasElement:
+                PDFCanvasElementView(pdfCanvasElement: pdfCanvasElement)
+            case let textBlock as TextBlock:
+                TextBlockView(textBlock: textBlock)
+            case let markupTextBlock as MarkupTextBlock:
+                MarkupTextBlockView(markupTextBlock: markupTextBlock)
+            default:
+                TestCanvasElementView(element: element)
+            }
+        }
+    }
+
+    private func isSelected(_ element: CanvasElementProtocol) -> Bool {
+        viewModel.selectedCanvasElementId == element.id
+    }
 
     var body: some View {
         ZStack {
             ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
-                // The group allows us to have common view modifiers.
-                Group {
-                    switch element {
-                    case let imageCanvasElement as ImageCanvasElement:
-                        ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
-                    case let pdfCanvasElement as PDFCanvasElement:
-                        PDFCanvasElementView(pdfCanvasElement: pdfCanvasElement)
-                    case let textBlock as TextBlock:
-                        TextBlockView(textBlock: textBlock)
-                    case let markupTextBlock as MarkupTextBlock:
-                        MarkupTextBlockView(markupTextBlock: markupTextBlock)
-                    default:
-                        CanvasElementView(element: element)
+                transformToView(element: element)
+                    .frame(width: element.width, height: element.height)
+                    .addCardOverlay()
+                    .onTapGesture {
+                        viewModel.select(canvasElement: element)
                     }
-                }
-                .addCardOverlay()
-                .offset(x: element.position.x, y: element.position.y)
+                    .gesture(isSelected(element) ? dragGesture : nil)
+                    .overlay(isSelected(element) ? SelectionOverlayView(element: element, viewModel: viewModel) : nil)
+                    .rotationEffect(.radians(element.rotation))
+                    .offset(x: element.position.x, y: element.position.y)
             }
         }
-        .scaleEffect(scaleFactor)
     }
 }
 
@@ -42,6 +61,6 @@ struct CanvasElementMapView_Previews: PreviewProvider {
     @State static var scale: CGFloat = 1.0
 
     static var previews: some View {
-        CanvasElementMapView(viewModel: viewModel, scaleFactor: $scale)
+        CanvasElementMapView(viewModel: viewModel)
     }
 }

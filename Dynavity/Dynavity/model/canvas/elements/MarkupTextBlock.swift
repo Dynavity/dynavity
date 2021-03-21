@@ -6,8 +6,13 @@ struct MarkupTextBlock: CanvasElementProtocol {
         case markdown, latex
     }
 
-    var textBlock = TextBlock()
-    var markupType: MarkupType = .markdown
+    var textBlock: TextBlock
+    var markupType: MarkupType
+
+    init(position: CGPoint, markupType: MarkupType) {
+        self.textBlock = TextBlock(position: position)
+        self.markupType = markupType
+    }
 
     var id: UUID {
         textBlock.id
@@ -18,6 +23,30 @@ struct MarkupTextBlock: CanvasElementProtocol {
         }
         set {
             textBlock.position = newValue
+        }
+    }
+    var width: CGFloat {
+        get {
+            textBlock.width
+        }
+        set {
+            textBlock.width = newValue
+        }
+    }
+    var height: CGFloat {
+        get {
+            textBlock.height
+        }
+        set {
+            textBlock.height = newValue
+        }
+    }
+    var rotation: Double {
+        get {
+            textBlock.rotation
+        }
+        set {
+            textBlock.rotation = newValue
         }
     }
     var text: String {
