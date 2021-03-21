@@ -1,9 +1,9 @@
 import SwiftUI
 
-struct SearchBar: UIViewRepresentable {
+struct SearchBarView: UIViewRepresentable {
     @Binding var text: String
 
-    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
+    func makeUIView(context: UIViewRepresentableContext<SearchBarView>) -> UISearchBar {
         let searchBar = UISearchBar(frame: .zero)
         searchBar.delegate = context.coordinator
         searchBar.placeholder = "Search"
@@ -12,7 +12,7 @@ struct SearchBar: UIViewRepresentable {
         return searchBar
     }
 
-    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBar>) {
+    func updateUIView(_ uiView: UISearchBar, context: UIViewRepresentableContext<SearchBarView>) {
         uiView.text = text
     }
 
@@ -28,13 +28,13 @@ struct SearchBar: UIViewRepresentable {
         }
     }
 
-    func makeCoordinator() -> SearchBar.Coordinator {
+    func makeCoordinator() -> SearchBarView.Coordinator {
         Coordinator(text: $text)
     }
 }
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(text: .constant(""))
+        SearchBarView(text: .constant(""))
     }
 }

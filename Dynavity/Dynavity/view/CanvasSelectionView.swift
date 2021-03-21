@@ -80,12 +80,12 @@ struct CanvasSelectionView: View {
                     Image(systemName: "trash")
                 }.disabled(noCanvasSelected)
 
-                SearchBar(text: $searchQuery)
+                SearchBarView(text: $searchQuery)
             } else {
                 Button("Edit") {
                     toggleEditMode()
                 }
-                SearchBar(text: $searchQuery)
+                SearchBarView(text: $searchQuery)
                 // TODO: Implement saving the newly created canvas to state & db
                 NavigationLink(destination: MainView()
                                 .navigationBarHidden(true)
