@@ -14,7 +14,7 @@ struct TextElementView: View {
     }
 }
 
-struct TextBlockView_Previews: PreviewProvider {
+struct TextElementView_Previews: PreviewProvider {
     static var previews: some View {
         TextElementView(textBlock: TextElement(position: .zero))
     }

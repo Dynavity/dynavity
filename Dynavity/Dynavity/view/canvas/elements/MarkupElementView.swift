@@ -27,7 +27,7 @@ struct MarkupElementView: View {
     }
 }
 
-struct MarkupTextBlockView_Previews: PreviewProvider {
+struct MarkupElementView_Previews: PreviewProvider {
     static var previews: some View {
         MarkupElementView(markupTextBlock: MarkupElement(position: .zero, markupType: .markdown))
     }

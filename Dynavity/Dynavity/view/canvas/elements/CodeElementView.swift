@@ -41,7 +41,7 @@ struct CodeElementView: View {
     }
 }
 
-struct CodeSnippetView_Previews: PreviewProvider {
+struct CodeElementView_Previews: PreviewProvider {
     static var previews: some View {
         CodeElementView(codeSnippet: CodeElement(position: .zero))
     }
