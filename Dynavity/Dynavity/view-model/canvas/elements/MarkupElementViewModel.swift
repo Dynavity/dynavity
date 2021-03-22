@@ -7,7 +7,7 @@ class MarkupElementViewModel: ObservableObject {
     @Published var markupTextBlock: MarkupElement
     @Published var rawHtml: String = ""
 
-    private let markupToHtmlExporter: HtmlExporter = MarkupToHtmlExporter()
+    private let markupToHtmlExporter: MarkupToHtmlExporter = PandocMarkupToHtmlExporter()
     // Responsible for triggering a request to convert text to HTML when markUpTextBlock changes
     private var cancellationToken: AnyCancellable?
     // Responsible for retrieving the exported HTML from the HtmlExporter
@@ -22,13 +22,13 @@ class MarkupElementViewModel: ObservableObject {
                                             .debounce(for: .seconds(MarkupElementViewModel.debounceDelay),
                                                       scheduler: RunLoop.main)
                                             .sink { _ in
-                                                self.fetchHtml()
+                                                self.exportToHtml()
                                             }
         )
     }
 
-    // Fetched HTML will be assigned to `rawHtml` variable
-    private func fetchHtml() {
+    // Exported HTML will be assigned to `rawHtml` variable
+    private func exportToHtml() {
         let htmlPublisher = self.markupToHtmlExporter.getHtmlPublisher(markupText: markupTextBlock.text,
                                                                        markupType: markupTextBlock.markupType)
         self.htmlCancellable = htmlPublisher
