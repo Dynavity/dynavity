@@ -31,25 +31,25 @@ class CanvasViewModel: ObservableObject {
 // MARK: Adding of canvas elements
 extension CanvasViewModel {
     func addImageCanvasElement(from image: UIImage) {
-        let imageCanvasElement = ImageCanvasElement(position: canvasOrigin, image: image)
+        let imageCanvasElement = ImageElement(position: canvasOrigin, image: image)
         canvas.addElement(imageCanvasElement)
     }
 
     func addPdfCanvasElement(from file: URL) {
-        let pdfCanvasElement = PDFCanvasElement(position: canvasOrigin, file: file)
+        let pdfCanvasElement = PDFElement(position: canvasOrigin, file: file)
         canvas.addElement(pdfCanvasElement)
     }
 
     func addTextBlock() {
-        canvas.addElement(TextBlock(position: canvasOrigin))
+        canvas.addElement(TextElement(position: canvasOrigin))
     }
 
     func addCodeSnippet() {
-        canvas.addElement(CodeSnippet(position: canvasOrigin))
+        canvas.addElement(CodeElement(position: canvasOrigin))
     }
 
-    func addMarkUpTextBlock(markupType: MarkupTextBlock.MarkupType) {
-        canvas.addElement(MarkupTextBlock(position: canvasOrigin, markupType: markupType))
+    func addMarkUpTextBlock(markupType: MarkupElement.MarkupType) {
+        canvas.addElement(MarkupElement(position: canvasOrigin, markupType: markupType))
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {

@@ -1,10 +1,10 @@
 import SwiftUI
 import Combine
 
-class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
+class MarkupElementViewModel: ObservableObject, HtmlRenderable {
     private static let debounceDelay = 1.5
 
-    @Published var markupTextBlock: MarkupTextBlock
+    @Published var markupTextBlock: MarkupElement
     @Published var rawHtml: String = ""
 
     // Responsible for triggering a request to external API when markUpTextBlock changes
@@ -12,13 +12,13 @@ class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
     // Responsible for retrieving data from external API
     private var requestCancellable: AnyCancellable?
 
-    init(markupTextBlock: MarkupTextBlock) {
+    init(markupTextBlock: MarkupElement) {
         self.markupTextBlock = markupTextBlock
 
         // Introduces a debounce so that we don't send too many requests out.
         // Implementation referenced from: https://stackoverflow.com/a/57365773
         cancellationToken = AnyCancellable($markupTextBlock.removeDuplicates()
-                                            .debounce(for: .seconds(MarkupTextBlockViewModel.debounceDelay),
+                                            .debounce(for: .seconds(MarkupElementViewModel.debounceDelay),
                                                       scheduler: RunLoop.main)
                                             .sink { textBlock in
                                                 self.convertTextToHtml(text: textBlock.text,
@@ -27,7 +27,7 @@ class MarkupTextBlockViewModel: ObservableObject, HtmlRenderable {
         )
     }
 
-    private func convertTextToHtml(text: String, inputFormat: MarkupTextBlock.MarkupType) {
+    private func convertTextToHtml(text: String, inputFormat: MarkupElement.MarkupType) {
         let stringEncoding: String.Encoding = .utf8
         let request = constructURLRequest(with: text.data(using: stringEncoding))
 

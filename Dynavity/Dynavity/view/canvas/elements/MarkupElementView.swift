@@ -1,16 +1,16 @@
 import SwiftUI
 
-struct MarkupTextBlockView: View {
-    @StateObject private var viewModel: MarkupTextBlockViewModel
+struct MarkupElementView: View {
+    @StateObject private var viewModel: MarkupElementViewModel
 
     // TODO: This is set to "selected" for now.
     // The parent view containing this view should probably implement the logic for view selection.
     // Purpose of having this state is so that when the view is not selected, the text editor will not show
     @State private var isViewSelected = true
 
-    init(markupTextBlock: MarkupTextBlock) {
+    init(markupTextBlock: MarkupElement) {
         self._viewModel = StateObject(wrappedValue:
-                                        MarkupTextBlockViewModel(markupTextBlock: markupTextBlock))
+                                        MarkupElementViewModel(markupTextBlock: markupTextBlock))
     }
 
     var body: some View {
@@ -29,6 +29,6 @@ struct MarkupTextBlockView: View {
 
 struct MarkupTextBlockView_Previews: PreviewProvider {
     static var previews: some View {
-        MarkupTextBlockView(markupTextBlock: MarkupTextBlock(position: .zero, markupType: .markdown))
+        MarkupElementView(markupTextBlock: MarkupElement(position: .zero, markupType: .markdown))
     }
 }

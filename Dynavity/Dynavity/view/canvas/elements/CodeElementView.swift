@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct CodeSnippetView: View {
-    @StateObject var viewModel: CodeSnippetViewModel
+struct CodeElementView: View {
+    @StateObject var viewModel: CodeElementViewModel
 
-    init(codeSnippet: CodeSnippet) {
-        self._viewModel = StateObject(wrappedValue: CodeSnippetViewModel(codeSnippet: codeSnippet))
+    init(codeSnippet: CodeElement) {
+        self._viewModel = StateObject(wrappedValue: CodeElementViewModel(codeSnippet: codeSnippet))
     }
 
     var body: some View {
@@ -20,7 +20,7 @@ struct CodeSnippetView: View {
                 Divider()
                 HStack {
                     Picker("Language", selection: $viewModel.codeSnippet.language) {
-                        ForEach(CodeSnippet.CodeLanguage.allCases) {
+                        ForEach(CodeElement.CodeLanguage.allCases) {
                             Text($0.displayName).tag($0)
                         }
                     }
@@ -43,6 +43,6 @@ struct CodeSnippetView: View {
 
 struct CodeSnippetView_Previews: PreviewProvider {
     static var previews: some View {
-        CodeSnippetView(codeSnippet: CodeSnippet(position: .zero))
+        CodeElementView(codeSnippet: CodeElement(position: .zero))
     }
 }

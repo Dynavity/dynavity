@@ -1,13 +1,13 @@
 import SwiftUI
 
-class CodeSnippetViewModel: ObservableObject {
-    @Published var codeSnippet: CodeSnippet
+class CodeElementViewModel: ObservableObject {
+    @Published var codeSnippet: CodeElement
     @Published var output: String = ""
 
     private var connection: URLSessionWebSocketTask
     private var containerId: String = ""
 
-    init(codeSnippet: CodeSnippet) {
+    init(codeSnippet: CodeElement) {
         self.codeSnippet = codeSnippet
 
         let endpointUrl = "wss://t8jfxu45v2.execute-api.us-east-2.amazonaws.com/production/"

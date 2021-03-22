@@ -1,16 +1,16 @@
 import CoreGraphics
 import Foundation
 
-struct MarkupTextBlock: CanvasElementProtocol {
+struct MarkupElement: CanvasElementProtocol {
     enum MarkupType: String {
         case markdown, latex
     }
 
-    var textBlock: TextBlock
+    var textBlock: TextElement
     var markupType: MarkupType
 
     init(position: CGPoint, markupType: MarkupType) {
-        self.textBlock = TextBlock(position: position)
+        self.textBlock = TextElement(position: position)
         self.markupType = markupType
     }
 
@@ -62,4 +62,4 @@ struct MarkupTextBlock: CanvasElementProtocol {
     }
 }
 
-extension MarkupTextBlock: Equatable {}
+extension MarkupElement: Equatable {}
