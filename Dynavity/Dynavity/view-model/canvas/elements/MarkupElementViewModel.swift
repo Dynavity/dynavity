@@ -1,69 +1,37 @@
 import SwiftUI
 import Combine
 
-class MarkupElementViewModel: ObservableObject, HtmlRenderable {
+class MarkupElementViewModel: ObservableObject {
     private static let debounceDelay = 1.5
 
     @Published var markupTextBlock: MarkupElement
     @Published var rawHtml: String = ""
 
-    // Responsible for triggering a request to external API when markUpTextBlock changes
+    private let markupToHtmlExporter: HtmlExporter = MarkupToHtmlExporter()
+    // Responsible for triggering a request to convert text to HTML when markUpTextBlock changes
     private var cancellationToken: AnyCancellable?
-    // Responsible for retrieving data from external API
-    private var requestCancellable: AnyCancellable?
+    // Responsible for retrieving the exported HTML from the HtmlExporter
+    private var htmlCancellable: AnyCancellable?
 
     init(markupTextBlock: MarkupElement) {
         self.markupTextBlock = markupTextBlock
 
-        // Introduces a debounce so that we don't send too many requests out.
+        // Introduces a debounce so that we don't fetch the HTML that many times.
         // Implementation referenced from: https://stackoverflow.com/a/57365773
         cancellationToken = AnyCancellable($markupTextBlock.removeDuplicates()
                                             .debounce(for: .seconds(MarkupElementViewModel.debounceDelay),
                                                       scheduler: RunLoop.main)
-                                            .sink { textBlock in
-                                                self.convertTextToHtml(text: textBlock.text,
-                                                                       inputFormat: textBlock.markupType)
+                                            .sink { _ in
+                                                self.fetchHtml()
                                             }
         )
     }
 
-    private func convertTextToHtml(text: String, inputFormat: MarkupElement.MarkupType) {
-        let stringEncoding: String.Encoding = .utf8
-        let request = constructURLRequest(with: text.data(using: stringEncoding))
-
-        requestCancellable = URLSession.shared.dataTaskPublisher(for: request).tryMap { data, response in
-            let httpResponse = response as? HTTPURLResponse
-
-            guard httpResponse?.statusCode != 400,
-                  let rawHtml = String(bytes: data, encoding: stringEncoding) else {
-                return "Error: Invalid / unsupported syntax used."
-            }
-
-            return rawHtml
-        }
-        // Only source of failure is due to invalid URL, which should have been validated
-        .assertNoFailure()
-        .receive(on: RunLoop.main)
-        .eraseToAnyPublisher()
-        .assign(to: \.rawHtml, on: self)
-    }
-
-    /// Constructs a POST request to https://pandoc.bilimedtech.com/ that seeks to convert
-    /// the current input format into html.
-    /// - Parameter data: The data that is to be sent in the body of the request (e.g. the raw text)
-    private func constructURLRequest(with data: Data?) -> URLRequest {
-        let inputFormat = markupTextBlock.markupType.rawValue
-        let outputFormat = "html"
-
-        guard let url = URL(string: "https://pandoc.bilimedtech.com/\(outputFormat)") else {
-            fatalError("Invalid URL")
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("text/\(inputFormat)", forHTTPHeaderField: "Content-Type")
-        request.httpBody = data
-
-        return request
+    // Fetched HTML will be assigned to `rawHtml` variable
+    private func fetchHtml() {
+        let htmlPublisher = self.markupToHtmlExporter.getHtmlPublisher(markupText: markupTextBlock.text,
+                                                                       markupType: markupTextBlock.markupType)
+        self.htmlCancellable = htmlPublisher
+            .assign(to: \.rawHtml, on: self)
     }
 }
