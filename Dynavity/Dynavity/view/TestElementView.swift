@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TestCanvasElementView: View {
+struct TestElementView: View {
     @Binding var element: CanvasElementProtocol
 
     init(element: CanvasElementProtocol) {
@@ -16,9 +16,9 @@ struct TestCanvasElementView: View {
     }
 }
 
-struct TestCanvasElementView_Previews: PreviewProvider {
+struct TestElementView_Previews: PreviewProvider {
     static var previews: some View {
-        let element = TestCanvasElement()
-        TestCanvasElementView(element: element)
+        let element = TestElement()
+        TestElementView(element: element)
     }
 }

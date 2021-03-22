@@ -1,14 +1,14 @@
 import PDFKit
 import SwiftUI
 
-struct PDFCanvasElementView: UIViewRepresentable {
+struct PDFElementView: UIViewRepresentable {
     typealias UIViewType = PDFView
 
-    @StateObject private var viewModel: PDFCanvasElementViewModel
+    @StateObject private var viewModel: PDFElementViewModel
 
-    init(pdfCanvasElement: PDFCanvasElement) {
+    init(pdfCanvasElement: PDFElement) {
         self._viewModel = StateObject(wrappedValue:
-                                        PDFCanvasElementViewModel(pdfCanvasElement: pdfCanvasElement))
+                                        PDFElementViewModel(pdfCanvasElement: pdfCanvasElement))
     }
 
     func makeUIView(context: Context) -> UIViewType {

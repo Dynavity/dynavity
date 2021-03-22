@@ -20,18 +20,18 @@ struct CanvasElementMapView: View {
     private func transformToView(element: CanvasElementProtocol) -> some View {
         Group {
             switch element {
-            case let imageCanvasElement as ImageCanvasElement:
-                ImageCanvasElementView(imageCanvasElement: imageCanvasElement)
-            case let pdfCanvasElement as PDFCanvasElement:
-                PDFCanvasElementView(pdfCanvasElement: pdfCanvasElement)
-            case let textBlock as TextBlock:
-                TextBlockView(textBlock: textBlock)
-            case let codeSnippet as CodeSnippet:
-                CodeSnippetView(codeSnippet: codeSnippet)
-            case let markupTextBlock as MarkupTextBlock:
-                MarkupTextBlockView(markupTextBlock: markupTextBlock)
+            case let imageCanvasElement as ImageElement:
+                ImageElementView(imageCanvasElement: imageCanvasElement)
+            case let pdfCanvasElement as PDFElement:
+                PDFElementView(pdfCanvasElement: pdfCanvasElement)
+            case let textBlock as TextElement:
+                TextElementView(textBlock: textBlock)
+            case let codeSnippet as CodeElement:
+                CodeElementView(codeSnippet: codeSnippet)
+            case let markupTextBlock as MarkupElement:
+                MarkupElementView(markupTextBlock: markupTextBlock)
             default:
-                TestCanvasElementView(element: element)
+                TestElementView(element: element)
             }
         }
     }

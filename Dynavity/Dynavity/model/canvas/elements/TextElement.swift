@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-struct TextBlock: CanvasElementProtocol {
+struct TextElement: CanvasElementProtocol {
     // TODO: replace these with actual values
     var id = UUID()
     var position: CGPoint
@@ -12,4 +12,4 @@ struct TextBlock: CanvasElementProtocol {
     var rotation: Double = .zero
 }
 
-extension TextBlock: Equatable {}
+extension TextElement: Equatable {}

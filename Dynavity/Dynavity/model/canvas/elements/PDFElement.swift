@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct PDFCanvasElement: CanvasElementProtocol {
+struct PDFElement: CanvasElementProtocol {
     var id = UUID()
     var position: CGPoint
     var file: URL
@@ -10,4 +10,4 @@ struct PDFCanvasElement: CanvasElementProtocol {
 }
 
 // MARK: Equatable
-extension PDFCanvasElement: Equatable {}
+extension PDFElement: Equatable {}

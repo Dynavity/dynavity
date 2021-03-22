@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-struct CodeSnippet: CanvasElementProtocol {
-    var textBlock: TextBlock
+struct CodeElement: CanvasElementProtocol {
+    var textBlock: TextElement
     var language = CodeLanguage.python
 
     var minimumWidth: CGFloat {
@@ -14,7 +14,7 @@ struct CodeSnippet: CanvasElementProtocol {
     }
 
     init(position: CGPoint) {
-        self.textBlock = TextBlock(position: position)
+        self.textBlock = TextElement(position: position)
         resetCodeTemplate()
     }
 

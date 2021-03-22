@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ImageCanvasElement: CanvasElementProtocol {
+struct ImageElement: CanvasElementProtocol {
     var id = UUID()
     var position: CGPoint
     var image: UIImage
@@ -17,4 +17,4 @@ struct ImageCanvasElement: CanvasElementProtocol {
 }
 
 // MARK: Equatable
-extension ImageCanvasElement: Equatable {}
+extension ImageElement: Equatable {}

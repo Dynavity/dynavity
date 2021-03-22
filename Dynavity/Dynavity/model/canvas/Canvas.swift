@@ -7,8 +7,8 @@ struct Canvas {
 
     init() {
         /// Starting center is now (x: 250000, y:  250000)
-        let testElement1 = TestCanvasElement(position: CGPoint(x: 250_000, y: 250_000))
-        let testElement2 = TestCanvasElement(position: CGPoint(x: 250_500, y: 250_500))
+        let testElement1 = TestElement(position: CGPoint(x: 250_000, y: 250_000))
+        let testElement2 = TestElement(position: CGPoint(x: 250_500, y: 250_500))
         addElement(testElement1)
         addElement(testElement2)
     }
