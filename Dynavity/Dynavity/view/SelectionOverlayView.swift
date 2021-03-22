@@ -126,6 +126,6 @@ struct SelectionOverlayView: View {
 
 struct SelectionOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        SelectionOverlayView(element: TestCanvasElement(), viewModel: CanvasViewModel())
+        SelectionOverlayView(element: TestElement(), viewModel: CanvasViewModel())
     }
 }

@@ -4,7 +4,7 @@ import CoreGraphics
 /**
  Test element to use when creating a canvas. This struct can be removed when real canvas elements are created.
  */
-struct TestCanvasElement: CanvasElementProtocol, Identifiable {
+struct TestElement: CanvasElementProtocol, Identifiable {
     typealias elementID = UUID
 
     var id = elementID()
@@ -13,7 +13,7 @@ struct TestCanvasElement: CanvasElementProtocol, Identifiable {
     var height: CGFloat = 100.0
     var rotation = Double.pi / 4.0
 
-    static func == (lhs: TestCanvasElement, rhs: TestCanvasElement) -> Bool {
+    static func == (lhs: TestElement, rhs: TestElement) -> Bool {
         lhs.id == rhs.id
     }
 }

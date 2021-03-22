@@ -31,7 +31,7 @@ struct CanvasElementMapView: View {
             case let markupTextBlock as MarkupElement:
                 MarkupElementView(markupTextBlock: markupTextBlock)
             default:
-                TestCanvasElementView(element: element)
+                TestElementView(element: element)
             }
         }
     }
