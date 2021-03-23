@@ -15,6 +15,7 @@
 For every Graph g:
  - g is either directed or undirected
  - All nodes in g must have unique labels
+ - No self loops present
 
  Similar to `Node` and `Edge`, `Graph` is a generic type with a type parameter
  `T` that defines the type of the nodes' labels.
@@ -85,6 +86,7 @@ struct Graph<T: Hashable> {
     mutating func addEdge(_ addedEdge: Edge<T>) {
         let destNode = addedEdge.destination
         let srcNode = addedEdge.source
+        assert(srcNode != destNode, "Self loops are not supported")
 
         // Add nodes referenced in edges which does not exist
         if !containsNode(destNode) {
@@ -204,11 +206,21 @@ struct Graph<T: Hashable> {
         return true
     }
 
+    private func hasSelfLoops() -> Bool {
+        for (node, edges) in adjList {
+            for edge in edges where edge.destination == node {
+                return true
+            }
+        }
+        return false
+    }
+
     /// Checks the representation invariants.
     /// TODO: remember to disable this / ship app in production
     private func checkRepresentation() -> Bool {
         checkDirectedUndirectedInvariant()
             && hasUniqueLabelsOnNodes()
             && checkAdjancencyListImpl()
+            && !hasSelfLoops()
     }
 }
