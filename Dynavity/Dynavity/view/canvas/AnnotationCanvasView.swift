@@ -19,12 +19,6 @@ struct AnnotationCanvasView_Previews: PreviewProvider {
 }
 
 extension AnnotationCanvasView {
-//    func showToolPicker() {
-//        toolPicker.setVisible(true, forFirstResponder: annotationCanvasView)
-//        toolPicker.addObserver(annotationCanvasView)
-//        annotationCanvasView.becomeFirstResponder()
-//    }
-
     func saveAnnotationToModel() {
         viewModel.storeAnnotation(annotationCanvasView.drawing)
     }
@@ -62,14 +56,12 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.bouncesZoom = false
         annotationCanvasView.contentOffset = viewModel.canvasOrigin
 
-        // showToolPicker()
         return annotationCanvasView
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
         // Update annotation tool
-        let currentTool = viewModel.getCurrentTool()
-        annotationCanvasView.tool = currentTool
+        annotationCanvasView.tool = viewModel.getCurrentTool()
     }
 
     func makeCoordinator() -> Coordinator {
