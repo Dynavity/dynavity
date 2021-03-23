@@ -96,7 +96,6 @@ targets:
           CODE_SIGN_STYLE: Automatic
           INFOPLIST_FILE: DynavityTests/Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: 14.0
-          PRODUCT_BUNDLE_IDENTIFIER: cs3217.DynavityTests
           SWIFT_VERSION: 5.0
           TEST_HOST: $(BUILT_PRODUCTS_DIR)/Dynavity.app/Dynavity
         Release:
@@ -105,7 +104,6 @@ targets:
           CODE_SIGN_STYLE: Automatic
           INFOPLIST_FILE: DynavityTests/Info.plist
           IPHONEOS_DEPLOYMENT_TARGET: 14.0
-          PRODUCT_BUNDLE_IDENTIFIER: cs3217.DynavityTests
           SWIFT_VERSION: 5.0
           TEST_HOST: $(BUILT_PRODUCTS_DIR)/Dynavity.app/Dynavity
     sources:
@@ -122,14 +120,12 @@ targets:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
           CODE_SIGN_STYLE: Automatic
           INFOPLIST_FILE: DynavityUITests/Info.plist
-          PRODUCT_BUNDLE_IDENTIFIER: cs3217.DynavityUITests
           SWIFT_VERSION: 5.0
           TEST_TARGET_NAME: Dynavity
         Release:
           ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
           CODE_SIGN_STYLE: Automatic
           INFOPLIST_FILE: DynavityUITests/Info.plist
-          PRODUCT_BUNDLE_IDENTIFIER: cs3217.DynavityUITests
           SWIFT_VERSION: 5.0
           TEST_TARGET_NAME: Dynavity
     sources:
