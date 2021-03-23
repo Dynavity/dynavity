@@ -206,8 +206,6 @@ struct Graph<T: Hashable> {
 
     /// Checks the representation invariants.
     /// TODO: remember to disable this / ship app in production
-    /// TODO: add another representation invariant that for every key in adjacency list,
-    /// the edges must start from (key, someOtherDest)
     private func checkRepresentation() -> Bool {
         checkDirectedUndirectedInvariant()
             && hasUniqueLabelsOnNodes()
