@@ -20,7 +20,7 @@ For every Graph g:
  `T` that defines the type of the nodes' labels.
  */
 struct Graph<T: Hashable> {
-    private let isDirected: Bool
+    let isDirected: Bool
 
     // Keep track of this to be able to use the most appropriate algorithms for the graph
     private var hasNegativeWeights: Bool
@@ -28,13 +28,13 @@ struct Graph<T: Hashable> {
 
     /// A read-only computed property that contains all the nodes
     /// of the graphs.
-    private var nodes: [Node<T>] {
+    var nodes: [Node<T>] {
         Array(adjList.keys)
     }
 
     /// A read-only computed property that contains all the edges
     /// of the graphs.
-    private var edges: [Edge<T>] {
+    var edges: [Edge<T>] {
         Array(adjList.values.flatMap({ $0 }))
     }
 
@@ -46,7 +46,7 @@ struct Graph<T: Hashable> {
 
     /// Adds the given node to the graph.
     /// If the node already exists in the graph, do nothing.
-    private mutating func addNode(_ addedNode: Node<T>) {
+    mutating func addNode(_ addedNode: Node<T>) {
         if !containsNode(addedNode) {
             adjList[addedNode] = []
         }
@@ -56,7 +56,7 @@ struct Graph<T: Hashable> {
 
     /// Remove the given node from the graph.
     /// If the node does not exist in the graph, do nothing.
-    private mutating func removeNode(_ removedNode: Node<T>) {
+    mutating func removeNode(_ removedNode: Node<T>) {
         if !containsNode(removedNode) {
             return
         }
@@ -75,14 +75,14 @@ struct Graph<T: Hashable> {
 
     /// Whether the graph contains the requested node.
     /// - Returns: true if the node exists in the graph
-    private func containsNode(_ targetNode: Node<T>) -> Bool {
+    func containsNode(_ targetNode: Node<T>) -> Bool {
         adjList[targetNode] != nil
     }
 
     /// Adds the given edge to the graph.
     /// If the edge already exists, do nothing. If any of the nodes referenced
     /// in the edge does not exist, it is added to the graph.
-    private mutating func addEdge(_ addedEdge: Edge<T>) {
+    mutating func addEdge(_ addedEdge: Edge<T>) {
         let destNode = addedEdge.destination
         let srcNode = addedEdge.source
 
@@ -104,7 +104,7 @@ struct Graph<T: Hashable> {
 
     /// Removes the requested edge from the graph. If it does not exist, do
     /// nothing.
-    private mutating func removeEdge(_ removedEdge: Edge<T>) {
+    mutating func removeEdge(_ removedEdge: Edge<T>) {
         let srcNode = removedEdge.source
 
         if containsEdge(removedEdge) {
@@ -121,7 +121,7 @@ struct Graph<T: Hashable> {
 
     /// Whether the requested edge exists in the graph.
     /// - Returns: true if the requested edge exists.
-    private func containsEdge(_ targetEdge: Edge<T>) -> Bool {
+    func containsEdge(_ targetEdge: Edge<T>) -> Bool {
         let srcNode = targetEdge.source
 
         if !containsNode(srcNode) {
@@ -143,7 +143,7 @@ struct Graph<T: Hashable> {
     /// - Parameters:
     ///   - fromNode: the source `Node`
     /// - Returns: an array of adjacent `Node`s
-    private func adjacentNodesFromNode(_ fromNode: Node<T>) -> [Node<T>] {
+    func adjacentNodesFromNode(_ fromNode: Node<T>) -> [Node<T>] {
         if !containsNode(fromNode) {
             return []
         }
