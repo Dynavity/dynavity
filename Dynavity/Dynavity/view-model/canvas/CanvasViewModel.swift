@@ -186,6 +186,14 @@ extension CanvasViewModel {
         annotationPalette.switchTool(newTool)
     }
 
+    func switchAnnotationWidth(_ newWidth: CGFloat) {
+        annotationPalette.switchAnnotationWidth(newWidth)
+    }
+
+    func switchAnnotationColor(_ newColor: UIColor) {
+        annotationPalette.switchAnnotationColor(newColor)
+    }
+
     func getCurrentTool() -> PKTool {
         annotationPalette.selectedTool
     }

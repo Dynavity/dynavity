@@ -48,6 +48,7 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.drawingPolicy = .anyInput
         #endif
 
+        annotationCanvasView.drawingPolicy = .anyInput
         annotationCanvasView.delegate = context.coordinator
         annotationCanvasView.isOpaque = false
         annotationCanvasView.showsVerticalScrollIndicator = false
