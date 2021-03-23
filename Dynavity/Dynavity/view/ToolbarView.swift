@@ -1,4 +1,5 @@
 import SwiftUI
+import PencilKit
 
 struct ToolbarView: View {
     private enum ActiveSheet: Identifiable {
@@ -84,8 +85,45 @@ struct ToolbarView: View {
         }
     }
 
+    private var penSelectionButton: some View {
+        Button(action: {
+            viewModel.switchAnnotationTool(PKInkingTool(.pen, color: .red, width: 10))
+        }) {
+            Image(systemName: "pencil")
+        }
+    }
+
+    private var highlighterSelectionButton: some View {
+        Button(action: {
+            viewModel.switchAnnotationTool(PKInkingTool(.marker, color: .yellow, width: 10))
+        }) {
+            Image(systemName: "highlighter")
+        }
+    }
+
+    private var eraserSelectionButton: some View {
+        Button(action: {
+            viewModel.switchAnnotationTool(PKEraserTool(.vector))
+        }) {
+            Image(systemName: "rectangle.portrait")
+        }
+    }
+
+    private var lassoSelectionButton: some View {
+        Button(action: {
+            viewModel.switchAnnotationTool(PKLassoTool())
+        }) {
+            Image(systemName: "lasso")
+        }
+    }
+
     var body: some View {
         HStack {
+            penSelectionButton
+            Spacer()
+            highlighterSelectionButton
+            Spacer()
+            eraserSelectionButton
             Spacer()
             addButton
             Spacer()

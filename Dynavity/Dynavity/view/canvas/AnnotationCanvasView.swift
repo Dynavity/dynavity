@@ -4,7 +4,7 @@ import PencilKit
 struct AnnotationCanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var annotationCanvasView = PKCanvasWrapperView()
-    @State private var toolPicker = PKToolPicker()
+    // @State private var toolPicker = PKToolPicker()
 
     init(viewModel: CanvasViewModel) {
         self.viewModel = viewModel
@@ -19,11 +19,11 @@ struct AnnotationCanvasView_Previews: PreviewProvider {
 }
 
 extension AnnotationCanvasView {
-    func showToolPicker() {
-        toolPicker.setVisible(true, forFirstResponder: annotationCanvasView)
-        toolPicker.addObserver(annotationCanvasView)
-        annotationCanvasView.becomeFirstResponder()
-    }
+//    func showToolPicker() {
+//        toolPicker.setVisible(true, forFirstResponder: annotationCanvasView)
+//        toolPicker.addObserver(annotationCanvasView)
+//        annotationCanvasView.becomeFirstResponder()
+//    }
 
     func saveAnnotationToModel() {
         viewModel.storeAnnotation(annotationCanvasView.drawing)
@@ -61,12 +61,14 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.bouncesZoom = false
         annotationCanvasView.contentOffset = viewModel.canvasOrigin
 
-        showToolPicker()
+        // showToolPicker()
         return annotationCanvasView
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        // Do nothing.
+        // Update annotation tool
+        let currentTool = viewModel.getCurrentTool()
+        annotationCanvasView.tool = currentTool
     }
 
     func makeCoordinator() -> Coordinator {

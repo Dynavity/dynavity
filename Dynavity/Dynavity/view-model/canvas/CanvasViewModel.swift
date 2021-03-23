@@ -4,6 +4,7 @@ import PencilKit
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
+    @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
     @Published var canvasCenterOffsetX: CGFloat = 0.0
     @Published var canvasCenterOffsetY: CGFloat = 0.0
@@ -176,5 +177,16 @@ extension CanvasViewModel {
     func handleDragEnd() {
         dragStartLocation = nil
         element = nil
+    }
+}
+
+// MARK: Annotation palette controls
+extension CanvasViewModel {
+    func switchAnnotationTool(_ newTool: PKTool) {
+        annotationPalette.switchTool(newTool)
+    }
+
+    func getCurrentTool() -> PKTool {
+        annotationPalette.selectedTool
     }
 }
