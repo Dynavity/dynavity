@@ -194,7 +194,28 @@ extension CanvasViewModel {
         annotationPalette.switchAnnotationColor(newColor)
     }
 
+    func getAnnotationWidths() -> [CGFloat] {
+        AnnotationPalette.annotationWidths
+    }
+
+    func getAnnotationColors() -> [UIColor] {
+        AnnotationPalette.annotationColors
+    }
+
     func getCurrentTool() -> PKTool {
         annotationPalette.selectedTool
+    }
+
+    func getDefaultAnnotationTool(_ toolType: PKInkingTool.InkType) -> PKTool {
+        switch toolType {
+        case .pen:
+            return AnnotationPalette.defaultPenTool
+        case .marker:
+            return AnnotationPalette.defaultMarkerTool
+        case .pencil:
+            fatalError("PKInkingTool should not be pencil")
+        @unknown default:
+            fatalError("PKInkingTool is not a pen or marker")
+        }
     }
 }

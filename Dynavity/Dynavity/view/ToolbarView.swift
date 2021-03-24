@@ -14,7 +14,7 @@ struct ToolbarView: View {
 
     private enum SelectedAnnotationTool: Identifiable {
         case pen
-        case highlighter
+        case marker
         case eraser
         case lasso
 
@@ -108,7 +108,7 @@ struct ToolbarView: View {
     private var annotationMenu: some View {
         HStack {
             LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(AnnotationPalette.annotationWidths, id: \.self) { width in
+                ForEach(viewModel.getAnnotationWidths(), id: \.self) { width in
                     Button(action: {
                         viewModel.switchAnnotationWidth(width)
                         shouldShowAnnotationMenu = false
@@ -125,7 +125,7 @@ struct ToolbarView: View {
             }
             Spacer()
             LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(AnnotationPalette.annotationColors, id: \.self) { color in
+                ForEach(viewModel.getAnnotationColors(), id: \.self) { color in
                     Button(action: {
                         viewModel.switchAnnotationColor(color)
                         shouldShowAnnotationMenu = false
@@ -145,7 +145,7 @@ struct ToolbarView: View {
                 shouldShowAnnotationMenu = true
             }
             currentlySelectedTool = .pen
-            viewModel.switchAnnotationTool(PKInkingTool(.pen, color: .blue, width: 10))
+            viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.pen))
 
         }) {
             Image(systemName: "pencil")
@@ -161,21 +161,21 @@ struct ToolbarView: View {
                     : nil)
     }
 
-    private var highlighterSelectionButton: some View {
+    private var markerSelectionButton: some View {
         Button(action: {
-            if currentlySelectedTool == .highlighter {
+            if currentlySelectedTool == .marker {
                 shouldShowAnnotationMenu = true
             }
-            currentlySelectedTool = .highlighter
-            viewModel.switchAnnotationTool(PKInkingTool(.marker, color: .yellow, width: 10))
+            currentlySelectedTool = .marker
+            viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.marker))
         }) {
             Image(systemName: "highlighter")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.highlighter ? Color.UI.grey : nil)
+        .background(currentlySelectedTool == SelectedAnnotationTool.marker ? Color.UI.grey : nil)
         .overlay(shouldShowAnnotationMenu &&
-                    currentlySelectedTool == SelectedAnnotationTool.highlighter
+                    currentlySelectedTool == SelectedAnnotationTool.marker
                     ? annotationMenu
                     : nil)
     }
@@ -208,7 +208,7 @@ struct ToolbarView: View {
         HStack {
             Spacer()
             penSelectionButton
-            highlighterSelectionButton
+            markerSelectionButton
             eraserSelectionButton
             lassoSelectionButton
             Spacer()

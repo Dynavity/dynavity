@@ -4,7 +4,6 @@ import PencilKit
 struct AnnotationCanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var annotationCanvasView = PKCanvasWrapperView()
-    // @State private var toolPicker = PKToolPicker()
 
     init(viewModel: CanvasViewModel) {
         self.viewModel = viewModel
