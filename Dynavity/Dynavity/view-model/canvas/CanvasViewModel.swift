@@ -4,6 +4,7 @@ import PencilKit
 class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
+    @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
     @Published var canvasCenterOffsetX: CGFloat = 0.0
     @Published var canvasCenterOffsetY: CGFloat = 0.0
@@ -41,7 +42,7 @@ extension CanvasViewModel {
     }
 
     func addTextBlock() {
-        canvas.addElement(TextElement(position: canvasOrigin))
+        canvas.addElement(PlainTextElement(position: canvasOrigin))
     }
 
     func addCodeSnippet() {
@@ -176,5 +177,45 @@ extension CanvasViewModel {
     func handleDragEnd() {
         dragStartLocation = nil
         element = nil
+    }
+}
+
+// MARK: Annotation palette controls
+extension CanvasViewModel {
+    func switchAnnotationTool(_ newTool: PKTool) {
+        annotationPalette.switchTool(newTool)
+    }
+
+    func switchAnnotationWidth(_ newWidth: CGFloat) {
+        annotationPalette.switchAnnotationWidth(newWidth)
+    }
+
+    func switchAnnotationColor(_ newColor: UIColor) {
+        annotationPalette.switchAnnotationColor(newColor)
+    }
+
+    func getAnnotationWidths() -> [CGFloat] {
+        AnnotationPalette.annotationWidths
+    }
+
+    func getAnnotationColors() -> [UIColor] {
+        AnnotationPalette.annotationColors
+    }
+
+    func getCurrentTool() -> PKTool {
+        annotationPalette.selectedTool
+    }
+
+    func getDefaultAnnotationTool(_ toolType: PKInkingTool.InkType) -> PKTool {
+        switch toolType {
+        case .pen:
+            return AnnotationPalette.defaultPenTool
+        case .marker:
+            return AnnotationPalette.defaultMarkerTool
+        case .pencil:
+            fatalError("PKInkingTool should not be pencil")
+        @unknown default:
+            fatalError("PKInkingTool is not a pen or marker")
+        }
     }
 }

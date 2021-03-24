@@ -23,8 +23,6 @@ For every Graph g:
 struct Graph<T: Hashable> {
     let isDirected: Bool
 
-    // Keep track of this to be able to use the most appropriate algorithms for the graph
-    private var hasNegativeWeights: Bool
     private var adjList: [Node<T>: Set<Edge<T>>] = [:]
 
     /// A read-only computed property that contains all the nodes
@@ -42,7 +40,6 @@ struct Graph<T: Hashable> {
     /// Constructs a directed or undirected graph.
     init(isDirected: Bool) {
         self.isDirected = isDirected
-        self.hasNegativeWeights = false
     }
 
     /// Adds the given node to the graph.

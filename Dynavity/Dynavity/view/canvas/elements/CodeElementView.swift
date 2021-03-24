@@ -10,11 +10,11 @@ struct CodeElementView: View {
     var body: some View {
         HStack {
             VStack {
-                TextEditor(text: $viewModel.codeSnippet.programString)
+                TextEditor(text: $viewModel.codeSnippet.text)
                     .font(.custom("Courier", size: viewModel.codeSnippet.fontSize))
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    .onChange(of: viewModel.codeSnippet.programString) {_ in
+                    .onChange(of: viewModel.codeSnippet.text) {_ in
                         viewModel.convertQuotes()
                     }
                 Divider()

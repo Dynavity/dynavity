@@ -1,20 +1,28 @@
 import CoreGraphics
 import Foundation
 
-struct CodeElement: CanvasElementProtocol {
-    var textBlock: TextElement
-    var language = CodeLanguage.python
-
+struct CodeElement: TextElementProtocol {
+    // MARK: CanvasElementProtocol
+    var id = UUID()
+    var position: CGPoint
+    var width: CGFloat = 500.0
+    var height: CGFloat = 500.0
+    var rotation: Double = .zero
     var minimumWidth: CGFloat {
         60.0
     }
-
     var minimumHeight: CGFloat {
         60.0
     }
 
+    // MARK: TextElementProtocol
+    var text: String = ""
+
+    // MARK: CodeElement-specific attributes
+    var language = CodeLanguage.python
+
     init(position: CGPoint) {
-        self.textBlock = TextElement(position: position)
+        self.position = position
         resetCodeTemplate()
     }
 
@@ -79,61 +87,8 @@ struct CodeElement: CanvasElementProtocol {
         }
     }
 
-    var id: UUID {
-        textBlock.id
-    }
-
-    var position: CGPoint {
-        get {
-            textBlock.position
-        }
-        set {
-            textBlock.position = newValue
-        }
-    }
-
-    var width: CGFloat {
-        get {
-            textBlock.width
-        }
-        set {
-            textBlock.width = newValue
-        }
-    }
-
-    var height: CGFloat {
-        get {
-            textBlock.height
-        }
-        set {
-            textBlock.height = newValue
-        }
-    }
-
-    var rotation: Double {
-        get {
-            textBlock.rotation
-        }
-        set {
-            textBlock.rotation = newValue
-        }
-    }
-
-    var programString: String {
-        get {
-            textBlock.text
-        }
-        set {
-            textBlock.text = newValue
-        }
-    }
-
-    var fontSize: CGFloat {
-        textBlock.fontSize
-    }
-
     mutating func resetCodeTemplate() {
-        textBlock.text = language.template
+        self.text = language.template
     }
 
     mutating func convertQuotes() {
@@ -143,10 +98,10 @@ struct CodeElement: CanvasElementProtocol {
             ("\u{2018}", "'"),
             ("\u{2019}", "'")
         ]
-        var processed = textBlock.text
+        var processed = self.text
         charsToReplace.forEach {
             processed = processed.replacingOccurrences(of: $0.0, with: $0.1)
         }
-        textBlock.text = processed
+        self.text = processed
     }
 }
