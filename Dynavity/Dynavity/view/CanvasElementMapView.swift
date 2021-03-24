@@ -21,7 +21,7 @@ struct CanvasElementMapView: View {
 
     var body: some View {
         ZStack {
-            ForEach(viewModel.canvas.canvasElements, id: \.id) { element in
+            ForEach(viewModel.getCanvasElements(), id: \.id) { element in
                 transformToView(element: element)
                     .frame(width: element.width, height: element.height)
                     .addCardOverlay()
