@@ -19,7 +19,7 @@ class CodeElementViewModel: ObservableObject {
     }
 
     func runCode() {
-        let program = codeSnippet.programString
+        let program = codeSnippet.text
         guard !program.isEmpty else {
             // backend will not accept an empty program
             return

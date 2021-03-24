@@ -24,8 +24,8 @@ struct CanvasElementMapView: View {
                 ImageElementView(imageCanvasElement: imageCanvasElement)
             case let pdfCanvasElement as PDFElement:
                 PDFElementView(pdfCanvasElement: pdfCanvasElement)
-            case let textBlock as TextElement:
-                TextElementView(textBlock: textBlock)
+            case let plainTextElement as PlainTextElement:
+                PlainTextElementView(plainTextElement: plainTextElement)
             case let codeSnippet as CodeElement:
                 CodeElementView(codeSnippet: codeSnippet)
             case let markupTextBlock as MarkupElement:

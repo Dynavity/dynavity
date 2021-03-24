@@ -42,7 +42,7 @@ extension CanvasViewModel {
     }
 
     func addTextBlock() {
-        canvas.addElement(TextElement(position: canvasOrigin))
+        canvas.addElement(PlainTextElement(position: canvasOrigin))
     }
 
     func addCodeSnippet() {
