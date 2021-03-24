@@ -1,14 +1,8 @@
-//
-//  CanvasElementMapView.swift
-//  Dynavity
-//
-//  Created by Hans Sebastian Tirtaputra on 15/3/21.
-//
-
 import SwiftUI
 
 struct CanvasElementMapView: View {
     @ObservedObject var viewModel: CanvasViewModel
+    private let elementViewFactory = CanvasElementViewFactory()
 
     private var dragGesture: some Gesture {
         DragGesture()
@@ -18,22 +12,7 @@ struct CanvasElementMapView: View {
     }
 
     private func transformToView(element: CanvasElementProtocol) -> some View {
-        Group {
-            switch element {
-            case let imageCanvasElement as ImageElement:
-                ImageElementView(imageCanvasElement: imageCanvasElement)
-            case let pdfCanvasElement as PDFElement:
-                PDFElementView(pdfCanvasElement: pdfCanvasElement)
-            case let plainTextElement as PlainTextElement:
-                PlainTextElementView(plainTextElement: plainTextElement)
-            case let codeSnippet as CodeElement:
-                CodeElementView(codeSnippet: codeSnippet)
-            case let markupTextBlock as MarkupElement:
-                MarkupElementView(markupTextBlock: markupTextBlock)
-            default:
-                TestElementView(element: element)
-            }
-        }
+        elementViewFactory.createView(element: element)
     }
 
     private func isSelected(_ element: CanvasElementProtocol) -> Bool {
