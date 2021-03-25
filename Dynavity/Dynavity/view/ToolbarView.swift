@@ -12,7 +12,7 @@ struct ToolbarView: View {
         }
     }
 
-    private enum SelectedAnnotationTool: Identifiable {
+    enum SelectedAnnotationTool: Identifiable {
         case pen
         case marker
         case eraser
@@ -32,7 +32,6 @@ struct ToolbarView: View {
     @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
     @State private var shouldShowAnnotationMenu = false
-    @State private var currentlySelectedTool: SelectedAnnotationTool? = SelectedAnnotationTool.pen
 
     let columns = [
         GridItem(.flexible()),
@@ -141,23 +140,23 @@ struct ToolbarView: View {
 
     private var canvasElementSelectionButton: some View {
         Button(action: {
-            currentlySelectedTool = nil
+            viewModel.currentlySelectedTool = nil
         }) {
             Image(systemName: "hand.tap")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == nil
+        .background(viewModel.currentlySelectedTool == nil
                         ? Color.UI.grey
                         : nil)
     }
 
     private var penSelectionButton: some View {
         Button(action: {
-            if currentlySelectedTool == .pen {
+            if viewModel.currentlySelectedTool == .pen {
                 shouldShowAnnotationMenu = true
             }
-            currentlySelectedTool = .pen
+            viewModel.currentlySelectedTool = .pen
             viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.pen))
 
         }) {
@@ -165,56 +164,56 @@ struct ToolbarView: View {
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.pen
+        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.pen
                         ? Color.UI.grey
                         : nil)
         .overlay(shouldShowAnnotationMenu &&
-                    currentlySelectedTool == SelectedAnnotationTool.pen
+                    viewModel.currentlySelectedTool == SelectedAnnotationTool.pen
                     ? annotationMenu
                     : nil)
     }
 
     private var markerSelectionButton: some View {
         Button(action: {
-            if currentlySelectedTool == .marker {
+            if viewModel.currentlySelectedTool == .marker {
                 shouldShowAnnotationMenu = true
             }
-            currentlySelectedTool = .marker
+            viewModel.currentlySelectedTool = .marker
             viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.marker))
         }) {
             Image(systemName: "highlighter")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.marker ? Color.UI.grey : nil)
+        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.marker ? Color.UI.grey : nil)
         .overlay(shouldShowAnnotationMenu &&
-                    currentlySelectedTool == SelectedAnnotationTool.marker
+                    viewModel.currentlySelectedTool == SelectedAnnotationTool.marker
                     ? annotationMenu
                     : nil)
     }
 
     private var eraserSelectionButton: some View {
         Button(action: {
-            currentlySelectedTool = .eraser
+            viewModel.currentlySelectedTool = .eraser
             viewModel.switchAnnotationTool(PKEraserTool(.vector))
         }) {
             Image(systemName: "rectangle.portrait")
                 .resizable()
                 .frame(width: toolButtonSize / 1.5, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.eraser ? Color.UI.grey : nil)
+        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.eraser ? Color.UI.grey : nil)
     }
 
     private var lassoSelectionButton: some View {
         Button(action: {
-            currentlySelectedTool = .lasso
+            viewModel.currentlySelectedTool = .lasso
             viewModel.switchAnnotationTool(PKLassoTool())
         }) {
             Image(systemName: "lasso")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.lasso ? Color.UI.grey : nil)
+        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.lasso ? Color.UI.grey : nil)
     }
 
     var body: some View {

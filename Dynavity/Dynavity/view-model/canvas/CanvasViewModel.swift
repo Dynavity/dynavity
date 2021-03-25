@@ -10,6 +10,7 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
+    @Published var currentlySelectedTool: ToolbarView.SelectedAnnotationTool?
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -21,6 +22,7 @@ class CanvasViewModel: ObservableObject {
 
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
+        self.currentlySelectedTool = ToolbarView.SelectedAnnotationTool.pen
     }
 
     convenience init() {
@@ -186,6 +188,10 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls
 extension CanvasViewModel {
+    var isAnnotationPaletteActive: Bool {
+        currentlySelectedTool != nil
+    }
+
     func switchAnnotationTool(_ newTool: PKTool) {
         annotationPalette.switchTool(newTool)
     }

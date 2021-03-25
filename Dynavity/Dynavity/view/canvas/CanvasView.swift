@@ -16,13 +16,14 @@ struct CanvasView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                AnnotationCanvasView(viewModel: viewModel)
                 CanvasElementMapView(viewModel: viewModel)
                     .scaleEffect(viewModel.scaleFactor)
                     .offset(
                         x: calculateOffsetX(width: geometry.size.width),
                         y: calculateOffsetY(height: geometry.size.height)
                     )
+                AnnotationCanvasView(viewModel: viewModel)
+                    .disabled(!viewModel.isAnnotationPaletteActive)
             }
         }
     }
