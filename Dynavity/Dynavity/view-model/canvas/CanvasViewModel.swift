@@ -27,6 +27,10 @@ class CanvasViewModel: ObservableObject {
         // Arbitrarily large value for the "infinite" canvas.
         self.init(canvasSize: 500_000)
     }
+
+    func getCanvasElements() -> [CanvasElementProtocol] {
+        canvas.canvasElements
+    }
 }
 
 // MARK: Adding of canvas elements
