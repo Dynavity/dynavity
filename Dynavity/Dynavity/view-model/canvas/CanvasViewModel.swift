@@ -11,6 +11,7 @@ class CanvasViewModel: ObservableObject {
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
     @Published var currentlySelectedTool: ToolbarView.SelectedAnnotationTool?
+    @Published var shouldShowAnnotationMenu = false
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -192,15 +193,15 @@ extension CanvasViewModel {
         currentlySelectedTool != nil
     }
 
-    func switchAnnotationTool(_ newTool: PKTool) {
+    private func switchAnnotationTool(_ newTool: PKTool) {
         annotationPalette.switchTool(newTool)
     }
 
-    func switchAnnotationWidth(_ newWidth: CGFloat) {
+    private func switchAnnotationWidth(_ newWidth: CGFloat) {
         annotationPalette.switchAnnotationWidth(newWidth)
     }
 
-    func switchAnnotationColor(_ newColor: UIColor) {
+    private func switchAnnotationColor(_ newColor: UIColor) {
         annotationPalette.switchAnnotationColor(newColor)
     }
 
@@ -227,5 +228,44 @@ extension CanvasViewModel {
         @unknown default:
             fatalError("PKInkingTool is not a pen or marker")
         }
+    }
+}
+
+// MARK: Annotation palette controls button handlers
+extension CanvasViewModel {
+    func selectPenAnnotationTool() {
+        if currentlySelectedTool == .pen {
+            shouldShowAnnotationMenu = true
+        }
+        currentlySelectedTool = .pen
+        switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.pen))
+    }
+
+    func selectMarkerAnnotationTool() {
+        if currentlySelectedTool == .marker {
+            shouldShowAnnotationMenu = true
+        }
+        currentlySelectedTool = .marker
+        switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.marker))
+    }
+
+    func selectEraserAnnotationTool() {
+        currentlySelectedTool = .eraser
+        switchAnnotationTool(PKEraserTool(.vector))
+    }
+
+    func selectLassoAnnotationTool() {
+        currentlySelectedTool = .lasso
+        switchAnnotationTool(PKLassoTool())
+    }
+
+    func selectAnnotationWidth(_ width: CGFloat) {
+        switchAnnotationWidth(width)
+        shouldShowAnnotationMenu = false
+    }
+
+    func selectAnnotationColor(_ color: UIColor) {
+        switchAnnotationColor(color)
+        shouldShowAnnotationMenu = false
     }
 }

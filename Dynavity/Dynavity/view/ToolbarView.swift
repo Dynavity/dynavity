@@ -31,7 +31,6 @@ struct ToolbarView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
-    @State private var shouldShowAnnotationMenu = false
 
     let columns = [
         GridItem(.flexible()),
@@ -109,8 +108,7 @@ struct ToolbarView: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.getAnnotationWidths(), id: \.self) { width in
                     Button(action: {
-                        viewModel.switchAnnotationWidth(width)
-                        shouldShowAnnotationMenu = false
+                        viewModel.selectAnnotationWidth(width)
                     }) {
                         ZStack {
                             Circle()
@@ -126,8 +124,7 @@ struct ToolbarView: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.getAnnotationColors(), id: \.self) { color in
                     Button(action: {
-                        viewModel.switchAnnotationColor(color)
-                        shouldShowAnnotationMenu = false
+                        viewModel.selectAnnotationColor(color)
                     }) {
                         Circle().fill(Color(color))
                     }.frame(width: selectorSize, height: selectorSize)
@@ -153,12 +150,7 @@ struct ToolbarView: View {
 
     private var penSelectionButton: some View {
         Button(action: {
-            if viewModel.currentlySelectedTool == .pen {
-                shouldShowAnnotationMenu = true
-            }
-            viewModel.currentlySelectedTool = .pen
-            viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.pen))
-
+            viewModel.selectPenAnnotationTool()
         }) {
             Image(systemName: "pencil")
                 .resizable()
@@ -167,7 +159,7 @@ struct ToolbarView: View {
         .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.pen
                         ? Color.UI.grey
                         : nil)
-        .overlay(shouldShowAnnotationMenu &&
+        .overlay(viewModel.shouldShowAnnotationMenu &&
                     viewModel.currentlySelectedTool == SelectedAnnotationTool.pen
                     ? annotationMenu
                     : nil)
@@ -175,18 +167,14 @@ struct ToolbarView: View {
 
     private var markerSelectionButton: some View {
         Button(action: {
-            if viewModel.currentlySelectedTool == .marker {
-                shouldShowAnnotationMenu = true
-            }
-            viewModel.currentlySelectedTool = .marker
-            viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.marker))
+            viewModel.selectMarkerAnnotationTool()
         }) {
             Image(systemName: "highlighter")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
         .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.marker ? Color.UI.grey : nil)
-        .overlay(shouldShowAnnotationMenu &&
+        .overlay(viewModel.shouldShowAnnotationMenu &&
                     viewModel.currentlySelectedTool == SelectedAnnotationTool.marker
                     ? annotationMenu
                     : nil)
@@ -194,8 +182,7 @@ struct ToolbarView: View {
 
     private var eraserSelectionButton: some View {
         Button(action: {
-            viewModel.currentlySelectedTool = .eraser
-            viewModel.switchAnnotationTool(PKEraserTool(.vector))
+            viewModel.selectEraserAnnotationTool()
         }) {
             Image(systemName: "rectangle.portrait")
                 .resizable()
@@ -206,8 +193,7 @@ struct ToolbarView: View {
 
     private var lassoSelectionButton: some View {
         Button(action: {
-            viewModel.currentlySelectedTool = .lasso
-            viewModel.switchAnnotationTool(PKLassoTool())
+            viewModel.selectLassoAnnotationTool()
         }) {
             Image(systemName: "lasso")
                 .resizable()
