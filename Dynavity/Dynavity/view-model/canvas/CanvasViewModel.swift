@@ -10,7 +10,14 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
-    @Published var currentlySelectedTool: ToolbarView.SelectedAnnotationTool?
+    @Published var currentlySelectedTool: ToolbarView.SelectedAnnotationTool? {
+        didSet {
+            // Reset the selected canvas element if an annotation tool is selected.
+            if currentlySelectedTool != nil {
+                selectedCanvasElementId = nil
+            }
+        }
+    }
     @Published var shouldShowAnnotationMenu = false
 
     // Reposition drag gesture
@@ -233,6 +240,10 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls button handlers
 extension CanvasViewModel {
+    func selectNoAnnotationTool() {
+        currentlySelectedTool = nil
+    }
+
     func selectPenAnnotationTool() {
         shouldShowAnnotationMenu = currentlySelectedTool == .pen
         currentlySelectedTool = .pen

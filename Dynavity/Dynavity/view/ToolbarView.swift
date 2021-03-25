@@ -137,7 +137,7 @@ struct ToolbarView: View {
 
     private var canvasElementSelectionButton: some View {
         Button(action: {
-            viewModel.currentlySelectedTool = nil
+            viewModel.selectNoAnnotationTool()
         }) {
             Image(systemName: "hand.tap")
                 .resizable()
