@@ -11,10 +11,6 @@ struct CanvasElementMapView: View {
             }
     }
 
-    private func transformToView(element: CanvasElementProtocol) -> some View {
-        elementViewFactory.createView(element: element)
-    }
-
     private func isSelected(_ element: CanvasElementProtocol) -> Bool {
         viewModel.selectedCanvasElementId == element.id
     }
@@ -22,7 +18,7 @@ struct CanvasElementMapView: View {
     var body: some View {
         ZStack {
             ForEach(viewModel.getCanvasElements(), id: \.id) { element in
-                transformToView(element: element)
+                elementViewFactory.createView(element: element)
                     .frame(width: element.width, height: element.height)
                     .addCardOverlay()
                     .onTapGesture {
