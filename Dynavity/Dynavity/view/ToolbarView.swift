@@ -32,7 +32,7 @@ struct ToolbarView: View {
     @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
     @State private var shouldShowAnnotationMenu = false
-    @State private var currentlySelectedTool = SelectedAnnotationTool.pen
+    @State private var currentlySelectedTool: SelectedAnnotationTool? = SelectedAnnotationTool.pen
 
     let columns = [
         GridItem(.flexible()),
@@ -139,6 +139,19 @@ struct ToolbarView: View {
         .frame(width: 200, height: 100, alignment: .center)
     }
 
+    private var canvasElementSelectionButton: some View {
+        Button(action: {
+            currentlySelectedTool = nil
+        }) {
+            Image(systemName: "hand.tap")
+                .resizable()
+                .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
+        }
+        .background(currentlySelectedTool == nil
+                        ? Color.UI.grey
+                        : nil)
+    }
+
     private var penSelectionButton: some View {
         Button(action: {
             if currentlySelectedTool == .pen {
@@ -207,6 +220,7 @@ struct ToolbarView: View {
     var body: some View {
         HStack {
             Spacer()
+            canvasElementSelectionButton
             penSelectionButton
             markerSelectionButton
             eraserSelectionButton
