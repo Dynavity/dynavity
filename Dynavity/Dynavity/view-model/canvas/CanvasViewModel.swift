@@ -234,17 +234,13 @@ extension CanvasViewModel {
 // MARK: Annotation palette controls button handlers
 extension CanvasViewModel {
     func selectPenAnnotationTool() {
-        if currentlySelectedTool == .pen {
-            shouldShowAnnotationMenu = true
-        }
+        shouldShowAnnotationMenu = currentlySelectedTool == .pen
         currentlySelectedTool = .pen
         switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.pen))
     }
 
     func selectMarkerAnnotationTool() {
-        if currentlySelectedTool == .marker {
-            shouldShowAnnotationMenu = true
-        }
+        shouldShowAnnotationMenu = currentlySelectedTool == .marker
         currentlySelectedTool = .marker
         switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.marker))
     }
