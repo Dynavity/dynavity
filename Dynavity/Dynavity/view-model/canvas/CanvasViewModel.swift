@@ -18,7 +18,14 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
-    @Published var canvasMode: CanvasMode
+    @Published var canvasMode: CanvasMode {
+        didSet {
+            // Reset canvas element selection on selecting some other mode.
+            if oldValue == .selection && canvasMode != oldValue {
+                selectedCanvasElementId = nil
+            }
+        }
+    }
     @Published var shouldShowAnnotationMenu = false
 
     // Reposition drag gesture
@@ -237,7 +244,7 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls button handlers
 extension CanvasViewModel {
-    func selectNoAnnotationTool() {
+    func clearSelectedAnnotationTool() {
         canvasMode = .selection
     }
 
