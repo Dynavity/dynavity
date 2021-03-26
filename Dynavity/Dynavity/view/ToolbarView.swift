@@ -12,17 +12,6 @@ struct ToolbarView: View {
         }
     }
 
-    enum SelectedAnnotationTool: Identifiable {
-        case pen
-        case marker
-        case eraser
-        case lasso
-
-        var id: Int {
-            hashValue
-        }
-    }
-
     private let height: CGFloat = 25.0
     private let padding: CGFloat = 10.0
     private let toolButtonSize: CGFloat = 25.0
@@ -143,7 +132,7 @@ struct ToolbarView: View {
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.currentlySelectedTool == nil
+        .background(viewModel.canvasMode == .selection
                         ? Color.UI.grey
                         : nil)
     }
@@ -156,11 +145,11 @@ struct ToolbarView: View {
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.pen
+        .background(viewModel.canvasMode == .pen
                         ? Color.UI.grey
                         : nil)
         .overlay(viewModel.shouldShowAnnotationMenu &&
-                    viewModel.currentlySelectedTool == SelectedAnnotationTool.pen
+                    viewModel.canvasMode == .pen
                     ? annotationMenu
                     : nil)
     }
@@ -173,9 +162,9 @@ struct ToolbarView: View {
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.marker ? Color.UI.grey : nil)
+        .background(viewModel.canvasMode == .marker ? Color.UI.grey : nil)
         .overlay(viewModel.shouldShowAnnotationMenu &&
-                    viewModel.currentlySelectedTool == SelectedAnnotationTool.marker
+                    viewModel.canvasMode == .marker
                     ? annotationMenu
                     : nil)
     }
@@ -188,7 +177,7 @@ struct ToolbarView: View {
                 .resizable()
                 .frame(width: toolButtonSize / 1.5, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.eraser ? Color.UI.grey : nil)
+        .background(viewModel.canvasMode == .eraser ? Color.UI.grey : nil)
     }
 
     private var lassoSelectionButton: some View {
@@ -199,7 +188,7 @@ struct ToolbarView: View {
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.currentlySelectedTool == SelectedAnnotationTool.lasso ? Color.UI.grey : nil)
+        .background(viewModel.canvasMode == .lasso ? Color.UI.grey : nil)
     }
 
     var body: some View {

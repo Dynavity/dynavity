@@ -2,6 +2,14 @@ import SwiftUI
 import PencilKit
 
 class CanvasViewModel: ObservableObject {
+    enum CanvasMode {
+        case selection
+        case pen
+        case marker
+        case eraser
+        case lasso
+    }
+
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
@@ -10,14 +18,7 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
-    @Published var currentlySelectedTool: ToolbarView.SelectedAnnotationTool? {
-        didSet {
-            // Reset the selected canvas element if an annotation tool is selected.
-            if currentlySelectedTool != nil {
-                selectedCanvasElementId = nil
-            }
-        }
-    }
+    @Published var canvasMode: CanvasMode
     @Published var shouldShowAnnotationMenu = false
 
     // Reposition drag gesture
@@ -30,7 +31,7 @@ class CanvasViewModel: ObservableObject {
 
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
-        self.currentlySelectedTool = ToolbarView.SelectedAnnotationTool.pen
+        self.canvasMode = .pen
     }
 
     convenience init() {
@@ -196,10 +197,6 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls
 extension CanvasViewModel {
-    var isAnnotationPaletteActive: Bool {
-        currentlySelectedTool != nil
-    }
-
     private func switchAnnotationTool(_ newTool: PKTool) {
         annotationPalette.switchTool(newTool)
     }
@@ -241,28 +238,28 @@ extension CanvasViewModel {
 // MARK: Annotation palette controls button handlers
 extension CanvasViewModel {
     func selectNoAnnotationTool() {
-        currentlySelectedTool = nil
+        canvasMode = .selection
     }
 
     func selectPenAnnotationTool() {
-        shouldShowAnnotationMenu = currentlySelectedTool == .pen
-        currentlySelectedTool = .pen
+        shouldShowAnnotationMenu = canvasMode == .pen
+        canvasMode = .pen
         switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.pen))
     }
 
     func selectMarkerAnnotationTool() {
-        shouldShowAnnotationMenu = currentlySelectedTool == .marker
-        currentlySelectedTool = .marker
+        shouldShowAnnotationMenu = canvasMode == .marker
+        canvasMode = .marker
         switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.marker))
     }
 
     func selectEraserAnnotationTool() {
-        currentlySelectedTool = .eraser
+        canvasMode = .eraser
         switchAnnotationTool(PKEraserTool(.vector))
     }
 
     func selectLassoAnnotationTool() {
-        currentlySelectedTool = .lasso
+        canvasMode = .lasso
         switchAnnotationTool(PKLassoTool())
     }
 

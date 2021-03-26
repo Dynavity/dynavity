@@ -23,7 +23,7 @@ struct CanvasView: View {
                         y: calculateOffsetY(height: geometry.size.height)
                     )
                 AnnotationCanvasView(viewModel: viewModel)
-                    .disabled(!viewModel.isAnnotationPaletteActive)
+                    .disabled(viewModel.canvasMode == .selection)
             }
         }
     }
