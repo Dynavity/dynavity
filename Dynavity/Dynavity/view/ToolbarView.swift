@@ -12,17 +12,6 @@ struct ToolbarView: View {
         }
     }
 
-    private enum SelectedAnnotationTool: Identifiable {
-        case pen
-        case marker
-        case eraser
-        case lasso
-
-        var id: Int {
-            hashValue
-        }
-    }
-
     private let height: CGFloat = 25.0
     private let padding: CGFloat = 10.0
     private let toolButtonSize: CGFloat = 25.0
@@ -31,8 +20,6 @@ struct ToolbarView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
-    @State private var shouldShowAnnotationMenu = false
-    @State private var currentlySelectedTool = SelectedAnnotationTool.pen
 
     let columns = [
         GridItem(.flexible()),
@@ -110,8 +97,7 @@ struct ToolbarView: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.getAnnotationWidths(), id: \.self) { width in
                     Button(action: {
-                        viewModel.switchAnnotationWidth(width)
-                        shouldShowAnnotationMenu = false
+                        viewModel.selectAnnotationWidth(width)
                     }) {
                         ZStack {
                             Circle()
@@ -127,8 +113,7 @@ struct ToolbarView: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.getAnnotationColors(), id: \.self) { color in
                     Button(action: {
-                        viewModel.switchAnnotationColor(color)
-                        shouldShowAnnotationMenu = false
+                        viewModel.selectAnnotationColor(color)
                     }) {
                         Circle().fill(Color(color))
                     }.frame(width: selectorSize, height: selectorSize)
@@ -139,74 +124,77 @@ struct ToolbarView: View {
         .frame(width: 200, height: 100, alignment: .center)
     }
 
+    private var canvasElementSelectionButton: some View {
+        Button(action: {
+            viewModel.clearSelectedAnnotationTool()
+        }) {
+            Image(systemName: "hand.tap")
+                .resizable()
+                .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
+        }
+        .background(viewModel.canvasMode == .selection
+                        ? Color.UI.grey
+                        : nil)
+    }
+
     private var penSelectionButton: some View {
         Button(action: {
-            if currentlySelectedTool == .pen {
-                shouldShowAnnotationMenu = true
-            }
-            currentlySelectedTool = .pen
-            viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.pen))
-
+            viewModel.selectPenAnnotationTool()
         }) {
             Image(systemName: "pencil")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.pen
+        .background(viewModel.canvasMode == .pen
                         ? Color.UI.grey
                         : nil)
-        .overlay(shouldShowAnnotationMenu &&
-                    currentlySelectedTool == SelectedAnnotationTool.pen
+        .overlay(viewModel.shouldShowAnnotationMenu &&
+                    viewModel.canvasMode == .pen
                     ? annotationMenu
                     : nil)
     }
 
     private var markerSelectionButton: some View {
         Button(action: {
-            if currentlySelectedTool == .marker {
-                shouldShowAnnotationMenu = true
-            }
-            currentlySelectedTool = .marker
-            viewModel.switchAnnotationTool(viewModel.getDefaultAnnotationTool(PKInkingTool.InkType.marker))
+            viewModel.selectMarkerAnnotationTool()
         }) {
             Image(systemName: "highlighter")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.marker ? Color.UI.grey : nil)
-        .overlay(shouldShowAnnotationMenu &&
-                    currentlySelectedTool == SelectedAnnotationTool.marker
+        .background(viewModel.canvasMode == .marker ? Color.UI.grey : nil)
+        .overlay(viewModel.shouldShowAnnotationMenu &&
+                    viewModel.canvasMode == .marker
                     ? annotationMenu
                     : nil)
     }
 
     private var eraserSelectionButton: some View {
         Button(action: {
-            currentlySelectedTool = .eraser
-            viewModel.switchAnnotationTool(PKEraserTool(.vector))
+            viewModel.selectEraserAnnotationTool()
         }) {
             Image(systemName: "rectangle.portrait")
                 .resizable()
                 .frame(width: toolButtonSize / 1.5, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.eraser ? Color.UI.grey : nil)
+        .background(viewModel.canvasMode == .eraser ? Color.UI.grey : nil)
     }
 
     private var lassoSelectionButton: some View {
         Button(action: {
-            currentlySelectedTool = .lasso
-            viewModel.switchAnnotationTool(PKLassoTool())
+            viewModel.selectLassoAnnotationTool()
         }) {
             Image(systemName: "lasso")
                 .resizable()
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(currentlySelectedTool == SelectedAnnotationTool.lasso ? Color.UI.grey : nil)
+        .background(viewModel.canvasMode == .lasso ? Color.UI.grey : nil)
     }
 
     var body: some View {
         HStack {
             Spacer()
+            canvasElementSelectionButton
             penSelectionButton
             markerSelectionButton
             eraserSelectionButton

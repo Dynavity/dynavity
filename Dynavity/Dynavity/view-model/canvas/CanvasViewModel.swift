@@ -2,6 +2,14 @@ import SwiftUI
 import PencilKit
 
 class CanvasViewModel: ObservableObject {
+    enum CanvasMode {
+        case selection
+        case pen
+        case marker
+        case eraser
+        case lasso
+    }
+
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
@@ -10,6 +18,15 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
+    @Published var canvasMode: CanvasMode {
+        didSet {
+            // Reset canvas element selection on selecting some other mode.
+            if oldValue == .selection && canvasMode != oldValue {
+                selectedCanvasElementId = nil
+            }
+        }
+    }
+    @Published var shouldShowAnnotationMenu = false
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -21,6 +38,7 @@ class CanvasViewModel: ObservableObject {
 
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
+        self.canvasMode = .pen
     }
 
     convenience init() {
@@ -186,15 +204,15 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls
 extension CanvasViewModel {
-    func switchAnnotationTool(_ newTool: PKTool) {
+    private func switchAnnotationTool(_ newTool: PKTool) {
         annotationPalette.switchTool(newTool)
     }
 
-    func switchAnnotationWidth(_ newWidth: CGFloat) {
+    private func switchAnnotationWidth(_ newWidth: CGFloat) {
         annotationPalette.switchAnnotationWidth(newWidth)
     }
 
-    func switchAnnotationColor(_ newColor: UIColor) {
+    private func switchAnnotationColor(_ newColor: UIColor) {
         annotationPalette.switchAnnotationColor(newColor)
     }
 
@@ -221,5 +239,44 @@ extension CanvasViewModel {
         @unknown default:
             fatalError("PKInkingTool is not a pen or marker")
         }
+    }
+}
+
+// MARK: Annotation palette controls button handlers
+extension CanvasViewModel {
+    func clearSelectedAnnotationTool() {
+        canvasMode = .selection
+    }
+
+    func selectPenAnnotationTool() {
+        shouldShowAnnotationMenu = canvasMode == .pen
+        canvasMode = .pen
+        switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.pen))
+    }
+
+    func selectMarkerAnnotationTool() {
+        shouldShowAnnotationMenu = canvasMode == .marker
+        canvasMode = .marker
+        switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.marker))
+    }
+
+    func selectEraserAnnotationTool() {
+        canvasMode = .eraser
+        switchAnnotationTool(PKEraserTool(.vector))
+    }
+
+    func selectLassoAnnotationTool() {
+        canvasMode = .lasso
+        switchAnnotationTool(PKLassoTool())
+    }
+
+    func selectAnnotationWidth(_ width: CGFloat) {
+        switchAnnotationWidth(width)
+        shouldShowAnnotationMenu = false
+    }
+
+    func selectAnnotationColor(_ color: UIColor) {
+        switchAnnotationColor(color)
+        shouldShowAnnotationMenu = false
     }
 }
