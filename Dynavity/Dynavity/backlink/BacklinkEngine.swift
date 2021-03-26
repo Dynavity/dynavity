@@ -1,10 +1,12 @@
+import CoreGraphics
+
 /// An engine that supports:
 /// - Creation of backlinks between items
 /// - Retrieval of all backlinks for a particular item
 ///
-/// Items need not be homogeneous. The only requirement is that the items are wrapped in an `AnyNamedIdentifiable`.
+/// Items need not be homogeneous. The only requirement is that the items are wrapped in an `BacklinkNode`.
 struct BacklinkEngine {
-    private var graph: BacklinkGraph = Graph<AnyNamedIdentifiable>(isDirected: false)
+    private var graph: BacklinkGraph = Graph<BacklinkNode>(isDirected: false)
 
     var nodes: [BacklinkNode] {
         graph.backlinkNodes
@@ -13,19 +15,20 @@ struct BacklinkEngine {
     var edges: [BacklinkEdge] {
         var output: [BacklinkEdge] = []
         for edge in graph.backlinkEdges {
-            // We remove "duplicate" edges. i.e. if (u, v) is included, we do not include (v, u)
-            if !output.contains(where: { $0.source == edge.destination && $0.destination == edge.source }) {
+            // We exclude duplicate edges.
+            // Specifically, we want to exclude (v, u) when (u, v) is already included.
+            if !output.contains(edge) {
                 output.append(edge)
             }
         }
         return output
     }
 
-    mutating func addLinkBetween(_ firstItem: AnyNamedIdentifiable, and secondItem: AnyNamedIdentifiable) {
+    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
         graph.addLinkBetween(firstItem, and: secondItem)
     }
 
-    func getBacklinks(for item: AnyNamedIdentifiable) -> [AnyNamedIdentifiable] {
+    func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
         graph.getBacklinks(for: item)
     }
 }
