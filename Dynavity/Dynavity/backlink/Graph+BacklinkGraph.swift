@@ -1,4 +1,12 @@
 extension Graph: BacklinkGraph where T == AnyNamedIdentifiable {
+    var backlinkNodes: [BacklinkNode] {
+        self.nodes
+    }
+
+    var backlinkEdges: [BacklinkEdge] {
+        self.edges
+    }
+
     mutating func addLinkBetween(_ firstItem: AnyNamedIdentifiable, and secondItem: AnyNamedIdentifiable) {
         assert(!self.isDirected)
         let firstNode = Node(firstItem)
