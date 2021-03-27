@@ -26,6 +26,9 @@ struct CanvasElementMapView: View {
                     }
                     .gesture(isSelected(element) ? dragGesture : nil)
                     .overlay(isSelected(element) ? SelectionOverlayView(element: element, viewModel: viewModel) : nil)
+                    .overlay(isSelected(element) && element is UmlElementProtocol
+                                ? UmlSelectionOverlayView(element: element, viewModel: viewModel)
+                                : nil)
                     .rotationEffect(.radians(element.rotation))
                     .offset(x: element.position.x, y: element.position.y)
             }

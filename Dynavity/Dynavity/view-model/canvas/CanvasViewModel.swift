@@ -302,3 +302,28 @@ extension CanvasViewModel {
         shouldShowUmlMenu = false
     }
 }
+
+// MARK: UML diagram connector drag gesture
+extension CanvasViewModel {
+    func handleConnectorDragChange(_ value: DragGesture.Value) {
+        if dragStartLocation == nil {
+            guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+                return
+            }
+            dragStartLocation = value.startLocation
+            self.element = element
+        }
+
+        guard let dragStartLocation = dragStartLocation,
+              let element = element else {
+            return
+        }
+        // TODO: Implement UML connection
+    }
+
+    func handleConnectorDragEnd() {
+        dragStartLocation = nil
+        element = nil
+        // TODO: Implement UML connection
+    }
+}
