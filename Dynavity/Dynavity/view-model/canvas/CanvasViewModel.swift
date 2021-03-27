@@ -79,6 +79,16 @@ extension CanvasViewModel {
     func storeAnnotation(_ drawing: PKDrawing) {
         annotationCanvas.drawing = drawing
     }
+
+    func addUmlElement(umlElement: UmlElementProtocol) {
+        // TODO: Apply factory pattern here
+        switch umlElement.umlShape {
+        case .diamond:
+            canvas.addElement(DiamondUmlElement(position: canvasOrigin))
+        case .rectangle:
+            canvas.addElement(RectangleUmlElement(position: canvasOrigin))
+        }
+    }
 }
 
 // MARK: Editing/deleting of canvas elements

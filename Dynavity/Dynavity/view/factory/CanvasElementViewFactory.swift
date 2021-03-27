@@ -1,6 +1,8 @@
 import SwiftUI
 
 class CanvasElementViewFactory: ViewFactory {
+    private let umlElementFactory = UmlElementViewFactory()
+
     func createView(element: CanvasElementProtocol) -> some View {
         Group {
             switch element {
@@ -14,6 +16,8 @@ class CanvasElementViewFactory: ViewFactory {
                 CodeElementView(codeSnippet: codeSnippet)
             case let markupTextBlock as MarkupElement:
                 MarkupElementView(markupTextBlock: markupTextBlock)
+            case let umlElement as UmlElementProtocol:
+                umlElementFactory.createView(element: umlElement)
             default:
                 TestElementView(element: element)
             }

@@ -20,7 +20,7 @@ struct CanvasElementMapView: View {
             ForEach(viewModel.getCanvasElements(), id: \.id) { element in
                 elementViewFactory.createView(element: element)
                     .frame(width: element.width, height: element.height)
-                    .addCardOverlay()
+                    .shouldAddCardOverlay(shouldAdd: !(element is UmlElementProtocol))
                     .onTapGesture {
                         viewModel.select(canvasElement: element)
                     }
