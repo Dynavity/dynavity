@@ -1,11 +1,17 @@
 import SwiftUI
 
 struct GraphView: View {
+    private static let zoomScaleRange: ClosedRange<CGFloat> = 0.2...2.5
+
     @StateObject var viewModel = GraphMapViewModel()
 
     // For viewport dragging gesture
     @State var originOffset: CGPoint = .zero
     @State var dragOffset: CGSize = .zero
+
+    // For viewport zooming
+    @State var zoomScale: CGFloat = 1.0
+    @State var previousZoomScale: CGFloat = 1.0
 
     var body: some View {
         GeometryReader { _ in
@@ -15,6 +21,7 @@ struct GraphView: View {
             }
             .drawingGroup(opaque: true, colorMode: .extendedLinear)
             .gesture(viewportDragGesture)
+            .gesture(viewportMagnificationGesture)
         }
     }
 
@@ -24,6 +31,7 @@ struct GraphView: View {
                 .zIndex(.infinity)
             edgesView
         }
+        .scaleEffect(zoomScale)
         .offset(x: self.originOffset.x + self.dragOffset.width,
                 y: self.originOffset.y + self.dragOffset.height)
         .animation(.easeIn)
@@ -54,6 +62,20 @@ extension GraphView {
             .onEnded { value in
                 dragOffset = .zero
                 originOffset += value.translation
+            }
+    }
+
+    var viewportMagnificationGesture: some Gesture {
+        MagnificationGesture()
+            .onChanged { value in
+                let delta = value / self.previousZoomScale
+                self.previousZoomScale = value
+                let newScale = self.zoomScale * delta
+
+                self.zoomScale = newScale.clamped(to: GraphView.zoomScaleRange)
+            }
+            .onEnded { _ in
+                self.previousZoomScale = 1.0
             }
     }
 }
