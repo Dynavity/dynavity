@@ -1,4 +1,7 @@
+import Foundation
+
 struct BacklinkEdge {
+    var id = UUID()
     let source: BacklinkNode
     let destination: BacklinkNode
 }

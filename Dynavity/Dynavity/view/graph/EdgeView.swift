@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EdgeView: Shape {
-    let start = CGPoint(x: Int.random(in: 0...100), y: Int.random(in: 0...100))
+    let start: CGPoint
     let end: CGPoint
 
     func path(in rect: CGRect) -> Path {
@@ -14,7 +14,7 @@ struct EdgeView: Shape {
 
 struct EdgeView_Previews: PreviewProvider {
     static var previews: some View {
-        EdgeView(end: CGPoint(x: 10, y: 10))
+        EdgeView(start: .zero, end: CGPoint(x: 50, y: 50))
             .stroke(lineWidth: 4)
     }
 }
