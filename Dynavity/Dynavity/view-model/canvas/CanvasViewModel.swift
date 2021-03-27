@@ -27,6 +27,7 @@ class CanvasViewModel: ObservableObject {
         }
     }
     @Published var shouldShowAnnotationMenu = false
+    @Published var shouldShowUmlMenu = false
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -278,5 +279,16 @@ extension CanvasViewModel {
     func selectAnnotationColor(_ color: UIColor) {
         switchAnnotationColor(color)
         shouldShowAnnotationMenu = false
+    }
+}
+
+// MARK: UML side menu controls button handlers
+extension CanvasViewModel {
+    func showUmlMenu() {
+        shouldShowUmlMenu = true
+    }
+
+    func hideUmlMenu() {
+        shouldShowUmlMenu = false
     }
 }
