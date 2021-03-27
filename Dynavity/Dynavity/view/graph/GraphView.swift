@@ -31,7 +31,7 @@ struct GraphView: View {
                 .zIndex(.infinity)
             edgesView
         }
-        .scaleEffect(zoomScale)
+        .scaleEffect(self.zoomScale)
         .offset(x: self.originOffset.x + self.dragOffset.width,
                 y: self.originOffset.y + self.dragOffset.height)
         .animation(.easeIn)
@@ -57,11 +57,11 @@ extension GraphView {
     var viewportDragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                dragOffset = value.translation
+                self.dragOffset = value.translation
             }
             .onEnded { value in
-                dragOffset = .zero
-                originOffset += value.translation
+                self.dragOffset = .zero
+                self.originOffset += value.translation
             }
     }
 

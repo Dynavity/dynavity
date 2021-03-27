@@ -1,14 +1,23 @@
 import SwiftUI
 
 struct EdgeView: Shape {
-    let start: CGPoint
-    let end: CGPoint
+    var start: CGPoint
+    var end: CGPoint
 
     func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: start)
-        path.addLine(to: end)
-        return path
+        Path { p in
+            p.move(to: start)
+            p.addLine(to: end)
+        }
+    }
+
+    var animatableData: AnimatablePair<CGPoint.AnimatableData, CGPoint.AnimatableData> {
+        get {
+            AnimatablePair(start.animatableData, end.animatableData)
+        }
+        set {
+            (start.animatableData, end.animatableData) = (newValue.first, newValue.second)
+        }
     }
 }
 
