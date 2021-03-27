@@ -38,16 +38,20 @@ struct GraphView: View {
     }
 
     var nodesView: some View {
-        ForEach(viewModel.getNodes(), id: \.id) { node in
-            NodeView(label: node.name)
-                .position(x: node.position.x, y: node.position.y)
+        ZStack {
+            ForEach(viewModel.getNodes(), id: \.id) { node in
+                NodeView(label: node.name)
+                    .position(x: node.position.x, y: node.position.y)
+            }
         }
     }
 
     var edgesView: some View {
-        ForEach(viewModel.getEdges(), id: \.id) { edge in
-            EdgeView(start: edge.source.position, end: edge.destination.position)
-                .stroke()
+        ZStack {
+            ForEach(viewModel.getEdges(), id: \.id) { edge in
+                EdgeView(start: edge.source.position, end: edge.destination.position)
+                    .stroke()
+            }
         }
     }
 }
