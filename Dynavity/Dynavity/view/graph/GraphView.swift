@@ -6,6 +6,7 @@ struct GraphView: View {
     var body: some View {
         ZStack {
             nodesView
+                .zIndex(.infinity)
             edgesView
         }
     }
@@ -13,7 +14,7 @@ struct GraphView: View {
     var nodesView: some View {
         ForEach(viewModel.getNodes(), id: \.id) { node in
             NodeView(label: node.name)
-                .offset(x: node.position.x, y: node.position.y)
+                .position(x: node.position.x, y: node.position.y)
         }
     }
 

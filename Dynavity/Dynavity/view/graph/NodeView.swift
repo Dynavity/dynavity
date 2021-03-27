@@ -8,7 +8,6 @@ struct NodeView: View {
     var body: some View {
         Ellipse()
             .fill(Color.UI.darkBlue.opacity(0.5))
-            // Replace this with actual label of node
             .overlay(Text(label)
                         .multilineTextAlignment(.center)
                         .padding())
