@@ -43,7 +43,7 @@ struct UmlSideMenuView: View {
         HStack {
             VStack(alignment: .leading) {
                 SideMenuHeaderView(headerText: "UML Shapes")
-                SideMenuContentView(label: "Class Diagram",
+                SideMenuContentView(label: "Activity Diagram",
                                     content: umlContent)
                 Divider()
 

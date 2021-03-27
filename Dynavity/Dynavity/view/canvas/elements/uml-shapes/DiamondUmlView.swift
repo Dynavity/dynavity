@@ -22,7 +22,8 @@ struct DiamondUmlView: View {
     var body: some View {
         ZStack {
             Diamond().stroke(Color.black, lineWidth: viewModel.shapeBorderWidth)
-            Text(viewModel.umlElement.label)
+            TextField("", text: $viewModel.umlElement.label)
+                .multilineTextAlignment(.center)
         }
     }
 }

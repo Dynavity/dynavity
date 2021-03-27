@@ -22,7 +22,8 @@ struct RectangleUmlView: View {
     var body: some View {
         ZStack {
             Rectangle().stroke(Color.black, lineWidth: viewModel.shapeBorderWidth)
-            Text(viewModel.umlElement.label)
+            TextField("", text: $viewModel.umlElement.label)
+                .multilineTextAlignment(.center)
         }
     }
 }
