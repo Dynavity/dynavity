@@ -16,6 +16,7 @@ struct ToolbarView: View {
     private let padding: CGFloat = 10.0
     private let toolButtonSize: CGFloat = 25.0
     private let selectorSize: CGFloat = 40.0
+    private let spacerWidth: CGFloat = 300.0
 
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
@@ -193,7 +194,8 @@ struct ToolbarView: View {
 
     var body: some View {
         HStack {
-            Spacer()
+            // Add sufficient spacing to prevent UML side menu from blocking
+            Spacer().frame(width: spacerWidth)
             canvasElementSelectionButton
             penSelectionButton
             markerSelectionButton
