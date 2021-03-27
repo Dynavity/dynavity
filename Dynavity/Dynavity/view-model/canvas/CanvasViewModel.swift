@@ -204,18 +204,6 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls
 extension CanvasViewModel {
-    private func switchAnnotationTool(_ newTool: AnnotationPalette.SelectedTool) {
-        annotationPalette.switchTool(newTool)
-    }
-
-    private func switchAnnotationWidth(_ newWidth: CGFloat) {
-        annotationPalette.setAnnotationWidth(newWidth)
-    }
-
-    private func switchAnnotationColor(_ newColor: UIColor) {
-        annotationPalette.setAnnotationColor(newColor)
-    }
-
     func getAnnotationWidths() -> [CGFloat] {
         AnnotationPalette.annotationWidths
     }
@@ -238,32 +226,32 @@ extension CanvasViewModel {
     func selectPenAnnotationTool() {
         shouldShowAnnotationMenu = canvasMode == .pen
         canvasMode = .pen
-        switchAnnotationTool(.pen)
+        annotationPalette.switchTool(.pen)
     }
 
     func selectMarkerAnnotationTool() {
         shouldShowAnnotationMenu = canvasMode == .marker
         canvasMode = .marker
-        switchAnnotationTool(.marker)
+        annotationPalette.switchTool(.marker)
     }
 
     func selectEraserAnnotationTool() {
         canvasMode = .eraser
-        switchAnnotationTool(.eraser)
+        annotationPalette.switchTool(.eraser)
     }
 
     func selectLassoAnnotationTool() {
         canvasMode = .lasso
-        switchAnnotationTool(.lasso)
+        annotationPalette.switchTool(.lasso)
     }
 
     func selectAnnotationWidth(_ width: CGFloat) {
-        switchAnnotationWidth(width)
+        annotationPalette.setAnnotationWidth(width)
         shouldShowAnnotationMenu = false
     }
 
     func selectAnnotationColor(_ color: UIColor) {
-        switchAnnotationColor(color)
+        annotationPalette.setAnnotationColor(color)
         shouldShowAnnotationMenu = false
     }
 }
