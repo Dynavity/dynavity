@@ -54,6 +54,7 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.maximumZoomScale = CGFloat(2.0)
         annotationCanvasView.bouncesZoom = false
         annotationCanvasView.contentOffset = viewModel.canvasOrigin
+        annotationCanvasView.scrollsToTop = false
 
         return annotationCanvasView
     }
