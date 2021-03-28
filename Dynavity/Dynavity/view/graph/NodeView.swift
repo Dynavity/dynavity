@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct NodeView: View {
-    private static let size = CGSize(width: 80, height: 80)
+    static let radius: CGFloat = 80
     private static let fontSize: CGFloat = 10.0
 
     let label: String
@@ -13,7 +13,7 @@ struct NodeView: View {
                         .font(.system(size: NodeView.fontSize))
                         .multilineTextAlignment(.center)
                         .padding())
-            .frame(width: NodeView.size.width, height: NodeView.size.height, alignment: .center)
+            .frame(width: NodeView.radius, height: NodeView.radius, alignment: .center)
     }
 }
 

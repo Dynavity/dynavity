@@ -4,7 +4,7 @@ import CoreGraphics
 /// - Creation of backlinks between items
 /// - Retrieval of all backlinks for a particular item
 ///
-/// Items need not be homogeneous. The only requirement is that the items are wrapped in an `BacklinkNode`.
+/// Items need not be homogeneous. The only requirement is that the items are wrapped in a `BacklinkNode`.
 struct BacklinkEngine {
     private var graph: BacklinkGraph = Graph<BacklinkNode>(isDirected: false)
 
