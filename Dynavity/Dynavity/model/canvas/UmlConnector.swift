@@ -7,7 +7,7 @@ import CoreGraphics
 struct UmlConnector {
     var id = UUID()
     var points: [CGPoint] = []
-    
+
     mutating func addPoint(_ point: CGPoint) {
         points.append(point)
     }
