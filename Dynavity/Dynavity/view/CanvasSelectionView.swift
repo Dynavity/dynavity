@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct CanvasSelectionView: View {
+    enum SelectionMode {
+        case grid
+        case graph
+    }
     // TODO: Use actual canvas model instead, this is a temporary substitute
     struct CanvasDetail: Hashable {
         var title: String
@@ -10,6 +14,7 @@ struct CanvasSelectionView: View {
     @State var canvases: [CanvasDetail]
     @State private var searchQuery: String = ""
     @State private var isEditing = false
+    @State private var selectionMode: SelectionMode = .grid
 
     let columns = [
         GridItem(.flexible()),
@@ -38,9 +43,15 @@ struct CanvasSelectionView: View {
             VStack {
                 actionButtonGroup
                 .padding()
-                ScrollView {
-                    canvasesGrid
+                switch selectionMode {
+                case .grid:
+                    ScrollView {
+                        canvasesGrid
+                    }
+                case .graph:
+                    GraphView()
                 }
+
             }
             .navigationBarHidden(true)
         }
@@ -67,6 +78,24 @@ struct CanvasSelectionView: View {
         .padding(.horizontal)
     }
 
+    var selectionModeToggleButton: some View {
+        switch selectionMode {
+        case .grid:
+            return Button(action: {
+                selectionMode = .graph
+            }) {
+                Image(systemName: "circle.grid.hex.fill")
+            }
+        case .graph:
+            return Button(action: {
+                selectionMode = .grid
+            }) {
+                Image(systemName: "square.grid.2x2.fill")
+            }
+        }
+
+    }
+
     var actionButtonGroup: some View {
         HStack {
             if isEditing {
@@ -82,11 +111,15 @@ struct CanvasSelectionView: View {
 
                 SearchBarView(text: $searchQuery)
             } else {
-                Button("Edit") {
-                    toggleEditMode()
+                if selectionMode == .grid {
+                    Button("Edit") {
+                        toggleEditMode()
+                    }
                 }
                 SearchBarView(text: $searchQuery)
                 // TODO: Implement saving the newly created canvas to state & db
+                selectionModeToggleButton
+
                 NavigationLink(destination: MainView()
                                 .navigationBarHidden(true)
                                 .navigationBarBackButtonHidden(true)) {
