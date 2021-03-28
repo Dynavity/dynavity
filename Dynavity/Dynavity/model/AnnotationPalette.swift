@@ -42,8 +42,7 @@ struct AnnotationPalette {
         case .marker:
             markerTool.width = newWidth
         default:
-            // Do nothing.
-            break
+            assertionFailure("Attempt at setting annotation width of a non-inking tool.")
         }
     }
 
@@ -54,8 +53,7 @@ struct AnnotationPalette {
         case .marker:
             markerTool.color = newColor
         default:
-            // Do nothing.
-            break
+            assertionFailure("Attempt at setting annotation color of a non-inking tool.")
         }
     }
 }
