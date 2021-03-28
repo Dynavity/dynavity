@@ -204,18 +204,6 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls
 extension CanvasViewModel {
-    private func switchAnnotationTool(_ newTool: PKTool) {
-        annotationPalette.switchTool(newTool)
-    }
-
-    private func switchAnnotationWidth(_ newWidth: CGFloat) {
-        annotationPalette.switchAnnotationWidth(newWidth)
-    }
-
-    private func switchAnnotationColor(_ newColor: UIColor) {
-        annotationPalette.switchAnnotationColor(newColor)
-    }
-
     func getAnnotationWidths() -> [CGFloat] {
         AnnotationPalette.annotationWidths
     }
@@ -225,20 +213,7 @@ extension CanvasViewModel {
     }
 
     func getCurrentTool() -> PKTool {
-        annotationPalette.selectedTool
-    }
-
-    func getDefaultAnnotationTool(_ toolType: PKInkingTool.InkType) -> PKTool {
-        switch toolType {
-        case .pen:
-            return AnnotationPalette.defaultPenTool
-        case .marker:
-            return AnnotationPalette.defaultMarkerTool
-        case .pencil:
-            fatalError("PKInkingTool should not be pencil")
-        @unknown default:
-            fatalError("PKInkingTool is not a pen or marker")
-        }
+        annotationPalette.getSelectedTool()
     }
 }
 
@@ -251,32 +226,32 @@ extension CanvasViewModel {
     func selectPenAnnotationTool() {
         shouldShowAnnotationMenu = canvasMode == .pen
         canvasMode = .pen
-        switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.pen))
+        annotationPalette.switchTool(.pen)
     }
 
     func selectMarkerAnnotationTool() {
         shouldShowAnnotationMenu = canvasMode == .marker
         canvasMode = .marker
-        switchAnnotationTool(getDefaultAnnotationTool(PKInkingTool.InkType.marker))
+        annotationPalette.switchTool(.marker)
     }
 
     func selectEraserAnnotationTool() {
         canvasMode = .eraser
-        switchAnnotationTool(PKEraserTool(.vector))
+        annotationPalette.switchTool(.eraser)
     }
 
     func selectLassoAnnotationTool() {
         canvasMode = .lasso
-        switchAnnotationTool(PKLassoTool())
+        annotationPalette.switchTool(.lasso)
     }
 
     func selectAnnotationWidth(_ width: CGFloat) {
-        switchAnnotationWidth(width)
+        annotationPalette.setAnnotationWidth(width)
         shouldShowAnnotationMenu = false
     }
 
     func selectAnnotationColor(_ color: UIColor) {
-        switchAnnotationColor(color)
+        annotationPalette.setAnnotationColor(color)
         shouldShowAnnotationMenu = false
     }
 }
