@@ -6,8 +6,8 @@ struct BacklinkNode: Identifiable {
     let name: String
     var position: CGPoint
 
-    mutating func move(by translation: CGSize) {
-        self.position += translation
+    func moving(to updatedPos: CGPoint) -> BacklinkNode {
+        BacklinkNode(id: self.id, name: self.name, position: updatedPos)
     }
 }
 

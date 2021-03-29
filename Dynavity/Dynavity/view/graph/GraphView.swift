@@ -61,23 +61,24 @@ extension GraphView {
     private func getViewportDragGesture(viewportSize: CGSize) -> some Gesture {
         DragGesture()
             .onChanged { value in
-                viewModel.hitTest(tapPos: value.startLocation,
-                                  viewportSize: viewportSize,
-                                  viewportZoomScale: zoomScale,
-                                  viewportOriginOffset: originOffset)
-
-                if viewModel.selectedNode != nil {
-                    viewModel.moveSelectedNode(by: value.translation)
-                } else {
+                // Dragging canvas instead of a node
+                if viewModel.selectedNode == nil {
+                    viewModel.hitTest(tapPos: value.startLocation,
+                                      viewportSize: viewportSize,
+                                      viewportZoomScale: zoomScale,
+                                      viewportOriginOffset: originOffset)
                     self.dragOffset = value.translation
+                } else {
+                    viewModel.handleNodeDragChange(value, viewportZoomScale: zoomScale)
                 }
             }
             .onEnded { value in
-                if viewModel.selectedNode != nil {
-                    viewModel.selectedNode = nil
-                } else {
+                // Dragged a canvas instead of a node
+                if viewModel.selectedNode == nil {
                     self.dragOffset = .zero
                     self.originOffset += value.translation
+                } else {
+                    viewModel.handleNodeDragEnd(value, viewportZoomScale: zoomScale)
                 }
             }
     }

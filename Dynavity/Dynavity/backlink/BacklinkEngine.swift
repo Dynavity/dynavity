@@ -32,7 +32,7 @@ struct BacklinkEngine {
         graph.getBacklinks(for: item)
     }
 
-    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, by translation: CGSize) {
-        graph.moveBacklinkNode(backlinkNode, by: translation)
+    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
+        graph.moveBacklinkNode(backlinkNode, to: updatedPos)
     }
 }

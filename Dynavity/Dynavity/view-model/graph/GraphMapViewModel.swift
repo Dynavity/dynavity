@@ -1,9 +1,11 @@
 import CoreGraphics
-import Combine
+import SwiftUI
 import Foundation
 
 class GraphMapViewModel: ObservableObject {
     @Published var backlinkEngine = BacklinkEngine()
+
+    private var selectedNodeOriginalPosition: CGPoint?
     @Published var selectedNode: BacklinkNode?
 
     init() {
@@ -18,13 +20,20 @@ class GraphMapViewModel: ObservableObject {
         backlinkEngine.edges
     }
 
-    func moveSelectedNode(by translation: CGSize) {
-        guard let selectedNode = selectedNode else {
-            return
+    private func initialiseBacklinkEngine() {
+        let nodes: [BacklinkNode] = (0..<20).map { i in
+            BacklinkNode(id: UUID(), name: "Node \(i)", position: CGPoint(x: Int.random(in: 0...700),
+                                                                          y: Int.random(in: 0...700)))
         }
-        backlinkEngine.moveBacklinkNode(selectedNode, by: translation)
-    }
 
+        for i in 0..<nodes.endIndex - 1 {
+            backlinkEngine.addLinkBetween(nodes[i], and: nodes[i + 1])
+        }
+    }
+}
+
+// MARK: Node Dragging Handling
+extension GraphMapViewModel {
     func hitTest(tapPos: CGPoint, viewportSize: CGSize,
                  viewportZoomScale: CGFloat, viewportOriginOffset: CGPoint) {
         for node in self.getNodes() {
@@ -35,20 +44,31 @@ class GraphMapViewModel: ObservableObject {
             let dist = tapPos.distance(to: processedPosition) / viewportZoomScale
 
             if dist < NodeView.radius {
-                self.selectedNode = node
+                selectedNode = node
+                selectedNodeOriginalPosition = node.position
             }
         }
     }
 
-    private func initialiseBacklinkEngine() {
-        let nodes: [BacklinkNode] = (0..<20).map { i in
-            BacklinkNode(id: UUID(), name: "Node \(i)", position: CGPoint(x: Int.random(in: 100...700),
-                                                                          y: Int.random(in: 100...700)))
+    func handleNodeDragChange(_ value: DragGesture.Value, viewportZoomScale: CGFloat) {
+        processNodeTranslation(translation: value.translation, viewportZoomScale: viewportZoomScale)
+    }
+
+    func handleNodeDragEnd(_ value: DragGesture.Value, viewportZoomScale: CGFloat) {
+        processNodeTranslation(translation: value.translation, viewportZoomScale: viewportZoomScale)
+        selectedNodeOriginalPosition = nil
+        selectedNode = nil
+    }
+
+    private func processNodeTranslation(translation: CGSize, viewportZoomScale: CGFloat) {
+        guard let selectedNode = selectedNode,
+              let selectedNodeOriginalPosition = selectedNodeOriginalPosition else {
+            return
         }
 
-        for i in 0..<nodes.endIndex - 1 {
-            backlinkEngine.addLinkBetween(nodes[i], and: nodes[i + 1])
-        }
+        let scaledDownTranslation = translation / viewportZoomScale
+        let updatedPos = selectedNodeOriginalPosition + scaledDownTranslation
+        backlinkEngine.moveBacklinkNode(selectedNode, to: updatedPos)
     }
 
     private func getPositionRelativeToViewport(point: CGPoint,

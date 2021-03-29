@@ -26,15 +26,14 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         return self.adjacentNodesFromNode(node).map({ $0.label })
     }
 
-    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, by translation: CGSize) {
+    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
         guard let originalNode = getNodeWithId(id: backlinkNode.id) else {
             return
         }
 
-        var backlinkNode = originalNode.label
-        backlinkNode.move(by: translation)
+        let updatedBacklinkNode = originalNode.label.moving(to: updatedPos)
 
-        self.updateNode(originalNode, to: Node(backlinkNode))
+        self.updateNode(originalNode, to: Node(updatedBacklinkNode))
     }
 
     private func getNodeWithId(id: UUID?) -> Node<BacklinkNode>? {
