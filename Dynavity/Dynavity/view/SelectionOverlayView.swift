@@ -4,16 +4,16 @@ struct SelectionOverlayView: View {
     var element: CanvasElementProtocol
     @ObservedObject var viewModel: CanvasViewModel
 
-    private let rotationControlSize: CGFloat = 25.0
-    private let rotationControlHandleLength: CGFloat = 10.0
+    private let rotationDragControlSize: CGFloat = 25.0
+    private let rotationDragControlHandleLength: CGFloat = 10.0
     private let resizeControlSize: CGFloat = 15.0
     private let resizeControlBorderPercentage: CGFloat = 0.1
     private let resizeControlHitboxScale: CGFloat = 2.0
     private let selectionOutlineWidth: CGFloat = 2.0
     private let overlayColor = Color.blue
 
-    private var rotationControlOffset: CGFloat {
-        -(element.height * viewModel.scaleFactor + rotationControlSize + rotationControlHandleLength) / 2.0
+    private var rotationDragControlOffset: CGFloat {
+        -(element.height * viewModel.scaleFactor + rotationDragControlSize + rotationDragControlHandleLength) / 2.0
     }
     private var halfWidth: CGFloat {
         element.width / 2.0
@@ -69,7 +69,7 @@ struct SelectionOverlayView: View {
             .onChanged { value in
                 // Calculate the translation with respect to the center of the canvas element.
                 var translationsFromCenter = value.translation
-                translationsFromCenter.height += rotationControlOffset
+                translationsFromCenter.height += rotationDragControlOffset
                 viewModel.rotateSelectedCanvasElement(by: translationsFromCenter)
             }
     }
@@ -83,13 +83,36 @@ struct SelectionOverlayView: View {
                     .resizable()
                     .foregroundColor(overlayColor)
             }
-            .frame(width: rotationControlSize, height: rotationControlSize)
+            .frame(width: rotationDragControlSize, height: rotationDragControlSize)
             Rectangle()
                 .fill(overlayColor)
-                .frame(width: 1.0, height: rotationControlHandleLength)
+                .frame(width: 1.0, height: rotationDragControlHandleLength)
         }
         .gesture(rotationGesture)
-        .offset(y: rotationControlOffset)
+        .offset(y: rotationDragControlOffset)
+        // Force the rotation control to be the same size regardless of scale factor.
+        .scaleEffect(1.0 / viewModel.scaleFactor)
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                viewModel.moveSelectedCanvasElement(by: value.translation)
+            }
+    }
+
+    private var dragControl: some View {
+        VStack(spacing: .zero) {
+            Rectangle()
+                .fill(overlayColor)
+                .frame(width: 1.0, height: rotationDragControlHandleLength)
+            Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
+                .resizable()
+                .foregroundColor(overlayColor)
+                .frame(width: rotationDragControlSize, height: rotationDragControlSize)
+        }
+        .gesture(dragGesture)
+        .offset(y: -rotationDragControlOffset)
         // Force the rotation control to be the same size regardless of scale factor.
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
@@ -117,6 +140,7 @@ struct SelectionOverlayView: View {
         ZStack {
             outline
             rotationControl
+            dragControl
             ForEach(ResizeControlAnchor.allCases, id: \.self) { corner in
                 makeResizeControl(corner)
             }

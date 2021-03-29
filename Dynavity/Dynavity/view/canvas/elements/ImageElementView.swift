@@ -9,6 +9,7 @@ struct ImageElementView: View {
 
     var body: some View {
         Image(uiImage: viewModel.imageCanvasElement.image)
+            .resizable()
     }
 }
 
