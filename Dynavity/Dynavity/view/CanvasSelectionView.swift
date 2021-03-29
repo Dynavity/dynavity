@@ -111,7 +111,7 @@ struct CanvasSelectionView: View {
 
                 SearchBarView(text: $searchQuery)
             } else {
-                if selectionMode == .grid {
+                if selectionMode != .graph {
                     Button("Edit") {
                         toggleEditMode()
                     }

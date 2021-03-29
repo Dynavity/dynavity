@@ -61,13 +61,23 @@ extension GraphView {
     private var viewportDragGesture: some Gesture {
         DragGesture()
             .onChanged { value in
-                self.dragOffset = value.translation
-                print(value.startLocation)
-                hitTest(tapPos: value.startLocation)
+                viewModel.hitTest(tapPos: value.startLocation,
+                                  viewportZoomScale: zoomScale,
+                                  viewportOriginOffset: originOffset)
+
+                if viewModel.selectedNode != nil {
+                    viewModel.moveSelectedNode(by: value.translation)
+                } else {
+                    self.dragOffset = value.translation
+                }
             }
             .onEnded { value in
-                self.dragOffset = .zero
-                self.originOffset += value.translation
+                if viewModel.selectedNode != nil {
+                    viewModel.selectedNode = nil
+                } else {
+                    self.dragOffset = .zero
+                    self.originOffset += value.translation
+                }
             }
     }
 
@@ -83,28 +93,6 @@ extension GraphView {
             .onEnded { _ in
                 self.previousZoomScale = 1.0
             }
-    }
-
-    // TODO: fix this so it's not dependent on backlink node
-    // probably update some state in viewmodel
-    private func hitTest(tapPos: CGPoint) -> BacklinkNode? {
-        for node in viewModel.getNodes() {
-            let processedPosition = getPositionRelativeToViewport(point: node.position)
-            let dist = tapPos.distance(to: processedPosition ) / self.zoomScale
-
-            if dist < NodeView.radius / 2.0 {
-                print(node)
-                return node
-            }
-        }
-
-      return nil
-    }
-
-    private func getPositionRelativeToViewport(point: CGPoint) -> CGPoint {
-        point
-            .scale(by: zoomScale)
-            .translateBy(x: originOffset.x, y: originOffset.y)
     }
 }
 

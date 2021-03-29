@@ -4,9 +4,38 @@ import Foundation
 
 class GraphMapViewModel: ObservableObject {
     @Published var backlinkEngine = BacklinkEngine()
+    @Published var selectedNode: BacklinkNode?
 
     init() {
         initialiseBacklinkEngine()
+    }
+
+    func getNodes() -> [BacklinkNode] {
+        backlinkEngine.nodes
+    }
+
+    func getEdges() -> [BacklinkEdge] {
+        backlinkEngine.edges
+    }
+
+    func moveSelectedNode(by translation: CGSize) {
+        guard let selectedNode = selectedNode else {
+            return
+        }
+        backlinkEngine.moveBacklinkNode(selectedNode, by: translation)
+    }
+
+    func hitTest(tapPos: CGPoint, viewportZoomScale: CGFloat, viewportOriginOffset: CGPoint) {
+        for node in self.getNodes() {
+            let processedPosition = getPositionRelativeToViewport(point: node.position,
+                                                                  viewportZoomScale: viewportZoomScale,
+                                                                  viewportOriginOffset: viewportOriginOffset)
+            let dist = tapPos.distance(to: processedPosition) / viewportZoomScale
+
+            if dist < NodeView.radius / 2.0 {
+                self.selectedNode = node
+            }
+        }
     }
 
     private func initialiseBacklinkEngine() {
@@ -20,11 +49,11 @@ class GraphMapViewModel: ObservableObject {
         }
     }
 
-    func getNodes() -> [BacklinkNode] {
-        backlinkEngine.nodes
-    }
-
-    func getEdges() -> [BacklinkEdge] {
-        backlinkEngine.edges
+    private func getPositionRelativeToViewport(point: CGPoint,
+                                               viewportZoomScale: CGFloat,
+                                               viewportOriginOffset: CGPoint) -> CGPoint {
+        point
+            .scale(by: viewportZoomScale)
+            .translateBy(x: viewportOriginOffset.x, y: viewportOriginOffset.y)
     }
 }
