@@ -35,7 +35,9 @@ struct CodeElementView: View {
                 }
             }
             Divider()
-            Text(viewModel.output)
+            ScrollView {
+                Text(viewModel.output)
+            }
         }
         .padding()
     }
