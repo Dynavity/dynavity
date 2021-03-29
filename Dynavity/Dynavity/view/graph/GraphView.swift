@@ -14,13 +14,13 @@ struct GraphView: View {
     @State var previousZoomScale: CGFloat = 1.0
 
     var body: some View {
-        GeometryReader { _ in
+        GeometryReader { geometry in
             ZStack {
                 Rectangle().fill(Color.UI.base5)
                 graphView
             }
             .drawingGroup(opaque: true, colorMode: .extendedLinear)
-            .gesture(viewportDragGesture)
+            .gesture(getViewportDragGesture(viewportSize: geometry.size))
             .gesture(viewportMagnificationGesture)
         }
     }
@@ -41,7 +41,7 @@ struct GraphView: View {
         ZStack {
             ForEach(viewModel.getNodes(), id: \.id) { node in
                 NodeView(label: node.name)
-                    .position(x: node.position.x, y: node.position.y)
+                    .offset(x: node.position.x, y: node.position.y)
             }
         }
     }
@@ -58,10 +58,11 @@ struct GraphView: View {
 
 // MARK: Gestures
 extension GraphView {
-    private var viewportDragGesture: some Gesture {
+    private func getViewportDragGesture(viewportSize: CGSize) -> some Gesture {
         DragGesture()
             .onChanged { value in
                 viewModel.hitTest(tapPos: value.startLocation,
+                                  viewportSize: viewportSize,
                                   viewportZoomScale: zoomScale,
                                   viewportOriginOffset: originOffset)
 

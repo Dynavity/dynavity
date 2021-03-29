@@ -6,8 +6,8 @@ struct EdgeView: Shape {
 
     func path(in rect: CGRect) -> Path {
         Path { p in
-            p.move(to: start)
-            p.addLine(to: end)
+            p.move(to: start.translateBy(x: rect.width / 2, y: rect.height / 2))
+            p.addLine(to: end.translateBy(x: rect.width / 2, y: rect.height / 2))
         }
     }
 

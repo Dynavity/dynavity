@@ -25,14 +25,16 @@ class GraphMapViewModel: ObservableObject {
         backlinkEngine.moveBacklinkNode(selectedNode, by: translation)
     }
 
-    func hitTest(tapPos: CGPoint, viewportZoomScale: CGFloat, viewportOriginOffset: CGPoint) {
+    func hitTest(tapPos: CGPoint, viewportSize: CGSize,
+                 viewportZoomScale: CGFloat, viewportOriginOffset: CGPoint) {
         for node in self.getNodes() {
             let processedPosition = getPositionRelativeToViewport(point: node.position,
+                                                                  viewportSize: viewportSize,
                                                                   viewportZoomScale: viewportZoomScale,
                                                                   viewportOriginOffset: viewportOriginOffset)
             let dist = tapPos.distance(to: processedPosition) / viewportZoomScale
 
-            if dist < NodeView.radius / 2.0 {
+            if dist < NodeView.radius {
                 self.selectedNode = node
             }
         }
@@ -50,10 +52,12 @@ class GraphMapViewModel: ObservableObject {
     }
 
     private func getPositionRelativeToViewport(point: CGPoint,
+                                               viewportSize: CGSize,
                                                viewportZoomScale: CGFloat,
                                                viewportOriginOffset: CGPoint) -> CGPoint {
         point
             .scale(by: viewportZoomScale)
+            .translateBy(x: viewportSize.width / 2, y: viewportSize.height / 2)
             .translateBy(x: viewportOriginOffset.x, y: viewportOriginOffset.y)
     }
 }
