@@ -2,6 +2,14 @@ import SwiftUI
 import PencilKit
 
 class CanvasViewModel: ObservableObject {
+    enum CanvasMode {
+        case selection
+        case pen
+        case marker
+        case eraser
+        case lasso
+    }
+
     @Published var canvas = Canvas()
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
@@ -10,6 +18,15 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasCenterOffsetY: CGFloat = 0.0
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
+    @Published var canvasMode: CanvasMode {
+        didSet {
+            // Reset canvas element selection on selecting some other mode.
+            if oldValue == .selection && canvasMode != oldValue {
+                selectedCanvasElementId = nil
+            }
+        }
+    }
+    @Published var shouldShowAnnotationMenu = false
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -21,6 +38,7 @@ class CanvasViewModel: ObservableObject {
 
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
+        self.canvasMode = .pen
     }
 
     convenience init() {
@@ -186,18 +204,6 @@ extension CanvasViewModel {
 
 // MARK: Annotation palette controls
 extension CanvasViewModel {
-    func switchAnnotationTool(_ newTool: PKTool) {
-        annotationPalette.switchTool(newTool)
-    }
-
-    func switchAnnotationWidth(_ newWidth: CGFloat) {
-        annotationPalette.switchAnnotationWidth(newWidth)
-    }
-
-    func switchAnnotationColor(_ newColor: UIColor) {
-        annotationPalette.switchAnnotationColor(newColor)
-    }
-
     func getAnnotationWidths() -> [CGFloat] {
         AnnotationPalette.annotationWidths
     }
@@ -207,19 +213,45 @@ extension CanvasViewModel {
     }
 
     func getCurrentTool() -> PKTool {
-        annotationPalette.selectedTool
+        annotationPalette.getSelectedTool()
+    }
+}
+
+// MARK: Annotation palette controls button handlers
+extension CanvasViewModel {
+    func clearSelectedAnnotationTool() {
+        canvasMode = .selection
     }
 
-    func getDefaultAnnotationTool(_ toolType: PKInkingTool.InkType) -> PKTool {
-        switch toolType {
-        case .pen:
-            return AnnotationPalette.defaultPenTool
-        case .marker:
-            return AnnotationPalette.defaultMarkerTool
-        case .pencil:
-            fatalError("PKInkingTool should not be pencil")
-        @unknown default:
-            fatalError("PKInkingTool is not a pen or marker")
-        }
+    func selectPenAnnotationTool() {
+        shouldShowAnnotationMenu = canvasMode == .pen
+        canvasMode = .pen
+        annotationPalette.switchTool(.pen)
+    }
+
+    func selectMarkerAnnotationTool() {
+        shouldShowAnnotationMenu = canvasMode == .marker
+        canvasMode = .marker
+        annotationPalette.switchTool(.marker)
+    }
+
+    func selectEraserAnnotationTool() {
+        canvasMode = .eraser
+        annotationPalette.switchTool(.eraser)
+    }
+
+    func selectLassoAnnotationTool() {
+        canvasMode = .lasso
+        annotationPalette.switchTool(.lasso)
+    }
+
+    func selectAnnotationWidth(_ width: CGFloat) {
+        annotationPalette.setAnnotationWidth(width)
+        shouldShowAnnotationMenu = false
+    }
+
+    func selectAnnotationColor(_ color: UIColor) {
+        annotationPalette.setAnnotationColor(color)
+        shouldShowAnnotationMenu = false
     }
 }

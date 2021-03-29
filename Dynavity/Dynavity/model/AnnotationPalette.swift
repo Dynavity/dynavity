@@ -1,54 +1,59 @@
 import PencilKit
 
 struct AnnotationPalette {
-    static let annotationWidths: [CGFloat] = [3, 6, 9, 12]
-    static let annotationColors = [UIColor.blue, UIColor.red, UIColor.green, UIColor.yellow]
-    static let defaultPenTool = PKInkingTool(.pen, color: .blue, width: annotationWidths[2])
-    static let defaultMarkerTool = PKInkingTool(.marker, color: .yellow, width: annotationWidths[2])
-
-    var selectedTool: PKTool
-
-    init() {
-        selectedTool = AnnotationPalette.defaultPenTool
+    enum SelectedTool {
+        case pen
+        case marker
+        case eraser
+        case lasso
     }
 
-    mutating func switchTool(_ newTool: PKTool) {
+    static let annotationWidths: [CGFloat] = [3, 6, 9, 12]
+    static let annotationColors = [UIColor.blue, UIColor.red, UIColor.green, UIColor.yellow]
+    private var penTool = PKInkingTool(.pen, color: .blue, width: annotationWidths[2])
+    private var markerTool = PKInkingTool(.marker, color: .yellow, width: annotationWidths[2])
+    private var selectedTool: SelectedTool
+
+    init() {
+        selectedTool = .pen
+    }
+
+    mutating func switchTool(_ newTool: SelectedTool) {
         selectedTool = newTool
     }
 
-    mutating func switchAnnotationWidth(_ newWidth: CGFloat) {
-        guard let inkingTool = selectedTool as? PKInkingTool else {
-            return
-        }
-
-        // Only pen and and marker (highlighter) inking tools used
-        switch inkingTool.inkType {
+    func getSelectedTool() -> PKTool {
+        switch selectedTool {
         case .pen:
-            selectedTool = PKInkingTool(.pen, color: inkingTool.color, width: newWidth)
+            return penTool
         case .marker:
-            selectedTool = PKInkingTool(.marker, color: inkingTool.color, width: newWidth)
-        case .pencil:
-            fatalError("PKInkingTool should not be pencil")
-        @unknown default:
-            fatalError("PKInkingTool is not a pen or marker")
+            return markerTool
+        case .eraser:
+            return PKEraserTool(.vector)
+        case .lasso:
+            return PKLassoTool()
         }
     }
 
-    mutating func switchAnnotationColor(_ newColor: UIColor) {
-        guard let inkingTool = selectedTool as? PKInkingTool else {
-            return
-        }
-
-        // Only pen and and marker (highlighter) inking tools used
-        switch inkingTool.inkType {
+    mutating func setAnnotationWidth(_ newWidth: CGFloat) {
+        switch selectedTool {
         case .pen:
-            selectedTool = PKInkingTool(.pen, color: newColor, width: inkingTool.width)
+            penTool.width = newWidth
         case .marker:
-            selectedTool = PKInkingTool(.marker, color: newColor, width: inkingTool.width)
-        case .pencil:
-            fatalError("PKInkingTool should not be pencil")
-        @unknown default:
-            fatalError("PKInkingTool is not a pen or marker")
+            markerTool.width = newWidth
+        default:
+            assertionFailure("Attempt at setting annotation width of a non-inking tool.")
+        }
+    }
+
+    mutating func setAnnotationColor(_ newColor: UIColor) {
+        switch selectedTool {
+        case .pen:
+            penTool.color = newColor
+        case .marker:
+            markerTool.color = newColor
+        default:
+            assertionFailure("Attempt at setting annotation color of a non-inking tool.")
         }
     }
 }
