@@ -1,6 +1,10 @@
+import CoreGraphics
+
 protocol BacklinkGraph {
     var backlinkNodes: [BacklinkNode] { get }
     var backlinkEdges: [BacklinkEdge] { get }
-    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode)
+
     func getBacklinks(for item: BacklinkNode) -> [BacklinkNode]
+    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode)
+    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, by translation: CGSize)
 }

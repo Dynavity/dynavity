@@ -1,3 +1,6 @@
+import CoreGraphics
+import Foundation
+
 /// `Graph` will contain `Node<BacklinkNode>`
 extension Graph: BacklinkGraph where T == BacklinkNode {
     var backlinkNodes: [BacklinkNode] {
@@ -21,5 +24,20 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
     func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
         let node = Node(item)
         return self.adjacentNodesFromNode(node).map({ $0.label })
+    }
+
+    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, by translation: CGSize) {
+        guard let originalNode = getNodeWithId(id: backlinkNode.id) else {
+            return
+        }
+
+        var backlinkNode = originalNode.label
+        backlinkNode.move(by: translation)
+
+        self.updateNode(originalNode, to: Node(backlinkNode))
+    }
+
+    private func getNodeWithId(id: UUID?) -> Node<BacklinkNode>? {
+        self.nodes.first(where: { $0.label.id == id })
     }
 }

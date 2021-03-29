@@ -31,4 +31,8 @@ struct BacklinkEngine {
     func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
         graph.getBacklinks(for: item)
     }
+
+    mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, by translation: CGSize) {
+        graph.moveBacklinkNode(backlinkNode, by: translation)
+    }
 }
