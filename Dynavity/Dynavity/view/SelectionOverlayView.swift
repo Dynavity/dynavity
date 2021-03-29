@@ -94,6 +94,13 @@ struct SelectionOverlayView: View {
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                viewModel.moveSelectedCanvasElement(by: value.translation)
+            }
+    }
+
     private var dragControl: some View {
         VStack(spacing: .zero) {
             Rectangle()
@@ -104,6 +111,7 @@ struct SelectionOverlayView: View {
                 .foregroundColor(overlayColor)
                 .frame(width: rotationDragControlSize, height: rotationDragControlSize)
         }
+        .gesture(dragGesture)
         .offset(y: -rotationDragControlOffset)
         // Force the rotation control to be the same size regardless of scale factor.
         .scaleEffect(1.0 / viewModel.scaleFactor)
