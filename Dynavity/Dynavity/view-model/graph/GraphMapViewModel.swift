@@ -5,8 +5,10 @@ import Foundation
 class GraphMapViewModel: ObservableObject {
     @Published var backlinkEngine = BacklinkEngine()
 
-    private var selectedNodeOriginalPosition: CGPoint?
-    @Published var selectedNode: BacklinkNode?
+    private var draggedNodeOriginalPosition: CGPoint?
+    @Published var draggedNode: BacklinkNode?
+
+    @Published var longPressedNode: BacklinkNode?
 
     init() {
         initialiseBacklinkEngine()
@@ -45,8 +47,8 @@ extension GraphMapViewModel {
             let dist = tapPos.distance(to: processedPosition) / viewportZoomScale
 
             if dist < NodeView.radius {
-                selectedNode = node
-                selectedNodeOriginalPosition = node.position
+                draggedNode = node
+                draggedNodeOriginalPosition = node.position
             }
         }
     }
@@ -57,19 +59,19 @@ extension GraphMapViewModel {
 
     func handleNodeDragEnd(_ value: DragGesture.Value, viewportZoomScale: CGFloat) {
         processNodeTranslation(translation: value.translation, viewportZoomScale: viewportZoomScale)
-        selectedNodeOriginalPosition = nil
-        selectedNode = nil
+        draggedNodeOriginalPosition = nil
+        draggedNode = nil
     }
 
     private func processNodeTranslation(translation: CGSize, viewportZoomScale: CGFloat) {
-        guard let selectedNode = selectedNode,
-              let selectedNodeOriginalPosition = selectedNodeOriginalPosition else {
+        guard let draggedNode = draggedNode,
+              let draggedNodeOriginalPosition = draggedNodeOriginalPosition else {
             return
         }
 
         let scaledDownTranslation = translation / viewportZoomScale
-        let updatedPos = selectedNodeOriginalPosition + scaledDownTranslation
-        backlinkEngine.moveBacklinkNode(selectedNode, to: updatedPos)
+        let updatedPos = draggedNodeOriginalPosition + scaledDownTranslation
+        backlinkEngine.moveBacklinkNode(draggedNode, to: updatedPos)
     }
 
     private func getPositionRelativeToViewport(point: CGPoint,

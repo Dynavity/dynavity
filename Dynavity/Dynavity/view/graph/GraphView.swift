@@ -15,8 +15,6 @@ struct GraphView: View {
 
     @Binding var searchQuery: String
 
-    @State var shouldGoToCanvasView = false
-
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -44,7 +42,26 @@ struct GraphView: View {
     var nodesView: some View {
         ZStack {
             ForEach(viewModel.getNodes(), id: \.id) { node in
-                getNavigationNodeView(for: node)
+                Group {
+                    // Solution referenced from https://stackoverflow.com/a/65401199
+                    // If the current node has been long pressed, it means that we want to automatically
+                    // navigate to the canvas corresponding to the long pressed node
+                    if viewModel.longPressedNode == node {
+                        // TODO: pass in the relevant canvas into MainView
+                        NavigationLink(destination: MainView()
+                                        .navigationBarHidden(true)
+                                        .navigationBarBackButtonHidden(true),
+                                       isActive: .constant(true)) {
+                            EmptyView()
+                        }
+                    }
+
+                    NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
+                        .offset(x: node.position.x, y: node.position.y)
+                        .onLongPressGesture {
+                            viewModel.longPressedNode = node
+                        }
+                }
             }
         }
     }
@@ -57,27 +74,6 @@ struct GraphView: View {
             }
         }
     }
-
-    /// Returns a `View` that groups a `NodeView` alongside a `NavigationLink`.
-    /// On long pressing the `NodeView`, the view will be navigated to the `MainView`
-    /// Referenced from https://stackoverflow.com/a/62055596
-    private func getNavigationNodeView(for node: BacklinkNode) -> some View {
-        Group {
-            // TODO: pass in the relevant canvas to mainView once storage has been implemented
-            NavigationLink(destination: MainView()
-                            .navigationBarHidden(true)
-                            .navigationBarBackButtonHidden(true),
-                           isActive: $shouldGoToCanvasView) {
-                EmptyView()
-            }
-
-            NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
-                .offset(x: node.position.x, y: node.position.y)
-                .onLongPressGesture {
-                    shouldGoToCanvasView = true
-                }
-        }
-    }
 }
 
 // MARK: Gestures
@@ -86,7 +82,7 @@ extension GraphView {
         DragGesture()
             .onChanged { value in
                 // Dragging canvas instead of a node
-                if viewModel.selectedNode == nil {
+                if viewModel.draggedNode == nil {
                     viewModel.hitTest(tapPos: value.startLocation,
                                       viewportSize: viewportSize,
                                       viewportZoomScale: zoomScale,
@@ -98,7 +94,7 @@ extension GraphView {
             }
             .onEnded { value in
                 // Dragged a canvas instead of a node
-                if viewModel.selectedNode == nil {
+                if viewModel.draggedNode == nil {
                     self.dragOffset = .zero
                     self.originOffset += value.translation
                 } else {
