@@ -5,14 +5,17 @@ struct NodeView: View {
     private static var diameter: CGFloat {
         radius * 2
     }
-
     private static let fontSize: CGFloat = 10.0
 
+    private static let highlightedNodeColor = Color.UI.green.opacity(0.7)
+    private static let defaultNodeColor = Color.UI.darkBlue.opacity(0.5)
+
     let label: String
+    let isHighlighted: Bool
 
     var body: some View {
         Ellipse()
-            .fill(Color.UI.darkBlue.opacity(0.5))
+            .fill(isHighlighted ? NodeView.highlightedNodeColor : NodeView.defaultNodeColor)
             .overlay(Text(label)
                         .font(.system(size: NodeView.fontSize))
                         .multilineTextAlignment(.center)
@@ -23,6 +26,6 @@ struct NodeView: View {
 
 struct NodeView_Previews: PreviewProvider {
     static var previews: some View {
-        NodeView(label: "AAAAA")
+        NodeView(label: "AAAAA", isHighlighted: true)
     }
 }

@@ -13,6 +13,8 @@ struct GraphView: View {
     @State var zoomScale: CGFloat = 1.0
     @State var previousZoomScale: CGFloat = 1.0
 
+    @Binding var searchQuery: String
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -40,7 +42,7 @@ struct GraphView: View {
     var nodesView: some View {
         ZStack {
             ForEach(viewModel.getNodes(), id: \.id) { node in
-                NodeView(label: node.name)
+                NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
                     .offset(x: node.position.x, y: node.position.y)
             }
         }
@@ -98,8 +100,19 @@ extension GraphView {
     }
 }
 
+// MARK: Search bar helper functions
+
+extension GraphView {
+    private func doesInputMatchSearchQuery(input: String) -> Bool {
+        if searchQuery.isEmpty {
+            return false
+        }
+        return input.lowercased().contains(self.searchQuery.lowercased())
+    }
+}
+
 struct GraphView_Previews: PreviewProvider {
     static var previews: some View {
-        GraphView()
+        GraphView(searchQuery: .constant("Hello"))
     }
 }

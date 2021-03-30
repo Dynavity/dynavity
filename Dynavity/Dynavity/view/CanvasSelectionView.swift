@@ -49,7 +49,7 @@ struct CanvasSelectionView: View {
                         canvasesGrid
                     }
                 case .graph:
-                    GraphView()
+                    GraphView(searchQuery: $searchQuery)
                 }
 
             }
