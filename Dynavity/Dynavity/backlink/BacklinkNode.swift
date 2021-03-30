@@ -17,7 +17,7 @@ struct BacklinkNode: Identifiable {
     }
 
     func moving(to updatedPos: CGPoint) -> BacklinkNode {
-        BacklinkNode(name: self.name, position: updatedPos)
+        BacklinkNode(id: self.id, name: self.name, position: updatedPos)
     }
 }
 
