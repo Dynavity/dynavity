@@ -7,10 +7,7 @@
  conform to `Hashable` protocol.
  */
 struct Node<T: Hashable> {
-    let label: T
-    // For shortest path calculations
-    var pathLengthFromSource = Double.infinity
-    var pathNodesFromSource: [Node<T>] = []
+    var label: T
 
     /// Creates a `Node` with the given `label`.
     init(_ label: T) {

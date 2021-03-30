@@ -5,7 +5,7 @@ import CoreGraphics
  
  This is used as part of the algorithm to find the orthogonal diagram connector routing between UmlElements.
  */
-struct GridRectangle {
+struct GridRectangle: Equatable, Hashable {
     let width: CGFloat
     let height: CGFloat
     // X-coordinate left edge
@@ -57,6 +57,11 @@ struct GridRectangle {
     }
 
     static func fromLTRB(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat) -> GridRectangle {
-        GridRectangle(left: left, top: top, width: right - left, height: bottom - top)
+        let width = right - left
+        let height = bottom - top
+        if width < 0 || height < 0 {
+            assertionFailure("GridRectangle created can not have negative width or height")
+        }
+        return GridRectangle(left: left, top: top, width: width, height: height)
     }
 }
