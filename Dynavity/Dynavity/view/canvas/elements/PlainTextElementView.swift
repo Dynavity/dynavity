@@ -9,7 +9,7 @@ struct PlainTextElementView: View {
 
     var body: some View {
         TextEditor(text: $viewModel.plainTextElement.text)
-            .font(.custom("Custom", size: viewModel.plainTextElement.fontSize))
+            .font(.system(size: viewModel.plainTextElement.fontSize))
             .padding()
     }
 }

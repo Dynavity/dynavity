@@ -17,7 +17,7 @@ struct MarkupElementView: View {
         HStack {
             if isViewSelected {
                 TextEditor(text: $viewModel.markupTextBlock.text)
-                    .font(.custom("Custom", size: viewModel.markupTextBlock.fontSize))
+                    .font(.system(size: viewModel.markupTextBlock.fontSize))
                 Divider()
             }
 
