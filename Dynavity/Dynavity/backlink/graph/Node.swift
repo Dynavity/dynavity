@@ -9,7 +9,7 @@
 struct Node<T: Hashable> {
     let label: T
     // For shortest path calculations
-    var pathLengthFromSource: Double = Double.infinity
+    var pathLengthFromSource = Double.infinity
     var pathNodesFromSource: [Node<T>] = []
 
     /// Creates a `Node` with the given `label`.

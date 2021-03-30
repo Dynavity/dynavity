@@ -51,7 +51,7 @@ struct Graph<T: Hashable> {
 
         assert(checkRepresentation())
     }
-    
+
     /// Gets the given node if it exists.
     /// If the node does not exists in the graph, return an empty optional.
     func getNode(_ node: Node<T>) -> Node<T>? {
@@ -60,7 +60,7 @@ struct Graph<T: Hashable> {
         }
         return nodes.first { $0 == node }
     }
-    
+
     /// Gets edge between source and destination node if it exists, otherwise return empty optional.
     func getEdgeBetween(source: Node<T>, destination: Node<T>) -> Edge<T>? {
         for edge in edges {
