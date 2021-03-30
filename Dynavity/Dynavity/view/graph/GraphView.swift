@@ -15,6 +15,8 @@ struct GraphView: View {
 
     @Binding var searchQuery: String
 
+    @State var shouldGoToCanvasView = false
+
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -42,8 +44,7 @@ struct GraphView: View {
     var nodesView: some View {
         ZStack {
             ForEach(viewModel.getNodes(), id: \.id) { node in
-                NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
-                    .offset(x: node.position.x, y: node.position.y)
+                getNavigationNodeView(for: node)
             }
         }
     }
@@ -54,6 +55,27 @@ struct GraphView: View {
                 EdgeView(start: edge.source.position, end: edge.destination.position)
                     .stroke()
             }
+        }
+    }
+
+    /// Returns a `View` that groups a `NodeView` alongside a `NavigationLink`.
+    /// On long pressing the `NodeView`, the view will be navigated to the `MainView`
+    /// Referenced from https://stackoverflow.com/a/62055596
+    private func getNavigationNodeView(for node: BacklinkNode) -> some View {
+        Group {
+            // TODO: pass in the relevant canvas to mainView once storage has been implemented
+            NavigationLink(destination: MainView()
+                            .navigationBarHidden(true)
+                            .navigationBarBackButtonHidden(true),
+                           isActive: $shouldGoToCanvasView) {
+                EmptyView()
+            }
+
+            NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
+                .offset(x: node.position.x, y: node.position.y)
+                .onLongPressGesture {
+                    shouldGoToCanvasView = true
+                }
         }
     }
 }
