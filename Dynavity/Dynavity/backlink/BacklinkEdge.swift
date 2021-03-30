@@ -1,11 +1,6 @@
 import Foundation
 
 struct BacklinkEdge {
-    // TODO: there's probably a better way of generating an ID
-    // from the IDs of source and destination
-    var id: Int {
-        self.hashValue
-    }
     let source: BacklinkNode
     let destination: BacklinkNode
 }

@@ -48,7 +48,7 @@ struct GraphView: View {
 
     var edgesView: some View {
         ZStack {
-            ForEach(viewModel.getEdges(), id: \.id) { edge in
+            ForEach(viewModel.getEdges(), id: \.self) { edge in
                 EdgeView(start: edge.source.position, end: edge.destination.position)
                     .stroke()
             }
