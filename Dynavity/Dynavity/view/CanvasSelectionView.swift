@@ -51,7 +51,6 @@ struct CanvasSelectionView: View {
                 case .graph:
                     GraphView(searchQuery: $searchQuery)
                 }
-
             }
             .navigationBarHidden(true)
         }
@@ -93,7 +92,6 @@ struct CanvasSelectionView: View {
                 Image(systemName: "square.grid.2x2.fill")
             }
         }
-
     }
 
     var actionButtonGroup: some View {

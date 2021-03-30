@@ -6,8 +6,18 @@ struct BacklinkNode: Identifiable {
     let name: String
     var position: CGPoint
 
+    init(id: UUID, name: String, position: CGPoint) {
+        self.id = id
+        self.name = name
+        self.position = position
+    }
+
+    init(name: String, position: CGPoint) {
+        self.init(id: UUID(), name: name, position: position)
+    }
+
     func moving(to updatedPos: CGPoint) -> BacklinkNode {
-        BacklinkNode(id: self.id, name: self.name, position: updatedPos)
+        BacklinkNode(name: self.name, position: updatedPos)
     }
 }
 

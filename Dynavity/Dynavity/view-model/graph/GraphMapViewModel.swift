@@ -20,6 +20,7 @@ class GraphMapViewModel: ObservableObject {
         backlinkEngine.edges
     }
 
+    // TODO: replace the implementation of this function: load from file and rebuild the links
     private func initialiseBacklinkEngine() {
         let nodes: [BacklinkNode] = (0..<20).map { i in
             BacklinkNode(id: UUID(), name: "Node \(i)", position: CGPoint(x: Int.random(in: 0...700),
