@@ -6,14 +6,14 @@ struct PDFElementView: UIViewRepresentable {
 
     @StateObject private var viewModel: PDFElementViewModel
 
-    init(pdfCanvasElement: PDFElement) {
+    init(pdfElement: PDFElement) {
         self._viewModel = StateObject(wrappedValue:
-                                        PDFElementViewModel(pdfCanvasElement: pdfCanvasElement))
+                                        PDFElementViewModel(pdfElement: pdfElement))
     }
 
     func makeUIView(context: Context) -> UIViewType {
         let pdfView = PDFView()
-        pdfView.document = PDFDocument(url: viewModel.pdfCanvasElement.file)
+        pdfView.document = PDFDocument(url: viewModel.pdfElement.file)
         pdfView.autoScales = true
         return pdfView
     }

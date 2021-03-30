@@ -8,16 +8,16 @@ struct MarkupElementView: View {
     // Purpose of having this state is so that when the view is not selected, the text editor will not show
     @State private var isViewSelected = true
 
-    init(markupTextBlock: MarkupElement) {
+    init(markupElement: MarkupElement) {
         self._viewModel = StateObject(wrappedValue:
-                                        MarkupElementViewModel(markupTextBlock: markupTextBlock))
+                                        MarkupElementViewModel(markupElement: markupElement))
     }
 
     var body: some View {
         HStack {
             if isViewSelected {
-                TextEditor(text: $viewModel.markupTextBlock.text)
-                    .font(.custom("Custom", size: viewModel.markupTextBlock.fontSize))
+                TextEditor(text: $viewModel.markupElement.text)
+                    .font(.custom("Custom", size: viewModel.markupElement.fontSize))
                 Divider()
             }
 
@@ -29,6 +29,6 @@ struct MarkupElementView: View {
 
 struct MarkupElementView_Previews: PreviewProvider {
     static var previews: some View {
-        MarkupElementView(markupTextBlock: MarkupElement(position: .zero, markupType: .markdown))
+        MarkupElementView(markupElement: MarkupElement(position: .zero, markupType: .markdown))
     }
 }
