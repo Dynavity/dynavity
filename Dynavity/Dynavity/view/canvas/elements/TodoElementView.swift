@@ -8,9 +8,15 @@ struct TodoElementView: View {
     }
 
     var body: some View {
-        List {
-            ForEach(viewModel.getTodos(), id: \.self) { todo in
-                TodoItemView(todo: todo)
+        // List cannot be used as it consumes touch events.
+        ScrollView {
+            // Necessary to remove the spacing between child views inherent to ScrollView.
+            VStack(spacing: 0.0) {
+                ForEach(viewModel.getTodos(), id: \.self) { todo in
+                    TodoItemView(todo: todo)
+                        .padding(5.0)
+                    Divider()
+                }
             }
         }
     }
