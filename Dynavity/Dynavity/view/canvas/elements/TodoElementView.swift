@@ -1,25 +1,39 @@
 import SwiftUI
 
 struct TodoElementView: View {
-    private let addButtonHeight: CGFloat = 45.0
+    private let addTodoButtonSize: CGFloat = 35.0
 
     @StateObject private var viewModel: TodoElementViewModel
+    @State private var newTodoLabel: String = ""
+
+    private var trimmedNewTodoLabel: String {
+        newTodoLabel.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var isAddTodoButtonDisabled: Bool {
+        trimmedNewTodoLabel.isEmpty
+    }
 
     init(todoElement: TodoElement) {
         self._viewModel = StateObject(wrappedValue: TodoElementViewModel(todoElement: todoElement))
     }
 
-    private var addTodoButton: some View {
-        Button(action: {
-            viewModel.addNewTodo()
-        }) {
-            HStack {
-                Image(systemName: "plus")
-                    .foregroundColor(Color.blue)
-                Text("Add a new To-Do")
+    private var addTodoControl: some View {
+        HStack {
+            Button(action: {
+                viewModel.addTodo(label: trimmedNewTodoLabel)
+                newTodoLabel = ""
+            }) {
+                Image(systemName: "plus.circle")
+                    .resizable()
+                    .foregroundColor(isAddTodoButtonDisabled ? Color.gray : Color.blue)
+                    .frame(width: addTodoButtonSize, height: addTodoButtonSize)
             }
-            .frame(height: addButtonHeight)
+            .padding(.leading, 5.0)
+            .disabled(isAddTodoButtonDisabled)
+            TextField("Add a new To-Do", text: $newTodoLabel)
         }
+        .padding(5.0)
     }
 
     var body: some View {
@@ -31,7 +45,7 @@ struct TodoElementView: View {
                     TodoItemView(todo: todo, onDelete: { viewModel.removeTodo(todo) })
                     Divider()
                 }
-                addTodoButton
+                addTodoControl
             }
         }
     }

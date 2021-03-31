@@ -60,6 +60,7 @@ struct TodoItemView: View {
         }
         // Disable flashing when tapped.
         .buttonStyle(PlainButtonStyle())
+        .padding(.leading, 5.0)
     }
 
     private var deleteButton: some View {
@@ -87,7 +88,6 @@ struct TodoItemView: View {
     var body: some View {
         HStack {
             checkbox
-                .padding(.leading, 5.0)
             TextField("", text: $viewModel.todo.label, onEditingChanged: { isFocused in
                 let trimmedLabel = viewModel.todo.label.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !isFocused && trimmedLabel.isEmpty {
