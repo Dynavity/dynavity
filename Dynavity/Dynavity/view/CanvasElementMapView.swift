@@ -17,16 +17,20 @@ struct CanvasElementMapView: View {
         viewModel.selectedCanvasElementId == element.id
     }
 
+    private func shouldShowUmlSelectionOverlay(_ element: CanvasElementProtocol) -> Bool {
+        element is UmlElementProtocol && (viewModel.umlConnectorStart != nil || isSelected(element))
+    }
+
     private func generateUmlConnectors(_ connector: UmlConnector) -> some View {
         var points = connector.points
         return Path { path in
             let origin = points.removeFirst()
             // Translate point to account of CanvasView offset
-            path.move(to: CGPoint(x: origin.x - viewModel.canvasOrigin.x,
-                                  y: origin.y - viewModel.canvasOrigin.y))
+            path.move(to: CGPoint(x: origin.x - viewModel.canvasOrigin.x + viewModel.canvasViewWidth / 2,
+                                  y: origin.y - viewModel.canvasOrigin.y + viewModel.canvasViewHeight / 2))
             points.forEach {
-                path.addLine(to: CGPoint(x: $0.x - viewModel.canvasOrigin.x,
-                                         y: $0.y - viewModel.canvasOrigin.y))
+                path.addLine(to: CGPoint(x: $0.x - viewModel.canvasOrigin.x + viewModel.canvasViewWidth / 2,
+                                         y: $0.y - viewModel.canvasOrigin.y + viewModel.canvasViewHeight / 2))
             }
         }
         .stroke(umlConnectorLineColor, lineWidth: umlConnectorLineWidth)
@@ -34,6 +38,7 @@ struct CanvasElementMapView: View {
         .offset(x: viewModel.canvasOrigin.x, y: viewModel.canvasOrigin.y)
     }
 
+    // TODO: Change this guesture to select uml connector
     var testGesture: some Gesture {
         TapGesture().onEnded({ _ in print("Tap gesture on red path") })
     }
@@ -53,7 +58,7 @@ struct CanvasElementMapView: View {
                     }
                     .gesture(isSelected(element) ? dragGesture : nil)
                     .overlay(isSelected(element) ? SelectionOverlayView(element: element, viewModel: viewModel) : nil)
-                    .overlay(isSelected(element) && element is UmlElementProtocol
+                    .overlay(shouldShowUmlSelectionOverlay(element)
                                 ? UmlSelectionOverlayView(element: element, viewModel: viewModel)
                                 : nil)
                     .rotationEffect(.radians(element.rotation))

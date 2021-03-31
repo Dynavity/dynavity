@@ -4,12 +4,14 @@ struct CanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
 
     private func calculateOffsetX(width: CGFloat) -> CGFloat {
-        -(viewModel.canvasOrigin.x + viewModel.canvasCenterOffsetX)
+        viewModel.canvasViewWidth = width
+        return -(viewModel.canvasOrigin.x + viewModel.canvasCenterOffsetX)
             + width / 2.0 * (viewModel.scaleFactor - 1.0)
     }
 
     private func calculateOffsetY(height: CGFloat) -> CGFloat {
-        -(viewModel.canvasOrigin.y + viewModel.canvasCenterOffsetY)
+        viewModel.canvasViewHeight = height
+        return -(viewModel.canvasOrigin.y + viewModel.canvasCenterOffsetY)
             + height / 2.0 * (viewModel.scaleFactor - 1.0)
     }
 

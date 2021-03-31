@@ -29,6 +29,12 @@ class CanvasViewModel: ObservableObject {
     @Published var shouldShowAnnotationMenu = false
     @Published var shouldShowUmlMenu = false
 
+    // Uml element connectors
+    @Published var umlConnectorStart: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
+    @Published var umlConnectorEnd: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
+    var canvasViewWidth: CGFloat = 0.0
+    var canvasViewHeight: CGFloat = 0.0
+
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
     private var element: CanvasElementProtocol?
@@ -280,25 +286,45 @@ extension CanvasViewModel {
 
 // MARK: UML diagram connector drag gesture
 extension CanvasViewModel {
-    func handleConnectorDragChange(_ value: DragGesture.Value) {
-        if dragStartLocation == nil {
-            guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
-                return
-            }
-            dragStartLocation = value.startLocation
-            self.element = element
-        }
+    func getCanvasUmlConnectors() -> [UmlConnector] {
+        canvas.umlConnectors
+    }
 
-        guard let dragStartLocation = dragStartLocation,
-              let element = element else {
+    private func pointInUmlElement(_ point: CGPoint) -> UmlElementProtocol? {
+        let canvasElement = canvas.canvasElements.first { $0 is UmlElementProtocol && $0.containsPoint(point) }
+        guard let umlElement = canvasElement as? UmlElementProtocol else {
+            return nil
+        }
+        return umlElement
+    }
+
+    /// To remove dependency of `OrthogonalConnector` model with `UmlSelectionOverlayView` view
+    private func convertToConnectorAnchor(_ anchor: UmlSelectionOverlayView.ConnectorControlAnchor)
+    -> ConnectorConnectingSide {
+        switch anchor {
+        case .middleBottom:
+            return .middleBottom
+        case .middleLeft:
+            return .middleLeft
+        case .middleRight:
+            return .middleRight
+        }
+    }
+
+    func handleConnectorTap(_ element: UmlElementProtocol, anchor: UmlSelectionOverlayView.ConnectorControlAnchor) {
+        guard let (startUmlElement, startAnchor) = umlConnectorStart else {
+            umlConnectorStart = (umlElement: element, anchor: convertToConnectorAnchor(anchor))
             return
         }
-        // TODO: Implement UML connection
-    }
-
-    func handleConnectorDragEnd() {
-        dragStartLocation = nil
-        element = nil
-        // TODO: Implement UML connection
-    }
-}
+        guard  umlConnectorEnd == nil else {
+            return
+        }
+        let newEndAnchor = convertToConnectorAnchor(anchor)
+        umlConnectorEnd = (umlElement: element, anchor: newEndAnchor)
+        let points = OrthogonalConnector(from: startUmlElement, to: element)
+            .generateRoute(startAnchor, destAnchor: newEndAnchor)
+        canvas.addUmlConnector(UmlConnector(points: points))
+        umlConnectorStart = nil
+        umlConnectorEnd = nil
+        selectedCanvasElementId = nil
+    }}

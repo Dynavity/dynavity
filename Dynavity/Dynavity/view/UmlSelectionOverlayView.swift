@@ -35,13 +35,12 @@ struct UmlSelectionOverlayView: View {
     }
 
     private func makeConnectorControl(_ connectorControl: ConnectorControlAnchor) -> some View {
-        let dragGesture = DragGesture(coordinateSpace: .global)
-            .onChanged { value in
-                viewModel.handleConnectorDragChange(value)
-
-            }
+        let tapGesture = TapGesture()
             .onEnded { _ in
-                viewModel.handleConnectorDragEnd()
+                guard let element = element as? UmlElementProtocol else {
+                    return
+                }
+                viewModel.handleConnectorTap(element, anchor: connectorControl)
             }
 
         return Group {
@@ -61,7 +60,7 @@ struct UmlSelectionOverlayView: View {
         .contentShape(Rectangle())
         .scaleEffect(1.0 / viewModel.scaleFactor)
         .offset(getConnectorControlPosition(connectorControl))
-        .gesture(dragGesture)
+        .gesture(tapGesture)
     }
 
     var body: some View {
