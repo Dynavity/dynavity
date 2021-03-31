@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TodoItemView: View {
-    static let checkboxSize: CGFloat = 30.0
+    static let checkboxSize: CGFloat = 35.0
     static let checkboxBorder: CGFloat = 1.0
 
     @StateObject private var viewModel: TodoItemViewModel
@@ -37,7 +37,7 @@ struct TodoItemView: View {
         HStack {
             checkbox
                 .padding(.leading, 5.0)
-            TextEditor(text: $viewModel.todo.label)
+            TextField("", text: $viewModel.todo.label)
         }
     }
 }
