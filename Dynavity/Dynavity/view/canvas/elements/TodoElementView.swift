@@ -1,17 +1,17 @@
 import SwiftUI
 
 struct TodoElementView: View {
-    @ObservedObject private var viewModel: TodoElementViewModel
+    @StateObject private var viewModel: TodoElementViewModel
 
     init(todoElement: TodoElement) {
-        self.viewModel = TodoElementViewModel(todoElement: todoElement)
+        self._viewModel = StateObject(wrappedValue: TodoElementViewModel(todoElement: todoElement))
     }
 
     var body: some View {
         // List cannot be used as it consumes touch events.
         ScrollView {
             // Necessary to remove the spacing between child views inherent to ScrollView.
-            VStack(spacing: 0.0) {
+            LazyVStack(spacing: 0.0) {
                 ForEach(viewModel.todos, id: \.id) { todo in
                     TodoItemView(todo: todo, onDelete: { viewModel.removeTodo(todo) })
                     Divider()
