@@ -229,7 +229,7 @@ class OrthogonalConnector {
         let grid = Grid.generateGridFromRulers(gridBounds: bounds,
                                                horizontalRulers: horizontalRulers,
                                                verticalRulers: verticalRulers)
-        let gridPoints = grid.generateGridPoints(toElement: toElement)
+        let gridPoints = grid.generateGridPoints(fromElement: fromElement, toElement: toElement)
         let graph = createGraph(points: gridPoints)
         let extrudedSource = generatePoint(target: fromElement, anchor, shouldExtrudePoint: true)
         let extrudedDest = generatePoint(target: toElement, destAnchor, shouldExtrudePoint: true)

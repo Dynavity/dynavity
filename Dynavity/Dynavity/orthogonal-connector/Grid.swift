@@ -88,7 +88,7 @@ class Grid {
     }
 
     // The points generated doesn't take into account obstacles(other UmlElementProtocols) in the grid
-    func generateGridPoints(toElement: UmlElementProtocol) -> [CGPoint] {
+    func generateGridPoints(fromElement: UmlElementProtocol, toElement: UmlElementProtocol) -> [CGPoint] {
         var gridPoints: [CGPoint] = []
 
         for (row, dict) in rectangles {
@@ -131,7 +131,9 @@ class Grid {
             }
         }
         // Order of gridPoints is not preserved with .uniqued()
-        let points = gridPoints.uniqued().filter { !toElement.containsPoint($0) }
+        let points = gridPoints.uniqued().filter { !toElement.containsPoint($0)
+            && !fromElement.containsPoint($0)
+        }
         return points
     }
 }
