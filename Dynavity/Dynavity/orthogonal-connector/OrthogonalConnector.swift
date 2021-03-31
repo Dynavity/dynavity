@@ -78,103 +78,6 @@ class OrthogonalConnector {
         horizontalRulers.sort()
     }
 
-    func generateGridFromRulers(gridBounds: GridRectangle) -> Grid {
-        let grid = Grid()
-        var lastX = gridBounds.leftEdge
-        var lastY = gridBounds.topEdge
-        var column = 0
-        var row = 0
-
-        for y in horizontalRulers {
-            for x in verticalRulers {
-                grid.set(row: row,
-                         col: column,
-                         rectangle: GridRectangle.fromLTRB(left: lastX, top: lastY, right: x, bottom: y))
-                column += 1
-                lastX = x
-            }
-
-            grid.set(row: row,
-                     col: column,
-                     rectangle: GridRectangle.fromLTRB(left: lastX, top: lastY, right: gridBounds.rightEdge, bottom: y))
-            lastX = gridBounds.leftEdge
-            lastY = y
-            column = 0
-            row += 1
-        }
-
-        lastX = gridBounds.leftEdge
-
-        // Last row of cells
-        for x in verticalRulers {
-            grid.set(row: row,
-                     col: column,
-                     rectangle: GridRectangle.fromLTRB(left: lastX,
-                                                       top: lastY,
-                                                       right: x,
-                                                       bottom: gridBounds.bottomEdge))
-            column += 1
-            lastX = x
-        }
-        // Last cell of last row
-        grid.set(row: row,
-                 col: column,
-                 rectangle: GridRectangle.fromLTRB(left: lastX,
-                                                   top: lastY,
-                                                   right: gridBounds.rightEdge,
-                                                   bottom: gridBounds.bottomEdge))
-
-        return grid
-    }
-
-    // The points generated doesn't take into account obstacles(other UmlElementProtocols) in the grid
-    func generateGridPoints(_ grid: Grid) -> [CGPoint] {
-        var gridPoints: [CGPoint] = []
-
-        for (row, dict) in grid.rectangles {
-            let isFirstRow = row == 0
-            let isLastRow = row == grid.rows - 1
-
-            for (col, rectangle) in dict {
-                let isFirstCol = col == 0
-                let isLastCol = col == grid.cols - 1
-                let isTopLeft = isFirstRow && isFirstCol
-                let isTopRight = isFirstRow && isLastCol
-                let isBottomLeft = isLastRow && isFirstCol
-                let isBottomRight = isLastRow && isLastCol
-
-                // Add various reference points depending on position of rectangle on grid
-                if isTopLeft || isTopRight || isBottomLeft || isBottomRight {
-                    gridPoints.append(contentsOf: [rectangle.topLeftPoint, rectangle.topRightPoint,
-                                                   rectangle.bottomLeftPoint, rectangle.bottomRightPoint])
-                } else if isFirstRow {
-                    gridPoints.append(contentsOf: [rectangle.topLeftPoint, rectangle.topPoint, rectangle.topRightPoint])
-                } else if isLastRow {
-                    gridPoints.append(contentsOf: [rectangle.bottomRightPoint,
-                                                   rectangle.bottomPoint,
-                                                   rectangle.bottomLeftPoint])
-                } else if isFirstCol {
-                    gridPoints.append(contentsOf: [rectangle.topLeftPoint,
-                                                   rectangle.leftPoint,
-                                                   rectangle.bottomLeftPoint])
-                } else if isLastCol {
-                    gridPoints.append(contentsOf: [rectangle.topRightPoint,
-                                                   rectangle.rightPoint,
-                                                   rectangle.bottomRightPoint])
-                } else {
-                    gridPoints.append(contentsOf: [rectangle.topLeftPoint, rectangle.topPoint,
-                                                   rectangle.topRightPoint, rectangle.rightPoint,
-                                                   rectangle.bottomRightPoint, rectangle.bottomPoint,
-                                                   rectangle.bottomLeftPoint, rectangle.leftPoint,
-                                                   rectangle.center])
-                }
-            }
-        }
-        // Order of gridPoints is not preserved with .uniqued()
-        let points = gridPoints.uniqued().filter { !toElement.containsPoint($0) }
-        return points
-    }
-
     /**
      Create graph using the reference points from the grid created in `generateGridPoints`, connecting reference points
      orthogonally.
@@ -318,16 +221,16 @@ class OrthogonalConnector {
                                            toElement.position.y + (toElement.height / 2) + boundsMargin))
     }
 
-    // TODO: destAnchor currently unused, factor that in to the endpoint of the SP algo
     func generateRoute(_ anchor: ConnectorConnectingSide, destAnchor: ConnectorConnectingSide) -> [CGPoint] {
         let bounds = getGridBounds()
         drawRulers(connectingSide: anchor)
-        let grid = generateGridFromRulers(gridBounds: bounds)
-        let gridPoints = generateGridPoints(grid)
+        let grid = Grid.generateGridFromRulers(gridBounds: bounds,
+                                               horizontalRulers: horizontalRulers,
+                                               verticalRulers: verticalRulers)
+        let gridPoints = grid.generateGridPoints(toElement: toElement)
         let graph = createGraph(points: gridPoints)
         let extrudedSource = extrudePoint(target: fromElement, anchor)
         let extrudedDest = extrudePoint(target: toElement, destAnchor)
-        let path = shortestPath(graph: graph, source: extrudedSource, destination: extrudedDest)
-        return path
+        return shortestPath(graph: graph, source: extrudedSource, destination: extrudedDest)
     }
 }
