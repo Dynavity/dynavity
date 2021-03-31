@@ -88,7 +88,14 @@ struct TodoItemView: View {
         HStack {
             checkbox
                 .padding(.leading, 5.0)
-            TextField("", text: $viewModel.todo.label)
+            TextField("", text: $viewModel.todo.label, onEditingChanged: { isFocused in
+                let trimmedLabel = viewModel.todo.label.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !isFocused && trimmedLabel.isEmpty {
+                    withAnimation {
+                        onDelete()
+                    }
+                }
+            })
                 .foregroundColor(viewModel.todo.isCompleted ? Color.gray : Color.black)
         }
         .padding(5.0)
