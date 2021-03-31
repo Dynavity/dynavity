@@ -170,8 +170,9 @@ class OrthogonalConnector {
                 }
             }
         }
-
-        return gridPoints.uniqued()
+        // Order of gridPoints is not preserved with .uniqued()
+        let points = gridPoints.uniqued().filter { !toElement.containsPoint($0) }
+        return points
     }
 
     /**
@@ -246,7 +247,7 @@ class OrthogonalConnector {
         return getDirectionOfNodes(source: shortestPath[shortestPath.count - 1], destination: node.label)
     }
 
-    func isChangingDirection(_ comingDirection: PathDirection?, _ goingDirection: PathDirection?) -> Bool {
+    private func isChangingDirection(_ comingDirection: PathDirection?, _ goingDirection: PathDirection?) -> Bool {
         guard let comingDirection = comingDirection,
               let goingDirection = goingDirection else {
             return false
