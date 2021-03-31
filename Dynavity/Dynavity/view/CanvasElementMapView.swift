@@ -11,6 +11,9 @@ struct CanvasElementMapView: View {
             .onChanged { value in
                 viewModel.moveSelectedCanvasElement(by: value.translation)
             }
+            .onEnded { _ in
+                viewModel.handleUmlElementDragEnded()
+            }
     }
 
     private func isSelected(_ element: CanvasElementProtocol) -> Bool {

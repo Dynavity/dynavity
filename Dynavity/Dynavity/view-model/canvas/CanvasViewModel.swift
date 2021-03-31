@@ -311,6 +311,15 @@ extension CanvasViewModel {
         }
     }
 
+    func handleUmlElementDragEnded() {
+        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+            return
+        }
+        if element is UmlElementProtocol {
+            updateUmlConnections(id: selectedCanvasElementId)
+        }
+    }
+
     func handleConnectorTap(_ element: UmlElementProtocol, anchor: UmlSelectionOverlayView.ConnectorControlAnchor) {
         guard let (startUmlElement, startAnchor) = umlConnectorStart else {
             umlConnectorStart = (umlElement: element, anchor: convertToConnectorAnchor(anchor))
@@ -323,8 +332,39 @@ extension CanvasViewModel {
         umlConnectorEnd = (umlElement: element, anchor: newEndAnchor)
         let points = OrthogonalConnector(from: startUmlElement, to: element)
             .generateRoute(startAnchor, destAnchor: newEndAnchor)
-        canvas.addUmlConnector(UmlConnector(points: points))
+        canvas.addUmlConnector(UmlConnector(points: points,
+                                            connects: (fromElement: startUmlElement.id,
+                                                       toElement: element.id),
+                                            connectingSide: (fromSide: startAnchor,
+                                                             toSide: newEndAnchor)))
         umlConnectorStart = nil
         umlConnectorEnd = nil
         selectedCanvasElementId = nil
-    }}
+    }
+
+    func updateUmlConnections(id: UUID?) {
+        guard let id = id else {
+            return
+        }
+        var idsToRemove: [UUID] = []
+        for var connector in canvas.umlConnectors {
+            if connector.connects.fromElement != id
+                    && connector.connects.toElement != id {
+                continue
+            }
+            idsToRemove.append(connector.id)
+            let sourceId = connector.connects.fromElement
+            let destId = connector.connects.toElement
+            guard let source = canvas.getElementBy(id: sourceId) as? UmlElementProtocol,
+                  let dest = canvas.getElementBy(id: destId) as? UmlElementProtocol else {
+                return
+            }
+            let sourceAnchor = connector.connectingSide.fromSide
+            let destAnchor = connector.connectingSide.toSide
+            let newPoints = OrthogonalConnector(from: source, to: dest)
+                .generateRoute(sourceAnchor, destAnchor: destAnchor)
+            connector.points = newPoints
+            canvas.replaceUmlConnector(connector)
+        }
+    }
+}
