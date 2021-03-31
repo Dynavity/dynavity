@@ -42,8 +42,26 @@ struct GraphView: View {
     var nodesView: some View {
         ZStack {
             ForEach(viewModel.getNodes(), id: \.id) { node in
-                NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
-                    .offset(x: node.position.x, y: node.position.y)
+                Group {
+                    // Solution referenced from https://stackoverflow.com/a/65401199
+                    // If the current node has been long pressed, it means that we want to automatically
+                    // navigate to the canvas corresponding to the long pressed node
+                    if viewModel.longPressedNode == node {
+                        // TODO: pass in the relevant canvas into MainView
+                        NavigationLink(destination: MainView()
+                                        .navigationBarHidden(true)
+                                        .navigationBarBackButtonHidden(true),
+                                       isActive: .constant(true)) {
+                            EmptyView()
+                        }
+                    }
+
+                    NodeView(label: node.name, isHighlighted: doesInputMatchSearchQuery(input: node.name))
+                        .offset(x: node.position.x, y: node.position.y)
+                        .onLongPressGesture {
+                            viewModel.longPressedNode = node
+                        }
+                }
             }
         }
     }
@@ -64,7 +82,7 @@ extension GraphView {
         DragGesture()
             .onChanged { value in
                 // Dragging canvas instead of a node
-                if viewModel.selectedNode == nil {
+                if viewModel.draggedNode == nil {
                     viewModel.hitTest(tapPos: value.startLocation,
                                       viewportSize: viewportSize,
                                       viewportZoomScale: zoomScale,
@@ -76,7 +94,7 @@ extension GraphView {
             }
             .onEnded { value in
                 // Dragged a canvas instead of a node
-                if viewModel.selectedNode == nil {
+                if viewModel.draggedNode == nil {
                     self.dragOffset = .zero
                     self.originOffset += value.translation
                 } else {
