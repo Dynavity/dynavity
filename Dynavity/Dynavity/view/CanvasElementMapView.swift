@@ -6,16 +6,6 @@ struct CanvasElementMapView: View {
     private let umlConnectorLineWidth: CGFloat = 1.0
     private let umlConnectorLineColor: Color = .black
 
-    private var dragGesture: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                viewModel.moveSelectedCanvasElement(by: value.translation)
-            }
-            .onEnded { _ in
-                viewModel.handleUmlElementDragEnded()
-            }
-    }
-
     private func isSelected(_ element: CanvasElementProtocol) -> Bool {
         viewModel.selectedCanvasElementId == element.id
     }
@@ -59,7 +49,6 @@ struct CanvasElementMapView: View {
                     .onTapGesture {
                         viewModel.select(canvasElement: element)
                     }
-                    .gesture(isSelected(element) ? dragGesture : nil)
                     .overlay(isSelected(element) ? SelectionOverlayView(element: element, viewModel: viewModel) : nil)
                     .overlay(shouldShowUmlSelectionOverlay(element)
                                 ? UmlSelectionOverlayView(element: element, viewModel: viewModel)
