@@ -20,4 +20,8 @@ struct TodoElement: CanvasElementProtocol {
     mutating func removeTodo(at index: Int) {
         todos.remove(at: index)
     }
+
+    mutating func addEmptyTodo() {
+        todos.append(Todo(label: ""))
+    }
 }

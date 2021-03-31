@@ -25,4 +25,8 @@ class TodoElementViewModel: ObservableObject {
         }
         todoElement.removeTodo(at: index)
     }
+
+    func addNewTodo() {
+        todoElement.addEmptyTodo()
+    }
 }
