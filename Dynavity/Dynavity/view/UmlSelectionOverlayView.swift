@@ -21,6 +21,7 @@ struct UmlSelectionOverlayView: View {
         case middleLeft
         case middleRight
         case middleBottom
+        case middleTop
     }
 
     private func getConnectorControlPosition(_ anchor: ConnectorControlAnchor) -> CGSize {
@@ -31,6 +32,8 @@ struct UmlSelectionOverlayView: View {
             return CGSize(width: halfWidth, height: 0)
         case .middleBottom:
             return CGSize(width: 0, height: halfHeight)
+        case .middleTop:
+            return CGSize(width: 0, height: -halfHeight)
         }
     }
 

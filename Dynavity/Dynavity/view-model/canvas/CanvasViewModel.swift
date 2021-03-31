@@ -302,6 +302,8 @@ extension CanvasViewModel {
     private func convertToConnectorAnchor(_ anchor: UmlSelectionOverlayView.ConnectorControlAnchor)
     -> ConnectorConnectingSide {
         switch anchor {
+        case .middleTop:
+            return .middleTop
         case .middleBottom:
             return .middleBottom
         case .middleLeft:

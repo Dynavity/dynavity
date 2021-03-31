@@ -33,7 +33,7 @@ struct CanvasElementMapView: View {
 
     // TODO: Change this guesture to select uml connector
     var testGesture: some Gesture {
-        TapGesture().onEnded({ _ in print("Tap gesture on red path") })
+        TapGesture().onEnded({ _ in print("Tap gesture UML connector") })
     }
 
     var body: some View {
