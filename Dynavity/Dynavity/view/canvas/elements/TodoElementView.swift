@@ -8,9 +8,11 @@ struct TodoElementView: View {
     }
 
     var body: some View {
-        // TODO: Implement this.
-        Rectangle()
-            .fill(Color.blue)
+        List {
+            ForEach(viewModel.getTodos(), id: \.self) { todo in
+                TodoItemView(todo: todo)
+            }
+        }
     }
 }
 
