@@ -59,7 +59,6 @@ struct CanvasElementMapView: View {
                     .onTapGesture {
                         viewModel.select(canvasElement: element)
                     }
-                    .gesture(isSelected(element) ? dragGesture : nil)
                     .overlay(isSelected(element) ? SelectionOverlayView(element: element, viewModel: viewModel) : nil)
                     .overlay(shouldShowUmlSelectionOverlay(element)
                                 ? UmlSelectionOverlayView(element: element, viewModel: viewModel)

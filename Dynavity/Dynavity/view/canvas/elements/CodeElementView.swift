@@ -9,35 +9,45 @@ struct CodeElementView: View {
 
     var body: some View {
         HStack {
-            VStack {
-                TextEditor(text: $viewModel.codeSnippet.text)
-                    .font(.custom("Courier", size: viewModel.codeSnippet.fontSize))
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                    .onChange(of: viewModel.codeSnippet.text) {_ in
-                        viewModel.convertQuotes()
-                    }
-                Divider()
-                HStack {
-                    Picker("Language", selection: $viewModel.codeSnippet.language) {
-                        ForEach(CodeElement.CodeLanguage.allCases) {
-                            Text($0.displayName).tag($0)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: viewModel.codeSnippet.language) {_ in
-                        viewModel.resetCodeTemplate()
-                    }
-                    Button(action: viewModel.runCode, label: {
-                        Text("Run")
-                    })
-                    .frame(maxWidth: .infinity)
-                }
-            }
+            codeWindow
             Divider()
-            Text(viewModel.output)
+            outputWindow
         }
         .padding()
+    }
+
+    private var codeWindow: some View {
+        VStack {
+            TextEditor(text: $viewModel.codeSnippet.text)
+                .font(.custom("Courier", size: viewModel.codeSnippet.fontSize))
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .onChange(of: viewModel.codeSnippet.text) {_ in
+                    viewModel.convertQuotes()
+                }
+            Divider()
+            HStack {
+                Picker("Language", selection: $viewModel.codeSnippet.language) {
+                    ForEach(CodeElement.CodeLanguage.allCases) {
+                        Text($0.displayName).tag($0)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .onChange(of: viewModel.codeSnippet.language) {_ in
+                    viewModel.resetCodeTemplate()
+                }
+                Button(action: viewModel.runCode, label: {
+                    Text("Run")
+                })
+                .frame(maxWidth: .infinity)
+            }
+        }
+    }
+
+    private var outputWindow: some View {
+        ScrollView {
+            Text(viewModel.output)
+        }
     }
 }
 
