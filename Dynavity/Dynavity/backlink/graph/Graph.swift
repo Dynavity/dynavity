@@ -71,6 +71,21 @@ struct Graph<T: Hashable> {
         assert(checkRepresentation())
     }
 
+    mutating func updateNode(_ originalNode: Node<T>, to updatedNode: Node<T>) {
+        let outgoingEdges = adjList[originalNode]
+        let incomingEdges = edges.filter({ $0.destination == originalNode })
+
+        self.removeNode(originalNode)
+
+        self.addNode(updatedNode)
+        for edge in outgoingEdges ?? [] {
+            self.addEdge(Edge(source: updatedNode, destination: edge.destination))
+        }
+        for edge in incomingEdges {
+            self.addEdge(Edge(source: edge.source, destination: updatedNode))
+        }
+    }
+
     /// Whether the graph contains the requested node.
     /// - Returns: true if the node exists in the graph
     func containsNode(_ targetNode: Node<T>) -> Bool {

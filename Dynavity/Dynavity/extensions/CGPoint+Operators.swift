@@ -29,4 +29,16 @@ extension CGPoint {
         point.x += size.width
         point.y += size.height
     }
+
+    func distance(to otherPoint: CGPoint) -> CGFloat {
+        hypot(self.x - otherPoint.x, self.y - otherPoint.y)
+    }
+
+    func scale(by factor: CGFloat) -> CGPoint {
+        CGPoint(x: self.x * factor, y: self.y * factor)
+    }
+
+    func translateBy(x: CGFloat, y: CGFloat) -> CGPoint {
+        CGPoint(x: self.x + x, y: self.y + y)
+    }
 }
