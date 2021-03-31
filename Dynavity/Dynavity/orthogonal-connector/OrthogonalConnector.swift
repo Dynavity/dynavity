@@ -30,21 +30,23 @@ class OrthogonalConnector {
         toElement = to
     }
 
-    func extrudePoint(target: UmlElementProtocol, _ anchor: ConnectorConnectingSide) -> CGPoint {
+    func generatePoint(target: UmlElementProtocol, _ anchor: ConnectorConnectingSide,
+                       shouldExtrudePoint: Bool) -> CGPoint {
+        let margin = shouldExtrudePoint ? shapeMargin : 0
         switch anchor {
         case .middleLeft:
             // Account for shape margin as points in graph will have taken into account the margin
-            return CGPoint(x: target.position.x - (target.width / 2) - shapeMargin,
+            return CGPoint(x: target.position.x - (target.width / 2) - margin,
                            y: target.position.y)
         case .middleRight:
-            return CGPoint(x: target.position.x + (target.width / 2) + shapeMargin,
+            return CGPoint(x: target.position.x + (target.width / 2) + margin,
                            y: target.position.y)
         case .middleBottom:
             return CGPoint(x: target.position.x,
-                           y: target.position.y + (target.height / 2) + shapeMargin)
+                           y: target.position.y + (target.height / 2) + margin)
         case .middleTop:
             return CGPoint(x: target.position.x,
-                           y: target.position.y - (target.height / 2) - shapeMargin)
+                           y: target.position.y - (target.height / 2) - margin)
         }
     }
 
@@ -229,8 +231,13 @@ class OrthogonalConnector {
                                                verticalRulers: verticalRulers)
         let gridPoints = grid.generateGridPoints(toElement: toElement)
         let graph = createGraph(points: gridPoints)
-        let extrudedSource = extrudePoint(target: fromElement, anchor)
-        let extrudedDest = extrudePoint(target: toElement, destAnchor)
-        return shortestPath(graph: graph, source: extrudedSource, destination: extrudedDest)
+        let extrudedSource = generatePoint(target: fromElement, anchor, shouldExtrudePoint: true)
+        let extrudedDest = generatePoint(target: toElement, destAnchor, shouldExtrudePoint: true)
+        let source = generatePoint(target: fromElement, anchor, shouldExtrudePoint: false)
+        let dest = generatePoint(target: toElement, destAnchor, shouldExtrudePoint: false)
+        var route: [CGPoint] = [source]
+        route.append(contentsOf: shortestPath(graph: graph, source: extrudedSource, destination: extrudedDest))
+        route.append(dest)
+        return route
     }
 }

@@ -39,19 +39,23 @@ class OrthogonalConnectorTests: XCTestCase {
         XCTAssertTrue(connector.horizontalRulers.isEmpty)
     }
 
-    func testExtrudePoint_differingAnchors_outputIncludeMargin() {
+    func testGeneratePoint_differingAnchors_outputIncludeMargin() {
         let leftAnchorSource = orthogonalConnector
-            .extrudePoint(target: sourceUmlElement,
-                          ConnectorConnectingSide.middleLeft)
+            .generatePoint(target: sourceUmlElement,
+                           ConnectorConnectingSide.middleLeft,
+                           shouldExtrudePoint: true)
         let rightAnchorSource = orthogonalConnector
-            .extrudePoint(target: sourceUmlElement,
-                          ConnectorConnectingSide.middleRight)
+            .generatePoint(target: sourceUmlElement,
+                           ConnectorConnectingSide.middleRight,
+                           shouldExtrudePoint: true)
         let topAnchorSource = orthogonalConnector
-            .extrudePoint(target: sourceUmlElement,
-                          ConnectorConnectingSide.middleTop)
+            .generatePoint(target: sourceUmlElement,
+                           ConnectorConnectingSide.middleTop,
+                           shouldExtrudePoint: true)
         let bottomAnchorSource = orthogonalConnector
-            .extrudePoint(target: sourceUmlElement,
-                          ConnectorConnectingSide.middleBottom)
+            .generatePoint(target: sourceUmlElement,
+                           ConnectorConnectingSide.middleBottom,
+                           shouldExtrudePoint: true)
         XCTAssertEqual(leftAnchorSource, CGPoint(x: 165.0, y: 250.0))
         XCTAssertEqual(rightAnchorSource, CGPoint(x: 335.0, y: 250.0))
         XCTAssertEqual(topAnchorSource, CGPoint(x: 250.0, y: 165.0))
