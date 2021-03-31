@@ -38,6 +38,7 @@ struct TodoItemView: View {
             checkbox
                 .padding(.leading, 5.0)
             TextField("", text: $viewModel.todo.label)
+                .foregroundColor(viewModel.todo.isCompleted ? Color.gray : Color.black)
         }
     }
 }
