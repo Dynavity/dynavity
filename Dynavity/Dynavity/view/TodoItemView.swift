@@ -8,9 +8,11 @@ struct TodoItemView: View {
 
     @StateObject private var viewModel: TodoItemViewModel
     @State private var swipeOffset: CGFloat = .zero
+    private let onDelete: () -> Void
 
-    init(todo: Todo) {
+    init(todo: Todo, onDelete: @escaping () -> Void) {
         self._viewModel = StateObject(wrappedValue: TodoItemViewModel(todo: todo))
+        self.onDelete = onDelete
     }
 
     private var swipeGesture: some Gesture {
@@ -74,6 +76,11 @@ struct TodoItemView: View {
                 }
             }
             .offset(x: geometry.size.width)
+            .onTapGesture {
+                withAnimation {
+                    onDelete()
+                }
+            }
         }
     }
 
@@ -95,6 +102,6 @@ struct TodoItemView_Previews: PreviewProvider {
     static let todo = Todo(label: "CS3217 Sprint Report")
 
     static var previews: some View {
-        TodoItemView(todo: todo)
+        TodoItemView(todo: todo, onDelete: {})
     }
 }

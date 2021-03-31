@@ -16,4 +16,8 @@ struct TodoElement: CanvasElementProtocol {
 
     // MARK: TodosElement-specific attributes
     var todos: [Todo] = []
+
+    mutating func removeTodo(at index: Int) {
+        todos.remove(at: index)
+    }
 }

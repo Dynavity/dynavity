@@ -1,4 +1,7 @@
+import SwiftUI
+
 struct Todo {
+    let id = UUID()
     var label: String
     var isCompleted = false
 }

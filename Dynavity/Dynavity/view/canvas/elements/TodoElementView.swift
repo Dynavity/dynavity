@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct TodoElementView: View {
-    @StateObject private var viewModel: TodoElementViewModel
+    @ObservedObject private var viewModel: TodoElementViewModel
 
     init(todoElement: TodoElement) {
-        self._viewModel = StateObject(wrappedValue: TodoElementViewModel(todoElement: todoElement))
+        self.viewModel = TodoElementViewModel(todoElement: todoElement)
     }
 
     var body: some View {
@@ -12,8 +12,8 @@ struct TodoElementView: View {
         ScrollView {
             // Necessary to remove the spacing between child views inherent to ScrollView.
             VStack(spacing: 0.0) {
-                ForEach(viewModel.getTodos(), id: \.self) { todo in
-                    TodoItemView(todo: todo)
+                ForEach(viewModel.todos, id: \.id) { todo in
+                    TodoItemView(todo: todo, onDelete: { viewModel.removeTodo(todo) })
                     Divider()
                 }
             }
