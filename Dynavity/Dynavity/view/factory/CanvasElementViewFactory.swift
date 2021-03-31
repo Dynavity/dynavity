@@ -8,6 +8,8 @@ class CanvasElementViewFactory: ViewFactory {
                 ImageElementView(imageElement: imageElement)
             case let pdfElement as PDFElement:
                 PDFElementView(pdfElement: pdfElement)
+            case let todoElement as TodoElement:
+                TodoElementView(todoElement: todoElement)
             case let plainTextElement as PlainTextElement:
                 PlainTextElementView(plainTextElement: plainTextElement)
             case let codeElement as CodeElement:

@@ -63,6 +63,10 @@ extension CanvasViewModel {
         canvas.addElement(pdfCanvasElement)
     }
 
+    func addTodoElement() {
+        canvas.addElement(TodoElement(position: canvasOrigin))
+    }
+
     func addPlainTextElement() {
         canvas.addElement(PlainTextElement(position: canvasOrigin))
     }

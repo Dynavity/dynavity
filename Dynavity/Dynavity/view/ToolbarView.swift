@@ -43,13 +43,11 @@ struct ToolbarView: View {
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
-            /*
             Button(action: {
-                // TODO: Implement to-do list card.
+                viewModel.addTodoElement()
             }) {
                 Label("To-Do List", systemImage: "list.bullet.rectangle")
             }
-            */
             Button(action: {
                 viewModel.addPlainTextElement()
             }) {
