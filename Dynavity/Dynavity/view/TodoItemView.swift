@@ -27,7 +27,7 @@ struct TodoItemView: View {
     var body: some View {
         HStack {
             checkbox
-            Text(viewModel.todo.label)
+            TextEditor(text: $viewModel.todo.label)
         }
     }
 }
