@@ -14,7 +14,6 @@ struct TodoElementView: View {
             VStack(spacing: 0.0) {
                 ForEach(viewModel.getTodos(), id: \.self) { todo in
                     TodoItemView(todo: todo)
-                        .padding(5.0)
                     Divider()
                 }
             }
