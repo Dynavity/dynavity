@@ -4,30 +4,66 @@ struct MainView: View {
     @ObservedObject private var canvasViewModel = CanvasViewModel()
     @State private var shouldShowMenu = false
 
-    var body: some View {
+    static let umlMenuButtonWidth: CGFloat = 25.0
+    static let umlMenuButtonHeight: CGFloat = 40.0
+    private let umlMenuButtonOffset: CGFloat = -5.0
+
+    var sideMenu: some View {
         GeometryReader { geometry in
-            let dismissSideMenuDragGesture = DragGesture()
-                .onEnded { value in
-                    handleSideMenuDrag(value)
-                }
+            if self.shouldShowMenu {
+                SideMenuView(canvasName: $canvasViewModel.canvas.name)
+                    .frame(width: geometry.size.width / 3)
+                    .offset(CGSize(width: geometry.size.width * (2 / 3), height: 0))
+                    .transition(.move(edge: .trailing))
+                    // Force the side menu to be drawn over everything else.
+                    .zIndex(.infinity)
+            }
+        }
+    }
 
-            ZStack(alignment: .trailing) {
-                VStack(spacing: 0.0) {
-                    ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu)
-                    Divider()
-                    CanvasView(viewModel: canvasViewModel)
-                }
-                .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
-                .disabled(self.shouldShowMenu)
+    var umlMenu: some View {
+        GeometryReader { geometry in
+            if canvasViewModel.shouldShowUmlMenu {
+                UmlSideMenuView(viewModel: canvasViewModel)
+                    .frame(width: geometry.size.width / 3)
+                    .transition(.move(edge: .leading))
+                    // Force the side menu to be drawn over everything else.
+                    .zIndex(.infinity)
+            }
+        }
+    }
 
-                if self.shouldShowMenu {
-                    SideMenuView(canvasName: $canvasViewModel.canvas.name)
-                        .frame(width: geometry.size.width / 3)
-                        .transition(.move(edge: .trailing))
-                        // Force the side menu to be drawn over everything else.
-                        .zIndex(.infinity)
-                }
-            }.gesture(shouldShowMenu ? dismissSideMenuDragGesture : nil)
+    var umlMenuButton: some View {
+        Button(action: {
+            canvasViewModel.showUmlMenu()
+        }) {
+            Image(systemName: "arrow.right.square").resizable()
+        }
+        .frame(width: MainView.umlMenuButtonWidth, height: MainView.umlMenuButtonHeight)
+        .offset(x: umlMenuButtonOffset, y: 0)
+    }
+
+    var body: some View {
+        let dismissSideMenuDragGesture = DragGesture()
+            .onEnded { value in
+                handleSideMenuDrag(value)
+            }
+
+        ZStack(alignment: .leading) {
+            VStack(spacing: 0.0) {
+                ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu)
+                Divider()
+                CanvasView(viewModel: canvasViewModel)
+            }
+            .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
+            .disabled(self.shouldShowMenu)
+
+            if !canvasViewModel.shouldShowUmlMenu {
+                umlMenuButton
+            }
+
+            sideMenu.gesture(shouldShowMenu ? dismissSideMenuDragGesture : nil)
+            umlMenu
         }
     }
 

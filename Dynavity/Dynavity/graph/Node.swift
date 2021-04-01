@@ -7,7 +7,7 @@
  conform to `Hashable` protocol.
  */
 struct Node<T: Hashable> {
-    let label: T
+    var label: T
 
     /// Creates a `Node` with the given `label`.
     init(_ label: T) {

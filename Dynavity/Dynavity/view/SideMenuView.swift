@@ -19,7 +19,7 @@ struct SideMenuView: View {
     }
 }
 
-private struct SideMenuHeaderView: View {
+struct SideMenuHeaderView: View {
     var headerText: String
 
     var body: some View {
@@ -31,7 +31,7 @@ private struct SideMenuHeaderView: View {
     }
 }
 
-private struct SideMenuContentView<Content: View>: View {
+struct SideMenuContentView<Content: View>: View {
     let label: String
     let content: Content
 

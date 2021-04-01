@@ -5,7 +5,7 @@ struct SelectionOverlayView: View {
     @ObservedObject var viewModel: CanvasViewModel
 
     private let rotationDragControlSize: CGFloat = 25.0
-    private let rotationDragControlHandleLength: CGFloat = 10.0
+    private let rotationDragControlHandleLength: CGFloat = 15.0
     private let resizeControlSize: CGFloat = 15.0
     private let resizeControlBorderPercentage: CGFloat = 0.1
     private let resizeControlHitboxScale: CGFloat = 2.0
@@ -98,6 +98,9 @@ struct SelectionOverlayView: View {
         DragGesture()
             .onChanged { value in
                 viewModel.moveSelectedCanvasElement(by: value.translation)
+            }
+            .onEnded { _ in
+                viewModel.handleUmlElementDragEnded()
             }
     }
 

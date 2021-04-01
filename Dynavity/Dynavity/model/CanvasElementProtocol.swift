@@ -36,4 +36,13 @@ extension CanvasElementProtocol {
     mutating func rotate(to rotation: Double) {
         self.rotation = rotation
     }
+
+    /// The point input has taken into account the offset from the `CanvasView`
+    func containsPoint(_ point: CGPoint) -> Bool {
+        let frame = CGRect(origin: CGPoint(x: position.x - (width / 2),
+                                           y: position.y - (height / 2)),
+                           size: CGSize(width: width, height: height)
+                            .rotate(by: CGFloat(rotation)))
+        return frame.contains(point)
+    }
 }

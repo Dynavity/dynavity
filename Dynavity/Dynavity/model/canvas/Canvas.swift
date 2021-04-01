@@ -3,6 +3,7 @@ import CoreGraphics
 
 struct Canvas {
     var canvasElements: [CanvasElementProtocol] = []
+    var umlConnectors: [UmlConnector] = []
     var name: String = ""
 
     init() {
@@ -51,5 +52,20 @@ struct Canvas {
         }
 
         canvasElements[index].rotate(to: rotation)
+    }
+}
+
+// MARK: UML Connectors
+extension Canvas {
+    mutating func addUmlConnector(_ connector: UmlConnector) {
+        umlConnectors.append(connector)
+    }
+
+    mutating func replaceUmlConnector(_ connector: UmlConnector) {
+        guard let index = umlConnectors.firstIndex(where: { $0.id == connector.id }) else {
+            return
+        }
+
+        umlConnectors[index] = connector
     }
 }
