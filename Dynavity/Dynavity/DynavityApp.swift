@@ -1,11 +1,13 @@
-//
-//  DynavityApp.swift
-//  Dynavity
-//
-//  Created by Hans Sebastian Tirtaputra on 13/3/21.
-//
-
 import SwiftUI
+import Firebase
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
+        return true
+     }
+}
 
 @main
 struct DynavityApp: App {
