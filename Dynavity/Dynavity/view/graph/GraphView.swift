@@ -18,7 +18,7 @@ struct GraphView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Rectangle().fill(Color.UI.base5)
+                Rectangle().fill(Color.UI.background)
                 graphView
             }
             .drawingGroup(opaque: true, colorMode: .extendedLinear)
@@ -70,7 +70,7 @@ struct GraphView: View {
         ZStack {
             ForEach(viewModel.getEdges(), id: \.self) { edge in
                 EdgeView(start: edge.source.position, end: edge.destination.position)
-                    .stroke()
+                    .stroke(Color.UI.grey)
             }
         }
     }
