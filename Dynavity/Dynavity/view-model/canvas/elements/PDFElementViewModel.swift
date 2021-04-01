@@ -1,9 +1,9 @@
 import SwiftUI
 
 class PDFElementViewModel: ObservableObject {
-    @Published var pdfCanvasElement: PDFElement
+    @Published var pdfElement: PDFElement
 
-    init(pdfCanvasElement: PDFElement) {
-        self.pdfCanvasElement = pdfCanvasElement
+    init(pdfElement: PDFElement) {
+        self.pdfElement = pdfElement
     }
 }

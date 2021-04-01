@@ -2,18 +2,18 @@ import SwiftUI
 import Combine
 
 class CodeElementViewModel: ObservableObject {
-    @Published var codeSnippet: CodeElement
+    @Published var codeElement: CodeElement
     @Published var output: String = ""
 
     // allows cancellation of the current execution (e.g. to make way for a new execution)
     private var currentExecution: AnyCancellable?
 
-    init(codeSnippet: CodeElement) {
-        self.codeSnippet = codeSnippet
+    init(codeElement: CodeElement) {
+        self.codeElement = codeElement
     }
 
     func runCode() {
-        let program = codeSnippet.text
+        let program = codeElement.text
         guard !program.isEmpty else {
             // backend will not accept an empty program
             return
@@ -23,7 +23,7 @@ class CodeElementViewModel: ObservableObject {
             previousExecution.cancel()
         }
         let executor: CodeExecutor = RunnableCodeExecutor()
-        let outputStream = executor.getOutputPublisher(program: program, language: codeSnippet.language)
+        let outputStream = executor.getOutputPublisher(program: program, language: codeElement.language)
         currentExecution = outputStream.sink { output in
             DispatchQueue.main.async {
                 self.addOutput(line: output)
@@ -40,10 +40,10 @@ class CodeElementViewModel: ObservableObject {
     }
 
     func resetCodeTemplate() {
-        codeSnippet.resetCodeTemplate()
+        codeElement.resetCodeTemplate()
     }
 
     func convertQuotes() {
-        codeSnippet.convertQuotes()
+        codeElement.convertQuotes()
     }
 }

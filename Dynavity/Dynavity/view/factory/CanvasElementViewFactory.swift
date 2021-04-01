@@ -6,16 +6,18 @@ class CanvasElementViewFactory: ViewFactory {
     func createView(element: CanvasElementProtocol) -> some View {
         Group {
             switch element {
-            case let imageCanvasElement as ImageElement:
-                ImageElementView(imageCanvasElement: imageCanvasElement)
-            case let pdfCanvasElement as PDFElement:
-                PDFElementView(pdfCanvasElement: pdfCanvasElement)
+            case let imageElement as ImageElement:
+                ImageElementView(imageElement: imageElement)
+            case let pdfElement as PDFElement:
+                PDFElementView(pdfElement: pdfElement)
+            case let todoElement as TodoElement:
+                TodoElementView(todoElement: todoElement)
             case let plainTextElement as PlainTextElement:
                 PlainTextElementView(plainTextElement: plainTextElement)
-            case let codeSnippet as CodeElement:
-                CodeElementView(codeSnippet: codeSnippet)
-            case let markupTextBlock as MarkupElement:
-                MarkupElementView(markupTextBlock: markupTextBlock)
+            case let codeElement as CodeElement:
+                CodeElementView(codeElement: codeElement)
+            case let markupElement as MarkupElement:
+                MarkupElementView(markupElement: markupElement)
             case let umlElement as UmlElementProtocol:
                 umlElementFactory.createView(element: umlElement)
             default:

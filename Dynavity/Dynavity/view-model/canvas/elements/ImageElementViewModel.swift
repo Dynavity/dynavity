@@ -1,9 +1,9 @@
 import SwiftUI
 
 class ImageElementViewModel: ObservableObject {
-    @Published var imageCanvasElement: ImageElement
+    @Published var imageElement: ImageElement
 
-    init(imageCanvasElement: ImageElement) {
-        self.imageCanvasElement = imageCanvasElement
+    init(imageElement: ImageElement) {
+        self.imageElement = imageElement
     }
 }

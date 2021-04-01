@@ -3,8 +3,8 @@ import SwiftUI
 struct CodeElementView: View {
     @StateObject var viewModel: CodeElementViewModel
 
-    init(codeSnippet: CodeElement) {
-        self._viewModel = StateObject(wrappedValue: CodeElementViewModel(codeSnippet: codeSnippet))
+    init(codeElement: CodeElement) {
+        self._viewModel = StateObject(wrappedValue: CodeElementViewModel(codeElement: codeElement))
     }
 
     var body: some View {
@@ -18,22 +18,22 @@ struct CodeElementView: View {
 
     private var codeWindow: some View {
         VStack {
-            TextEditor(text: $viewModel.codeSnippet.text)
-                .font(.custom("Courier", size: viewModel.codeSnippet.fontSize))
+            TextEditor(text: $viewModel.codeElement.text)
+                .font(.custom("Courier", size: viewModel.codeElement.fontSize))
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onChange(of: viewModel.codeSnippet.text) {_ in
+                .onChange(of: viewModel.codeElement.text) {_ in
                     viewModel.convertQuotes()
                 }
             Divider()
             HStack {
-                Picker("Language", selection: $viewModel.codeSnippet.language) {
+                Picker("Language", selection: $viewModel.codeElement.language) {
                     ForEach(CodeElement.CodeLanguage.allCases) {
                         Text($0.displayName).tag($0)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: viewModel.codeSnippet.language) {_ in
+                .onChange(of: viewModel.codeElement.language) {_ in
                     viewModel.resetCodeTemplate()
                 }
                 Button(action: viewModel.runCode, label: {
@@ -53,6 +53,6 @@ struct CodeElementView: View {
 
 struct CodeElementView_Previews: PreviewProvider {
     static var previews: some View {
-        CodeElementView(codeSnippet: CodeElement(position: .zero))
+        CodeElementView(codeElement: CodeElement(position: .zero))
     }
 }
