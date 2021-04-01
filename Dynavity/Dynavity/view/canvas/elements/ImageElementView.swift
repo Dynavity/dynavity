@@ -3,20 +3,20 @@ import SwiftUI
 struct ImageElementView: View {
     @StateObject private var viewModel: ImageElementViewModel
 
-    init(imageCanvasElement: ImageElement) {
-        self._viewModel = StateObject(wrappedValue: ImageElementViewModel(imageCanvasElement: imageCanvasElement))
+    init(imageElement: ImageElement) {
+        self._viewModel = StateObject(wrappedValue: ImageElementViewModel(imageElement: imageElement))
     }
 
     var body: some View {
-        Image(uiImage: viewModel.imageCanvasElement.image)
+        Image(uiImage: viewModel.imageElement.image)
             .resizable()
     }
 }
 
 struct ImageElementView_Previews: PreviewProvider {
-    static let imageCanvasElement = ImageElement(position: .zero, image: UIImage())
+    static let imageElement = ImageElement(position: .zero, image: UIImage())
 
     static var previews: some View {
-        ImageElementView(imageCanvasElement: imageCanvasElement)
+        ImageElementView(imageElement: imageElement)
     }
 }

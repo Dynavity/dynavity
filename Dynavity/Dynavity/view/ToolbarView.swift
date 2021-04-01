@@ -43,20 +43,18 @@ struct ToolbarView: View {
             }) {
                 Label("PDF", systemImage: "doc.text")
             }
-            /*
             Button(action: {
-                // TODO: Implement to-do list card.
+                viewModel.addTodoElement()
             }) {
                 Label("To-Do List", systemImage: "list.bullet.rectangle")
             }
-            */
             Button(action: {
-                viewModel.addTextBlock()
+                viewModel.addPlainTextElement()
             }) {
                 Label("Text", systemImage: "note.text")
             }
             Button(action: {
-                viewModel.addCodeSnippet()
+                viewModel.addCodeElement()
             }) {
                 Label("Code", systemImage: "chevron.left.slash.chevron.right")
             }
@@ -70,12 +68,12 @@ struct ToolbarView: View {
     private var markupTextBlockButtons: some View {
         Group {
             Button(action: {
-                viewModel.addMarkUpTextBlock(markupType: .markdown)
+                viewModel.addMarkupElement(markupType: .markdown)
             }) {
                 Label("Markdown", systemImage: "text.badge.star")
             }
             Button(action: {
-                viewModel.addMarkUpTextBlock(markupType: .latex)
+                viewModel.addMarkupElement(markupType: .latex)
             }) {
                 Label("LaTeX", systemImage: "doc.richtext")
             }
@@ -213,11 +211,11 @@ struct ToolbarView: View {
         .sheet(item: $activeSheet) { item in
             switch item {
             case .camera:
-                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .camera)
+                ImagePickerView(onImageSelected: viewModel.addImageElement, sourceType: .camera)
             case .photoGallery:
-                ImagePickerView(onImageSelected: viewModel.addImageCanvasElement, sourceType: .photoLibrary)
+                ImagePickerView(onImageSelected: viewModel.addImageElement, sourceType: .photoLibrary)
             case .pdfPicker:
-                DocumentPickerView(onFileSelected: viewModel.addPdfCanvasElement, contentTypes: [.pdf])
+                DocumentPickerView(onFileSelected: viewModel.addPdfElement, contentTypes: [.pdf])
             }
         }
         // Force the toolbar to be drawn over everything else.
