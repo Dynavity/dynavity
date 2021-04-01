@@ -6,9 +6,10 @@ struct SideMenuView: View {
     var body: some View {
         VStack(alignment: .leading) {
             SideMenuHeaderView(headerText: "Canvas Metadata")
-            SideMenuContentView(label: "Canvas Name",
-                                content: TextField("Enter Canvas Name", text: $canvasName)
-                                    .textFieldStyle(RoundedBorderTextFieldStyle()))
+            SideMenuContentView(label: "Canvas Name") {
+                TextField("Enter Canvas Name", text: $canvasName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
             Divider()
 
             Spacer()
@@ -34,6 +35,11 @@ struct SideMenuHeaderView: View {
 struct SideMenuContentView<Content: View>: View {
     let label: String
     let content: Content
+
+    init(label: String, @ViewBuilder content: () -> Content) {
+        self.label = label
+        self.content = content()
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
