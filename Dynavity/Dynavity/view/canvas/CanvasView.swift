@@ -4,14 +4,12 @@ struct CanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
 
     private func calculateOffsetX(width: CGFloat) -> CGFloat {
-        viewModel.canvasViewWidth = width
-        return -(viewModel.canvasOrigin.x + viewModel.canvasCenterOffsetX)
+        -(viewModel.canvasOrigin.x + viewModel.canvasCenterOffsetX)
             + width / 2.0 * (viewModel.scaleFactor - 1.0)
     }
 
     private func calculateOffsetY(height: CGFloat) -> CGFloat {
-        viewModel.canvasViewHeight = height
-        return -(viewModel.canvasOrigin.y + viewModel.canvasCenterOffsetY)
+        -(viewModel.canvasOrigin.y + viewModel.canvasCenterOffsetY)
             + height / 2.0 * (viewModel.scaleFactor - 1.0)
     }
 
@@ -26,6 +24,9 @@ struct CanvasView: View {
                     )
                 AnnotationCanvasView(viewModel: viewModel)
                     .disabled(viewModel.canvasMode == .selection)
+            }
+            .onAppear {
+                viewModel.setCanvasViewport(size: geometry.size)
             }
         }
     }

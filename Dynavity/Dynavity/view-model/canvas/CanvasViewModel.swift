@@ -32,8 +32,8 @@ class CanvasViewModel: ObservableObject {
     // Uml element connectors
     @Published var umlConnectorStart: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     @Published var umlConnectorEnd: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
-    var canvasViewWidth: CGFloat = 0.0
-    var canvasViewHeight: CGFloat = 0.0
+    var canvasViewportWidth: CGFloat = 0.0
+    var canvasViewportHeight: CGFloat = 0.0
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -41,6 +41,12 @@ class CanvasViewModel: ObservableObject {
 
     var canvasOrigin: CGPoint {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
+    }
+
+    var canvasCenter: CGPoint {
+        let originOffset = CGPoint(x: canvasCenterOffsetX, y: canvasCenterOffsetY)
+        print(originOffset)
+        return canvasOrigin - originOffset
     }
 
     init(canvasSize: CGFloat) {
@@ -56,34 +62,39 @@ class CanvasViewModel: ObservableObject {
     func getCanvasElements() -> [CanvasElementProtocol] {
         canvas.canvasElements
     }
+
+    func setCanvasViewport(size: CGSize) {
+        canvasViewportWidth = size.width
+        canvasViewportHeight = size.height
+    }
 }
 
 // MARK: Adding of canvas elements
 extension CanvasViewModel {
     func addImageElement(from image: UIImage) {
-        let imageCanvasElement = ImageElement(position: canvasOrigin, image: image)
+        let imageCanvasElement = ImageElement(position: canvasCenter, image: image)
         canvas.addElement(imageCanvasElement)
     }
 
     func addPdfElement(from file: URL) {
-        let pdfCanvasElement = PDFElement(position: canvasOrigin, file: file)
+        let pdfCanvasElement = PDFElement(position: canvasCenter, file: file)
         canvas.addElement(pdfCanvasElement)
     }
 
     func addTodoElement() {
-        canvas.addElement(TodoElement(position: canvasOrigin))
+        canvas.addElement(TodoElement(position: canvasCenter))
     }
 
     func addPlainTextElement() {
-        canvas.addElement(PlainTextElement(position: canvasOrigin))
+        canvas.addElement(PlainTextElement(position: canvasCenter))
     }
 
     func addCodeElement() {
-        canvas.addElement(CodeElement(position: canvasOrigin))
+        canvas.addElement(CodeElement(position: canvasCenter))
     }
 
     func addMarkupElement(markupType: MarkupElement.MarkupType) {
-        canvas.addElement(MarkupElement(position: canvasOrigin, markupType: markupType))
+        canvas.addElement(MarkupElement(position: canvasCenter, markupType: markupType))
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {
@@ -94,9 +105,9 @@ extension CanvasViewModel {
         // TODO: Apply factory pattern here
         switch umlElement.umlShape {
         case .diamond:
-            canvas.addElement(DiamondUmlElement(position: canvasOrigin))
+            canvas.addElement(DiamondUmlElement(position: canvasCenter))
         case .rectangle:
-            canvas.addElement(RectangleUmlElement(position: canvasOrigin))
+            canvas.addElement(RectangleUmlElement(position: canvasCenter))
         }
     }
 }

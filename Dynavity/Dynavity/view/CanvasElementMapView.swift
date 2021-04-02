@@ -19,11 +19,11 @@ struct CanvasElementMapView: View {
         return Path { path in
             let origin = points.removeFirst()
             // Translate point to account of CanvasView offset
-            path.move(to: CGPoint(x: origin.x - viewModel.canvasOrigin.x + viewModel.canvasViewWidth / 2,
-                                  y: origin.y - viewModel.canvasOrigin.y + viewModel.canvasViewHeight / 2))
+            path.move(to: CGPoint(x: origin.x - viewModel.canvasOrigin.x + viewModel.canvasViewportWidth / 2,
+                                  y: origin.y - viewModel.canvasOrigin.y + viewModel.canvasViewportHeight / 2))
             points.forEach {
-                path.addLine(to: CGPoint(x: $0.x - viewModel.canvasOrigin.x + viewModel.canvasViewWidth / 2,
-                                         y: $0.y - viewModel.canvasOrigin.y + viewModel.canvasViewHeight / 2))
+                path.addLine(to: CGPoint(x: $0.x - viewModel.canvasOrigin.x + viewModel.canvasViewportWidth / 2,
+                                         y: $0.y - viewModel.canvasOrigin.y + viewModel.canvasViewportHeight / 2))
             }
         }
         .stroke(umlConnectorLineColor, lineWidth: umlConnectorLineWidth)
