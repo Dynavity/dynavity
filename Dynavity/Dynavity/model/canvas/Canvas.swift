@@ -1,7 +1,7 @@
 import Foundation
 import CoreGraphics
 
-struct Canvas {
+struct Canvas: Codable {
     var canvasElements: [CanvasElementProtocol] = []
     var umlConnectors: [UmlConnector] = []
     var name: String = ""
@@ -60,6 +60,26 @@ struct Canvas {
         }
 
         canvasElements[index].rotate(to: rotation)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case canvasElements, umlConnectors, name
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let wrappedElements = try container.decode([TypeWrappedCanvasElement].self, forKey: .canvasElements)
+        self.canvasElements = wrappedElements.map { $0.data }
+        self.umlConnectors = try container.decode([UmlConnector].self, forKey: .umlConnectors)
+        self.name = try container.decode(String.self, forKey: .name)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let wrappedElements = canvasElements.map(TypeWrappedCanvasElement.init)
+        try container.encode(wrappedElements, forKey: .canvasElements)
+        try container.encode(self.umlConnectors, forKey: .umlConnectors)
+        try container.encode(self.name, forKey: .name)
     }
 }
 
