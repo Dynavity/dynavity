@@ -58,7 +58,7 @@ class CanvasViewModel: ObservableObject {
     }
 
     private var canvasCenter: CGPoint {
-        canvasOrigin - viewportOffset + scaledOriginOffset
+        canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
     init(canvasSize: CGFloat) {
