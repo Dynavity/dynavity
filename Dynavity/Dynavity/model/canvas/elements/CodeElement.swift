@@ -26,7 +26,7 @@ struct CodeElement: TextElementProtocol {
         resetCodeTemplate()
     }
 
-    enum CodeLanguage: Int, CaseIterable, Identifiable {
+    enum CodeLanguage: Int, CaseIterable, Identifiable, Codable {
         case python, java, c, javascript
 
         var id: Int {

@@ -1,7 +1,7 @@
 import Foundation
 import CoreGraphics
 
-protocol CanvasElementProtocol {
+protocol CanvasElementProtocol: Codable {
     var id: UUID { get }
     var position: CGPoint { get set }
     var width: CGFloat { get set }
