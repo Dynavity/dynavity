@@ -106,6 +106,7 @@ extension CanvasViewModel {
     func select(canvasElement: CanvasElementProtocol) {
         if selectedCanvasElementId == canvasElement.id {
             selectedCanvasElementId = nil
+            umlConnectorStart = nil
             return
         }
         selectedCanvasElementId = canvasElement.id
