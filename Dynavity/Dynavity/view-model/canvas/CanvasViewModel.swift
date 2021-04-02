@@ -14,8 +14,7 @@ class CanvasViewModel: ObservableObject {
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
-    @Published var canvasCenterOffsetX: CGFloat = 0.0
-    @Published var canvasCenterOffsetY: CGFloat = 0.0
+    @Published var canvasTopLeftOffset: CGPoint = .zero
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
     @Published var canvasMode: CanvasMode {
@@ -43,16 +42,18 @@ class CanvasViewModel: ObservableObject {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
     }
 
+    var originOffset: CGPoint {
+        canvasTopLeftOffset - canvasOrigin
+    }
+
     var canvasViewportOffset: CGSize {
-        let originOffset = CGPoint(x: canvasCenterOffsetX, y: canvasCenterOffsetY)
         let canvasViewport = CGSize(width: canvasViewportWidth, height: canvasViewportHeight)
         let viewportOffset = canvasViewport / 2.0 * (scaleFactor - 1.0)
-        return viewportOffset - canvasOrigin - originOffset
+        return viewportOffset - originOffset - canvasOrigin
     }
 
     var canvasCenter: CGPoint {
-        let originOffset = CGPoint(x: canvasCenterOffsetX, y: canvasCenterOffsetY)
-        return canvasOrigin - originOffset
+        canvasOrigin
     }
 
     init(canvasSize: CGFloat) {

@@ -27,8 +27,7 @@ extension AnnotationCanvasView {
     }
 
     func didScroll(to offset: CGPoint) {
-        viewModel.canvasCenterOffsetX = offset.x - viewModel.canvasOrigin.x
-        viewModel.canvasCenterOffsetY = offset.y - viewModel.canvasOrigin.y
+        viewModel.canvasTopLeftOffset = offset
     }
 }
 
