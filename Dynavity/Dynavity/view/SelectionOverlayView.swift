@@ -91,8 +91,6 @@ struct SelectionOverlayView: View {
         }
         .gesture(rotationGesture)
         .offset(y: extendedControlOffset)
-        // Force the rotation control to be the same size regardless of scale factor.
-        .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
     private var dragGesture: some Gesture {
@@ -117,8 +115,6 @@ struct SelectionOverlayView: View {
         }
         .gesture(dragGesture)
         .offset(y: -extendedControlOffset)
-        // Force the drag control to be the same size regardless of scale factor.
-        .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
     private var deleteControl: some View {
@@ -134,8 +130,6 @@ struct SelectionOverlayView: View {
                 .frame(width: extendedControlHandleLength, height: 1.0)
         }
         .offset(x: extendedControlOffset)
-        // Force the delete control to be the same size regardless of scale factor.
-        .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
     private func makeResizeControl(_ resizeControl: ResizeControlAnchor) -> some View {
@@ -160,9 +154,13 @@ struct SelectionOverlayView: View {
     var body: some View {
         ZStack {
             outline
-            rotationControl
-            dragControl
-            deleteControl
+            ZStack {
+                rotationControl
+                dragControl
+                deleteControl
+            }
+            // Force the extended controls to be the same size regardless of scale factor.
+            .scaleEffect(1.0 / viewModel.scaleFactor)
             ForEach(ResizeControlAnchor.allCases, id: \.self) { corner in
                 makeResizeControl(corner)
             }
