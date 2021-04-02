@@ -30,51 +30,85 @@ class OrthogonalConnector {
         toElement = to
     }
 
-    func generatePoint(target: UmlElementProtocol, _ anchor: ConnectorConnectingSide,
-                       shouldExtrudePoint: Bool) -> CGPoint {
-        let margin = shouldExtrudePoint ? shapeMargin : 0
+    private func pointAtTopSide(target: UmlElementProtocol, point: CGPoint) -> Bool {
+        let topThresholdBuffer: CGFloat = target.height / 10
+        let topThreshold = target.position.y - (target.height / 2) + topThresholdBuffer
+        return point.y <= topThreshold
+    }
+
+    private func pointAtBottomSide(target: UmlElementProtocol, point: CGPoint) -> Bool {
+        let bottomThresholdBuffer: CGFloat = target.height / 10
+        let bottomThreshold = target.position.y + (target.height / 2) - bottomThresholdBuffer
+        return point.y >= bottomThreshold
+    }
+
+    private func pointAtLeftSide(target: UmlElementProtocol, point: CGPoint) -> Bool {
+        let leftThresholdBuffer: CGFloat = target.width / 10
+        let leftThreshold = target.position.x - (target.width / 2) + leftThresholdBuffer
+        return point.x <= leftThreshold
+    }
+
+    private func pointAtRightSide(target: UmlElementProtocol, point: CGPoint) -> Bool {
+        let rightThresholdBuffer: CGFloat = target.width / 10
+        let rightThreshold = target.position.x + (target.width / 2) - rightThresholdBuffer
+        return point.x >= rightThreshold
+    }
+
+    func generatePoint(target: UmlElementProtocol, _ anchor: ConnectorConnectingSide) -> CGPoint {
+        var point: CGPoint
         switch anchor {
         case .middleLeft:
             // Account for shape margin as points in graph will have taken into account the margin
-            return CGPoint(x: target.position.x - (target.width / 2) - margin,
-                           y: target.position.y)
+            point = CGPoint(x: (target.topLeftCorner.x + target.bottomLeftCorner.x) / 2,
+                            y: (target.topLeftCorner.y + target.bottomLeftCorner.y) / 2)
         case .middleRight:
-            return CGPoint(x: target.position.x + (target.width / 2) + margin,
-                           y: target.position.y)
+            point = CGPoint(x: (target.topRightCorner.x + target.bottomRightCorner.x) / 2,
+                            y: (target.topRightCorner.y + target.bottomRightCorner.y) / 2)
         case .middleBottom:
-            return CGPoint(x: target.position.x,
-                           y: target.position.y + (target.height / 2) + margin)
+            point = CGPoint(x: (target.bottomLeftCorner.x + target.bottomRightCorner.x) / 2,
+                            y: (target.bottomLeftCorner.y + target.bottomRightCorner.y) / 2)
         case .middleTop:
-            return CGPoint(x: target.position.x,
-                           y: target.position.y - (target.height / 2) - margin)
+            point = CGPoint(x: (target.topLeftCorner.x + target.topRightCorner.x) / 2,
+                            y: (target.topLeftCorner.y + target.topRightCorner.y) / 2)
         }
+        point.x = point.x.rounded()
+        point.y = point.y.rounded()
+
+        return point
     }
 
-    private func isConnectingSideVertical(side: ConnectorConnectingSide) -> Bool {
-        side == .middleBottom || side == .middleTop
+    private func isConnectingSideVertical(target: UmlElementProtocol, connectingPoint: CGPoint) -> Bool {
+        pointAtTopSide(target: target, point: connectingPoint)
+        || pointAtBottomSide(target: target, point: connectingPoint)
     }
 
-    func drawRulers(connectingSide: ConnectorConnectingSide) {
-        let fromTop = fromElement.position.y - (fromElement.height / 2) - shapeMargin
-        let fromBottom = fromElement.position.y + (fromElement.height / 2) + shapeMargin
-        let toTop = toElement.position.y - (toElement.height / 2) - shapeMargin
-        let toBottom = toElement.position.y + (toElement.height / 2) + shapeMargin
-        // Used to generate possible destination for UmlConnector
-        let toHorizontalMiddle = toElement.position.y
-        horizontalRulers = [fromTop, fromBottom, toTop, toBottom, toHorizontalMiddle]
+    func drawRulers(connectingSide: ConnectorConnectingSide, destConnectingSide: ConnectorConnectingSide) {
+        let fromTop = fromElement.topMostPoint.y.rounded() - shapeMargin
+        let fromBottom = fromElement.bottomMostPoint.y.rounded() + shapeMargin
+        let toTop = toElement.topMostPoint.y.rounded() - shapeMargin
+        let toBottom = toElement.bottomMostPoint.y.rounded() + shapeMargin
+        horizontalRulers = [fromTop, fromBottom, toTop, toBottom]
 
-        let fromRight = fromElement.position.x + (fromElement.width / 2) + shapeMargin
-        let fromLeft = fromElement.position.x - (fromElement.width / 2) - shapeMargin
-        let toRight = toElement.position.x + (toElement.width / 2) + shapeMargin
-        let toLeft = toElement.position.x - (toElement.width / 2) - shapeMargin
-        // Used to generate possible destination for UmlConnector
-        let toVerticalMiddle = toElement.position.x
-        verticalRulers = [fromRight, fromLeft, toRight, toLeft, toVerticalMiddle]
+        let fromRight = fromElement.rightMostPoint.x.rounded() + shapeMargin
+        let fromLeft = fromElement.leftMostPoint.x.rounded() - shapeMargin
+        let toRight = toElement.rightMostPoint.x.rounded() + shapeMargin
+        let toLeft = toElement.leftMostPoint.x.rounded() - shapeMargin
+        verticalRulers = [fromRight, fromLeft, toRight, toLeft]
 
-        if isConnectingSideVertical(side: connectingSide) {
-            verticalRulers.append(fromElement.position.x)
+        // Add ruler for source connecting side
+        let sourceConnectingPoint = generatePoint(target: fromElement, connectingSide)
+        if isConnectingSideVertical(target: fromElement, connectingPoint: sourceConnectingPoint) {
+            verticalRulers.append(sourceConnectingPoint.x)
         } else {
-            horizontalRulers.append(fromElement.position.y)
+            horizontalRulers.append(sourceConnectingPoint.y)
+        }
+
+        // Add ruler for destination connecting side
+        let destConnectingPoint = generatePoint(target: toElement, destConnectingSide)
+        if isConnectingSideVertical(target: toElement, connectingPoint: destConnectingPoint) {
+            verticalRulers.append(destConnectingPoint.x)
+        } else {
+            horizontalRulers.append(destConnectingPoint.y)
         }
         verticalRulers.sort()
         horizontalRulers.sort()
@@ -213,30 +247,56 @@ class OrthogonalConnector {
     }
 
     func getGridBounds() -> GridRectangle {
-        GridRectangle.fromLTRB(left: min(fromElement.position.x - (fromElement.width / 2) - boundsMargin,
-                                         toElement.position.x - (toElement.width / 2) - boundsMargin),
-                               top: min(fromElement.position.y - (fromElement.height / 2) - boundsMargin,
-                                        toElement.position.y - (toElement.height / 2) - boundsMargin),
-                               right: max(fromElement.position.x + (fromElement.width / 2) + boundsMargin,
-                                          toElement.position.x + (toElement.width / 2) + boundsMargin),
-                               bottom: max(fromElement.position.y + (fromElement.height / 2) + boundsMargin,
-                                           toElement.position.y + (toElement.height / 2) + boundsMargin))
+        GridRectangle.fromLTRB(left: min(fromElement.leftMostPoint.x - boundsMargin,
+                                         toElement.leftMostPoint.x - boundsMargin),
+                               top: min(fromElement.topMostPoint.y - boundsMargin,
+                                        toElement.topMostPoint.y - boundsMargin),
+                               right: max(fromElement.rightMostPoint.x + boundsMargin,
+                                          toElement.rightMostPoint.x + boundsMargin),
+                               bottom: max(fromElement.bottomMostPoint.y + boundsMargin,
+                                           toElement.bottomMostPoint.y + boundsMargin))
+    }
+
+    private func getNearestCoordinate(coordinate: CGFloat, ruler: [CGFloat]) -> CGFloat {
+        var minDist: CGFloat = .infinity
+        var nearestCoordinate = coordinate
+        for value in ruler {
+            let dist = abs(coordinate - value)
+            if dist < minDist {
+                minDist = dist
+                nearestCoordinate = value
+            }
+        }
+        return nearestCoordinate
+    }
+
+    private func getPointInGraph(target: UmlElementProtocol, point: CGPoint) -> CGPoint {
+        var updatedPoint = point
+        if isConnectingSideVertical(target: target, connectingPoint: point) {
+            let nearestYCoordinate = getNearestCoordinate(coordinate: point.y, ruler: horizontalRulers)
+            updatedPoint.y = nearestYCoordinate
+        } else {
+            let nearestXCoordinate = getNearestCoordinate(coordinate: point.x, ruler: verticalRulers)
+            updatedPoint.x = nearestXCoordinate
+        }
+
+        return updatedPoint
     }
 
     func generateRoute(_ anchor: ConnectorConnectingSide, destAnchor: ConnectorConnectingSide) -> [CGPoint] {
         let bounds = getGridBounds()
-        drawRulers(connectingSide: anchor)
+        drawRulers(connectingSide: anchor, destConnectingSide: destAnchor)
         let grid = Grid.generateGridFromRulers(gridBounds: bounds,
                                                horizontalRulers: horizontalRulers,
                                                verticalRulers: verticalRulers)
         let gridPoints = grid.generateGridPoints(fromElement: fromElement, toElement: toElement)
         let graph = createGraph(points: gridPoints)
-        let extrudedSource = generatePoint(target: fromElement, anchor, shouldExtrudePoint: true)
-        let extrudedDest = generatePoint(target: toElement, destAnchor, shouldExtrudePoint: true)
-        let source = generatePoint(target: fromElement, anchor, shouldExtrudePoint: false)
-        let dest = generatePoint(target: toElement, destAnchor, shouldExtrudePoint: false)
+        let source = generatePoint(target: fromElement, anchor)
+        let dest = generatePoint(target: toElement, destAnchor)
+        let sourceInGraph = getPointInGraph(target: fromElement, point: source)
+        let destInGraph = getPointInGraph(target: toElement, point: dest)
         var route: [CGPoint] = [source]
-        route.append(contentsOf: shortestPath(graph: graph, source: extrudedSource, destination: extrudedDest))
+        route.append(contentsOf: shortestPath(graph: graph, source: sourceInGraph, destination: destInGraph))
         route.append(dest)
         return route
     }

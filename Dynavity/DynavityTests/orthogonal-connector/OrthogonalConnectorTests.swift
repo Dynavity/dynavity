@@ -14,8 +14,8 @@ class OrthogonalConnectorTests: XCTestCase {
         orthogonalConnector = OrthogonalConnector(from: sourceUmlElement,
                                                   to: destinationUmlElement)
         bounds = orthogonalConnector.getGridBounds()
-        orthogonalConnector.drawRulers(connectingSide: ConnectorConnectingSide.middleRight)
-        orthogonalConnector.drawRulers(connectingSide: ConnectorConnectingSide.middleRight)
+        orthogonalConnector.drawRulers(connectingSide: ConnectorConnectingSide.middleRight,
+                                       destConnectingSide: .middleLeft)
         let verticalRulers = orthogonalConnector.verticalRulers
         let horizontalRulers = orthogonalConnector.horizontalRulers
         grid = Grid.generateGridFromRulers(gridBounds: bounds,
@@ -42,35 +42,31 @@ class OrthogonalConnectorTests: XCTestCase {
     func testGeneratePoint_differingAnchors_outputIncludeMargin() {
         let leftAnchorSource = orthogonalConnector
             .generatePoint(target: sourceUmlElement,
-                           ConnectorConnectingSide.middleLeft,
-                           shouldExtrudePoint: true)
+                           ConnectorConnectingSide.middleLeft)
         let rightAnchorSource = orthogonalConnector
             .generatePoint(target: sourceUmlElement,
-                           ConnectorConnectingSide.middleRight,
-                           shouldExtrudePoint: true)
+                           ConnectorConnectingSide.middleRight)
         let topAnchorSource = orthogonalConnector
             .generatePoint(target: sourceUmlElement,
-                           ConnectorConnectingSide.middleTop,
-                           shouldExtrudePoint: true)
+                           ConnectorConnectingSide.middleTop)
         let bottomAnchorSource = orthogonalConnector
             .generatePoint(target: sourceUmlElement,
-                           ConnectorConnectingSide.middleBottom,
-                           shouldExtrudePoint: true)
-        XCTAssertEqual(leftAnchorSource, CGPoint(x: 165.0, y: 250.0))
-        XCTAssertEqual(rightAnchorSource, CGPoint(x: 335.0, y: 250.0))
-        XCTAssertEqual(topAnchorSource, CGPoint(x: 250.0, y: 165.0))
-        XCTAssertEqual(bottomAnchorSource, CGPoint(x: 250.0, y: 335.0))
+                           ConnectorConnectingSide.middleBottom)
+        XCTAssertEqual(leftAnchorSource, CGPoint(x: 175.0, y: 250.0))
+        XCTAssertEqual(rightAnchorSource, CGPoint(x: 325.0, y: 250.0))
+        XCTAssertEqual(topAnchorSource, CGPoint(x: 250.0, y: 175.0))
+        XCTAssertEqual(bottomAnchorSource, CGPoint(x: 250.0, y: 325.0))
     }
 
     func testDrawRulers() {
-        orthogonalConnector.drawRulers(connectingSide: ConnectorConnectingSide.middleRight)
+        orthogonalConnector.drawRulers(connectingSide: ConnectorConnectingSide.middleRight,
+                                       destConnectingSide: ConnectorConnectingSide.middleLeft)
         let verticalRulers = orthogonalConnector.verticalRulers
         let horizontalRulers = orthogonalConnector.horizontalRulers
         XCTAssertEqual(verticalRulers[0], 165.0)
         XCTAssertEqual(verticalRulers[1], 335.0)
         XCTAssertEqual(verticalRulers[2], 915.0)
-        XCTAssertEqual(verticalRulers[3], 1_000.0)
-        XCTAssertEqual(verticalRulers[4], 1_085.0)
+        XCTAssertEqual(verticalRulers[3], 1_085.0)
         XCTAssertEqual(horizontalRulers[0], 165.0)
         XCTAssertEqual(horizontalRulers[1], 250.0)
         XCTAssertEqual(horizontalRulers[2], 335.0)
@@ -92,8 +88,8 @@ class OrthogonalConnectorTests: XCTestCase {
         let graph = orthogonalConnector.createGraph(points: points)
         let gridPoint = GridPoint(point: CGPoint(x: 335.0, y: 250.0))
         let graphNode = Node(gridPoint)
-        XCTAssertEqual(graph.nodes.count, 131)
-        XCTAssertEqual(graph.edges.count, 456)
+        XCTAssertEqual(graph.nodes.count, 111)
+        XCTAssertEqual(graph.edges.count, 384)
         XCTAssertEqual(graph.getNode(graphNode)!.label, gridPoint)
     }
 
@@ -181,11 +177,8 @@ class OrthogonalConnectorTests: XCTestCase {
         XCTAssertEqual(path[7], CGPoint(x: 335.0, y: 915.0))
         XCTAssertEqual(path[8], CGPoint(x: 625.0, y: 915.0))
         XCTAssertEqual(path[9], CGPoint(x: 915.0, y: 915.0))
-        XCTAssertEqual(path[10], CGPoint(x: 957.5, y: 915.0))
-        XCTAssertEqual(path[11], CGPoint(x: 1_000.0, y: 915.0))
-        XCTAssertEqual(path[12], CGPoint(x: 1_042.5, y: 915.0))
-        XCTAssertEqual(path[13], CGPoint(x: 1_085.0, y: 915.0))
-        XCTAssertEqual(path[14], CGPoint(x: 1_085.0, y: 957.5))
+        XCTAssertEqual(path[13], CGPoint(x: 1_085.0, y: 1_000))
+        XCTAssertEqual(path[14], CGPoint(x: 1_075.0, y: 1_000))
     }
 
     func testGenerateRoute_middleBottomToMiddleBottom_returnsOrthogonalPath() {
@@ -194,15 +187,8 @@ class OrthogonalConnectorTests: XCTestCase {
         XCTAssertEqual(path[1], CGPoint(x: 250.0, y: 335.0))
         XCTAssertEqual(path[2], CGPoint(x: 250.0, y: 625.0))
         XCTAssertEqual(path[3], CGPoint(x: 250.0, y: 915.0))
-        XCTAssertEqual(path[4], CGPoint(x: 250.0, y: 957.5))
-        XCTAssertEqual(path[5], CGPoint(x: 250.0, y: 1_000.0))
-        XCTAssertEqual(path[6], CGPoint(x: 250.0, y: 1_042.5))
-        XCTAssertEqual(path[7], CGPoint(x: 250.0, y: 1_085.0))
-        XCTAssertEqual(path[8], CGPoint(x: 292.5, y: 1_085.0))
-        XCTAssertEqual(path[9], CGPoint(x: 335.0, y: 1_085.0))
-        XCTAssertEqual(path[10], CGPoint(x: 625.0, y: 1_085.0))
-        XCTAssertEqual(path[11], CGPoint(x: 915.0, y: 1_085.0))
-        XCTAssertEqual(path[12], CGPoint(x: 957.5, y: 1_085.0))
+        XCTAssertEqual(path[11], CGPoint(x: 1_000.0, y: 1_085.0))
+        XCTAssertEqual(path[12], CGPoint(x: 1_000.0, y: 1_075.0))
     }
 
     func testGenerateRoute_middleTopToMiddleBottom_returnsOrthogonalPath() {
@@ -215,12 +201,28 @@ class OrthogonalConnectorTests: XCTestCase {
         XCTAssertEqual(path[5], CGPoint(x: 335.0, y: 335.0))
         XCTAssertEqual(path[6], CGPoint(x: 335.0, y: 625.0))
         XCTAssertEqual(path[7], CGPoint(x: 335.0, y: 915.0))
-        XCTAssertEqual(path[8], CGPoint(x: 335.0, y: 957.5))
-        XCTAssertEqual(path[9], CGPoint(x: 335.0, y: 1_000.0))
-        XCTAssertEqual(path[10], CGPoint(x: 335.0, y: 1_042.5))
-        XCTAssertEqual(path[11], CGPoint(x: 335.0, y: 1_085.0))
-        XCTAssertEqual(path[12], CGPoint(x: 625.0, y: 1_085.0))
-        XCTAssertEqual(path[13], CGPoint(x: 915.0, y: 1_085.0))
-        XCTAssertEqual(path[14], CGPoint(x: 957.5, y: 1_085.0))
+        XCTAssertEqual(path[13], CGPoint(x: 1_000.0, y: 1_085.0))
+        XCTAssertEqual(path[14], CGPoint(x: 1_000.0, y: 1_075.0))
+    }
+
+    func testGenerateRouteRotatedElement_middleTopToMiddleBottom_returnsOrthogonalPath() {
+        let fourtyFiveDegClockwise = 0.785
+        let fourtyFiveDegAntiClockwise = -0.785
+        var rotatedSource = sourceUmlElement
+        var rotatedDest = destinationUmlElement
+        rotatedSource.rotate(to: fourtyFiveDegClockwise)
+        rotatedDest.rotate(to: fourtyFiveDegAntiClockwise)
+        let orthogonalConnector = OrthogonalConnector(from: rotatedSource,
+                                                      to: rotatedDest)
+        orthogonalConnector.drawRulers(connectingSide: ConnectorConnectingSide.middleRight,
+                                       destConnectingSide: ConnectorConnectingSide.middleLeft)
+        let path = orthogonalConnector.generateRoute(.middleTop, destAnchor: .middleBottom)
+        XCTAssertEqual(path[0], CGPoint(x: 303.0, y: 197.0))
+        XCTAssertEqual(path[1], CGPoint(x: 366.0, y: 197.0))
+        XCTAssertEqual(path[2], CGPoint(x: 366.0, y: 281.5))
+        XCTAssertEqual(path[3], CGPoint(x: 366.0, y: 366.0))
+        XCTAssertEqual(path[4], CGPoint(x: 366.0, y: 625.0))
+        XCTAssertEqual(path[5], CGPoint(x: 366.0, y: 884.0))
+        XCTAssertEqual(path[6], CGPoint(x: 366.0, y: 968.5))
     }
 }
