@@ -13,7 +13,10 @@ struct SelectionOverlayView: View {
     private let overlayColor = Color.blue
     private let overlayDestructiveColor = Color.red
 
-    private var extendedControlOffset: CGFloat {
+    private var extendedControlOffsetX: CGFloat {
+        -(element.width * viewModel.scaleFactor + extendedControlSize + extendedControlHandleLength) / 2.0
+    }
+    private var extendedControlOffsetY: CGFloat {
         -(element.height * viewModel.scaleFactor + extendedControlSize + extendedControlHandleLength) / 2.0
     }
     private var halfWidth: CGFloat {
@@ -70,7 +73,7 @@ struct SelectionOverlayView: View {
             .onChanged { value in
                 // Calculate the translation with respect to the center of the canvas element.
                 var translationsFromCenter = value.translation
-                translationsFromCenter.height += extendedControlOffset
+                translationsFromCenter.height += extendedControlOffsetY
                 viewModel.rotateSelectedCanvasElement(by: translationsFromCenter)
             }
     }
@@ -90,7 +93,7 @@ struct SelectionOverlayView: View {
                 .frame(width: 1.0, height: extendedControlHandleLength)
         }
         .gesture(rotationGesture)
-        .offset(y: extendedControlOffset)
+        .offset(y: extendedControlOffsetY)
     }
 
     private var dragGesture: some Gesture {
@@ -114,7 +117,7 @@ struct SelectionOverlayView: View {
                 .frame(width: extendedControlSize, height: extendedControlSize)
         }
         .gesture(dragGesture)
-        .offset(y: -extendedControlOffset)
+        .offset(y: -extendedControlOffsetY)
     }
 
     private var deleteControl: some View {
@@ -129,7 +132,7 @@ struct SelectionOverlayView: View {
                 .fill(overlayDestructiveColor)
                 .frame(width: extendedControlHandleLength, height: 1.0)
         }
-        .offset(x: extendedControlOffset)
+        .offset(x: extendedControlOffsetX)
     }
 
     private func makeResizeControl(_ resizeControl: ResizeControlAnchor) -> some View {
