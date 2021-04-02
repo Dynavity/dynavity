@@ -50,6 +50,7 @@ struct SelectionOverlayView: View {
             }
             .onEnded { _ in
                 viewModel.handleDragEnd()
+                viewModel.handleUmlElementUpdated()
             }
     }
 
