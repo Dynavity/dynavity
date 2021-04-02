@@ -21,7 +21,7 @@ struct MarkupElementView: View {
                 Divider()
             }
 
-            WebView(rawHtml: viewModel.rawHtml)
+            WebView(bodyHtmlContent: viewModel.rawHtml)
         }
         .padding()
     }
