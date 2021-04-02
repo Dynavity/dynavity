@@ -10,7 +10,7 @@ struct CodableImage: Codable, Equatable {
         self.image = image
     }
 
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case image
     }
 

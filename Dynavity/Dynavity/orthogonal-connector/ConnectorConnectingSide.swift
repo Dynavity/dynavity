@@ -3,7 +3,7 @@
  
  This is used as part of the algorithm to find the orthogonal diagram connector routing between UmlElements.
  */
-enum ConnectorConnectingSide {
+enum ConnectorConnectingSide: Int, Codable {
     // Can possibly add more connecting sides
     case middleLeft
     case middleRight
