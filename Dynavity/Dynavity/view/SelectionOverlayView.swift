@@ -3,6 +3,7 @@ import SwiftUI
 struct SelectionOverlayView: View {
     var element: CanvasElementProtocol
     @ObservedObject var viewModel: CanvasViewModel
+    @State private var shouldDisplayDeleteAlert = false
 
     private let extendedControlSize: CGFloat = 25.0
     private let extendedControlHandleLength: CGFloat = 15.0
@@ -120,10 +121,21 @@ struct SelectionOverlayView: View {
         .offset(y: -extendedControlOffsetY)
     }
 
+    private var deleteAlert: Alert {
+        Alert(
+            title: Text("Are you sure?"),
+            message: Text("This will delete the element!"),
+            primaryButton: .destructive(Text("Delete"), action: {
+                viewModel.removeElement(element)
+            }),
+            secondaryButton: .cancel()
+        )
+    }
+
     private var deleteGesture: some Gesture {
         TapGesture()
             .onEnded {
-                viewModel.removeElement(element)
+                shouldDisplayDeleteAlert = true
             }
     }
 
@@ -141,6 +153,9 @@ struct SelectionOverlayView: View {
         }
         .gesture(deleteGesture)
         .offset(x: extendedControlOffsetX)
+        .alert(isPresented: $shouldDisplayDeleteAlert) { () -> Alert in
+            deleteAlert
+        }
     }
 
     private func makeResizeControl(_ resizeControl: ResizeControlAnchor) -> some View {
