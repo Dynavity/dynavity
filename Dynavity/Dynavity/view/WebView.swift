@@ -19,6 +19,11 @@ struct WebView: UIViewRepresentable {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1">
+                <style>
+                    :root {
+                        word-wrap: break-word;
+                    }
+                </style>
             </head>
 
             <body>
