@@ -80,7 +80,7 @@ class CanvasViewModel: ObservableObject {
     }
 }
 
-// MARK: Adding/removing of canvas elements
+// MARK: Adding of canvas elements
 extension CanvasViewModel {
     func addImageElement(from image: UIImage) {
         let imageCanvasElement = ImageElement(position: canvasCenter, image: image)
@@ -120,10 +120,6 @@ extension CanvasViewModel {
         case .rectangle:
             canvas.addElement(RectangleUmlElement(position: canvasCenter))
         }
-    }
-
-    func removeElement(_ element: CanvasElementProtocol) {
-        canvas.removeElement(element)
     }
 }
 
@@ -221,6 +217,10 @@ extension CanvasViewModel {
 
         canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
     }
+
+    func removeElement(_ element: CanvasElementProtocol) {
+        canvas.removeElement(element)
+    }
 }
 
 // MARK: Reposition drag gesture
@@ -247,60 +247,6 @@ extension CanvasViewModel {
     func handleDragEnd() {
         dragStartLocation = nil
         element = nil
-    }
-}
-
-// MARK: Annotation palette controls
-extension CanvasViewModel {
-    func getAnnotationWidths() -> [CGFloat] {
-        AnnotationPalette.annotationWidths
-    }
-
-    func getAnnotationColors() -> [UIColor] {
-        AnnotationPalette.annotationColors
-    }
-
-    func getCurrentTool() -> PKTool {
-        annotationPalette.getSelectedTool()
-    }
-}
-
-// MARK: Annotation palette controls button handlers
-extension CanvasViewModel {
-    func clearSelectedAnnotationTool() {
-        canvasMode = .selection
-    }
-
-    func selectPenAnnotationTool() {
-        shouldShowAnnotationMenu = canvasMode == .pen
-        canvasMode = .pen
-        annotationPalette.switchTool(.pen)
-    }
-
-    func selectMarkerAnnotationTool() {
-        shouldShowAnnotationMenu = canvasMode == .marker
-        canvasMode = .marker
-        annotationPalette.switchTool(.marker)
-    }
-
-    func selectEraserAnnotationTool() {
-        canvasMode = .eraser
-        annotationPalette.switchTool(.eraser)
-    }
-
-    func selectLassoAnnotationTool() {
-        canvasMode = .lasso
-        annotationPalette.switchTool(.lasso)
-    }
-
-    func selectAnnotationWidth(_ width: CGFloat) {
-        annotationPalette.setAnnotationWidth(width)
-        shouldShowAnnotationMenu = false
-    }
-
-    func selectAnnotationColor(_ color: UIColor) {
-        annotationPalette.setAnnotationColor(color)
-        shouldShowAnnotationMenu = false
     }
 }
 
