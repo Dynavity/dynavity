@@ -16,5 +16,4 @@ target 'Dynavity' do
   target 'DynavityUITests' do
     # Pods for testing
   end
-
 end
