@@ -72,7 +72,10 @@ struct SelectionOverlayView: View {
                 translationsFromCenter.height += rotationDragControlOffset
                 viewModel.rotateSelectedCanvasElement(by: translationsFromCenter)
             }
-    }
+            .onEnded { _ in
+                viewModel.handleUmlElementUpdated()
+            }
+     }
 
     private var rotationControl: some View {
         VStack(spacing: .zero) {
@@ -100,7 +103,7 @@ struct SelectionOverlayView: View {
                 viewModel.moveSelectedCanvasElement(by: value.translation)
             }
             .onEnded { _ in
-                viewModel.handleUmlElementDragEnded()
+                viewModel.handleUmlElementUpdated()
             }
     }
 

@@ -317,7 +317,7 @@ extension CanvasViewModel {
         }
     }
 
-    func handleUmlElementDragEnded() {
+    func handleUmlElementUpdated() {
         guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
             return
         }
