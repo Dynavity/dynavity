@@ -3,7 +3,7 @@ import SwiftUI
 struct GraphView: View {
     private static let zoomScaleRange: ClosedRange<CGFloat> = 0.2...2.5
 
-    @StateObject var viewModel = GraphMapViewModel()
+    @EnvironmentObject var viewModel: GraphMapViewModel
 
     // For viewport dragging gesture
     @State var originOffset: CGPoint = .zero
@@ -18,7 +18,7 @@ struct GraphView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Rectangle().fill(Color.UI.base5)
+                Rectangle().fill(Color.UI.background)
                 graphView
             }
             .drawingGroup(opaque: true, colorMode: .extendedLinear)
@@ -70,7 +70,7 @@ struct GraphView: View {
         ZStack {
             ForEach(viewModel.getEdges(), id: \.self) { edge in
                 EdgeView(start: edge.source.position, end: edge.destination.position)
-                    .stroke()
+                    .stroke(Color.UI.grey)
             }
         }
     }
@@ -132,5 +132,6 @@ extension GraphView {
 struct GraphView_Previews: PreviewProvider {
     static var previews: some View {
         GraphView(searchQuery: .constant("Hello"))
+            .environmentObject(GraphMapViewModel())
     }
 }

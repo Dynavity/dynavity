@@ -7,8 +7,8 @@ struct NodeView: View {
     }
     private static let fontSize: CGFloat = 10.0
 
-    private static let highlightedNodeColor = Color.UI.green.opacity(0.7)
-    private static let defaultNodeColor = Color.UI.darkBlue.opacity(0.5)
+    private static let highlightedNodeColor = Color.UI.green.opacity(0.8)
+    private static let defaultNodeColor = Color.UI.blue.opacity(0.8)
 
     let label: String
     let isHighlighted: Bool

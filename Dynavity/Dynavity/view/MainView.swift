@@ -44,36 +44,49 @@ struct MainView: View {
     }
 
     var body: some View {
-        let dismissSideMenuDragGesture = DragGesture()
-            .onEnded { value in
-                handleSideMenuDrag(value)
-            }
-
         ZStack(alignment: .leading) {
             VStack(spacing: 0.0) {
                 ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu)
                 Divider()
                 CanvasView(viewModel: canvasViewModel)
             }
-            .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
             .disabled(self.shouldShowMenu)
+            .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
 
             if !canvasViewModel.shouldShowUmlMenu {
                 umlMenuButton
             }
 
-            sideMenu.gesture(shouldShowMenu ? dismissSideMenuDragGesture : nil)
+            sideMenu
             umlMenu
         }
     }
 
     var translucentBlackOverlay: some View {
-        Rectangle().fill(Color.black).opacity(0.5)
+        Rectangle()
+            .fill(Color.black)
+            .opacity(0.5)
+            .gesture(dismissSideMenuTapGesture)
+            .gesture(dismissSideMenuDragGesture)
     }
 }
 
 // MARK: Side Menu Related Gesture Handlers
 extension MainView {
+    private var dismissSideMenuDragGesture: some Gesture {
+        DragGesture()
+            .onEnded { value in
+                handleSideMenuDrag(value)
+            }
+    }
+
+    private var dismissSideMenuTapGesture: some Gesture {
+        TapGesture()
+            .onEnded {
+                dismissSideMenu()
+            }
+    }
+
     private func dismissSideMenu() {
         withAnimation {
             self.shouldShowMenu = false
@@ -89,9 +102,7 @@ extension MainView {
         if value.translation.width > 50 {
             dismissSideMenu()
         }
-
     }
-
 }
 
 struct MainView_Previews: PreviewProvider {
