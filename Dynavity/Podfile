@@ -6,7 +6,7 @@ target 'Dynavity' do
   use_frameworks!
 
   # Pods for Dynavity
-  pod 'Firebase/Analytics'
+  pod 'Firebase/Database'
 
   target 'DynavityTests' do
     inherit! :search_paths
