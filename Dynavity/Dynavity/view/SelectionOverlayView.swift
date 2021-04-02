@@ -4,16 +4,17 @@ struct SelectionOverlayView: View {
     var element: CanvasElementProtocol
     @ObservedObject var viewModel: CanvasViewModel
 
-    private let rotationDragControlSize: CGFloat = 25.0
-    private let rotationDragControlHandleLength: CGFloat = 15.0
+    private let extendedControlSize: CGFloat = 25.0
+    private let extendedControlHandleLength: CGFloat = 15.0
     private let resizeControlSize: CGFloat = 15.0
     private let resizeControlBorderPercentage: CGFloat = 0.1
     private let resizeControlHitboxScale: CGFloat = 2.0
     private let selectionOutlineWidth: CGFloat = 2.0
     private let overlayColor = Color.blue
+    private let overlayDestructiveColor = Color.red
 
-    private var rotationDragControlOffset: CGFloat {
-        -(element.height * viewModel.scaleFactor + rotationDragControlSize + rotationDragControlHandleLength) / 2.0
+    private var extendedControlOffset: CGFloat {
+        -(element.height * viewModel.scaleFactor + extendedControlSize + extendedControlHandleLength) / 2.0
     }
     private var halfWidth: CGFloat {
         element.width / 2.0
@@ -69,7 +70,7 @@ struct SelectionOverlayView: View {
             .onChanged { value in
                 // Calculate the translation with respect to the center of the canvas element.
                 var translationsFromCenter = value.translation
-                translationsFromCenter.height += rotationDragControlOffset
+                translationsFromCenter.height += extendedControlOffset
                 viewModel.rotateSelectedCanvasElement(by: translationsFromCenter)
             }
     }
@@ -83,13 +84,13 @@ struct SelectionOverlayView: View {
                     .resizable()
                     .foregroundColor(overlayColor)
             }
-            .frame(width: rotationDragControlSize, height: rotationDragControlSize)
+            .frame(width: extendedControlSize, height: extendedControlSize)
             Rectangle()
                 .fill(overlayColor)
-                .frame(width: 1.0, height: rotationDragControlHandleLength)
+                .frame(width: 1.0, height: extendedControlHandleLength)
         }
         .gesture(rotationGesture)
-        .offset(y: rotationDragControlOffset)
+        .offset(y: extendedControlOffset)
         // Force the rotation control to be the same size regardless of scale factor.
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
@@ -108,15 +109,32 @@ struct SelectionOverlayView: View {
         VStack(spacing: .zero) {
             Rectangle()
                 .fill(overlayColor)
-                .frame(width: 1.0, height: rotationDragControlHandleLength)
+                .frame(width: 1.0, height: extendedControlHandleLength)
             Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
                 .resizable()
                 .foregroundColor(overlayColor)
-                .frame(width: rotationDragControlSize, height: rotationDragControlSize)
+                .frame(width: extendedControlSize, height: extendedControlSize)
         }
         .gesture(dragGesture)
-        .offset(y: -rotationDragControlOffset)
-        // Force the rotation control to be the same size regardless of scale factor.
+        .offset(y: -extendedControlOffset)
+        // Force the drag control to be the same size regardless of scale factor.
+        .scaleEffect(1.0 / viewModel.scaleFactor)
+    }
+
+    private var deleteControl: some View {
+        HStack(spacing: .zero) {
+            Image(systemName: "trash.circle")
+                .resizable()
+                .foregroundColor(overlayDestructiveColor)
+                .frame(width: extendedControlSize, height: extendedControlSize)
+                // Always display the icon the right side up regardless of rotation.
+                .rotationEffect(.radians(-element.rotation))
+            Rectangle()
+                .fill(overlayDestructiveColor)
+                .frame(width: extendedControlHandleLength, height: 1.0)
+        }
+        .offset(x: extendedControlOffset)
+        // Force the delete control to be the same size regardless of scale factor.
         .scaleEffect(1.0 / viewModel.scaleFactor)
     }
 
@@ -144,6 +162,7 @@ struct SelectionOverlayView: View {
             outline
             rotationControl
             dragControl
+            deleteControl
             ForEach(ResizeControlAnchor.allCases, id: \.self) { corner in
                 makeResizeControl(corner)
             }
