@@ -42,18 +42,25 @@ class CanvasViewModel: ObservableObject {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
     }
 
-    var originOffset: CGPoint {
+    private var originOffset: CGPoint {
         canvasTopLeftOffset - canvasOrigin
     }
 
-    var canvasViewportOffset: CGSize {
-        let canvasViewport = CGSize(width: canvasViewportWidth, height: canvasViewportHeight)
-        let viewportOffset = canvasViewport / 2.0 * (scaleFactor - 1.0)
-        return viewportOffset - originOffset - canvasOrigin
+    private var scaledOriginOffset: CGPoint {
+        canvasTopLeftOffset / scaleFactor - canvasOrigin
     }
 
-    var canvasCenter: CGPoint {
-        canvasOrigin
+    private var viewportOffset: CGSize {
+        let canvasViewport = CGSize(width: canvasViewportWidth, height: canvasViewportHeight)
+        return canvasViewport / 2.0 * (scaleFactor - 1.0)
+    }
+
+    var canvasViewportOffset: CGSize {
+        viewportOffset - originOffset - canvasOrigin
+    }
+
+    private var canvasCenter: CGPoint {
+        canvasOrigin - viewportOffset + scaledOriginOffset
     }
 
     init(canvasSize: CGFloat) {
