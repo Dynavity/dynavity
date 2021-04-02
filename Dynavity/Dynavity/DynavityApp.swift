@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct DynavityApp: App {
+    @StateObject var graphMapViewModel = GraphMapViewModel()
+
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(graphMapViewModel)
         }
     }
 }

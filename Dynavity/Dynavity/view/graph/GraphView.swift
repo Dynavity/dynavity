@@ -3,7 +3,7 @@ import SwiftUI
 struct GraphView: View {
     private static let zoomScaleRange: ClosedRange<CGFloat> = 0.2...2.5
 
-    @StateObject var viewModel = GraphMapViewModel()
+    @EnvironmentObject var viewModel: GraphMapViewModel
 
     // For viewport dragging gesture
     @State var originOffset: CGPoint = .zero
@@ -132,5 +132,6 @@ extension GraphView {
 struct GraphView_Previews: PreviewProvider {
     static var previews: some View {
         GraphView(searchQuery: .constant("Hello"))
+            .environmentObject(GraphMapViewModel())
     }
 }

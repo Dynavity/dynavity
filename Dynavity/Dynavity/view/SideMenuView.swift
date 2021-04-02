@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct SideMenuView: View {
+    @EnvironmentObject var graphMapViewModel: GraphMapViewModel
+
     @Binding var canvasName: String
 
     // TODO: replace these with actual linked and unlinked canvases
@@ -127,5 +129,6 @@ struct SideMenuContentView<Content: View>: View {
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
         SideMenuView(canvasName: .constant("Cool Name"))
+            .environmentObject(GraphMapViewModel())
     }
 }
