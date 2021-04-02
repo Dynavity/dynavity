@@ -18,6 +18,14 @@ struct Canvas {
         canvasElements.append(element)
     }
 
+    mutating func removeElement(_ element: CanvasElementProtocol) {
+        guard let index = canvasElements.firstIndex(where: { $0.id == element.id }) else {
+            return
+        }
+
+        canvasElements.remove(at: index)
+    }
+
     mutating func replaceElement(_ element: CanvasElementProtocol) {
         guard let index = canvasElements.firstIndex(where: { $0.id == element.id }) else {
             return

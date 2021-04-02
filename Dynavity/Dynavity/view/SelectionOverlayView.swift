@@ -3,17 +3,22 @@ import SwiftUI
 struct SelectionOverlayView: View {
     var element: CanvasElementProtocol
     @ObservedObject var viewModel: CanvasViewModel
+    @State private var shouldDisplayDeleteAlert = false
 
-    private let rotationDragControlSize: CGFloat = 25.0
-    private let rotationDragControlHandleLength: CGFloat = 15.0
+    private let extendedControlSize: CGFloat = 25.0
+    private let extendedControlHandleLength: CGFloat = 15.0
     private let resizeControlSize: CGFloat = 15.0
     private let resizeControlBorderPercentage: CGFloat = 0.1
     private let resizeControlHitboxScale: CGFloat = 2.0
     private let selectionOutlineWidth: CGFloat = 2.0
     private let overlayColor = Color.blue
+    private let overlayDestructiveColor = Color.red
 
-    private var rotationDragControlOffset: CGFloat {
-        -(element.height * viewModel.scaleFactor + rotationDragControlSize + rotationDragControlHandleLength) / 2.0
+    private var extendedControlOffsetX: CGFloat {
+        -(element.width * viewModel.scaleFactor + extendedControlSize + extendedControlHandleLength) / 2.0
+    }
+    private var extendedControlOffsetY: CGFloat {
+        -(element.height * viewModel.scaleFactor + extendedControlSize + extendedControlHandleLength) / 2.0
     }
     private var halfWidth: CGFloat {
         element.width / 2.0
@@ -70,7 +75,7 @@ struct SelectionOverlayView: View {
             .onChanged { value in
                 // Calculate the translation with respect to the center of the canvas element.
                 var translationsFromCenter = value.translation
-                translationsFromCenter.height += rotationDragControlOffset
+                translationsFromCenter.height += extendedControlOffsetY
                 viewModel.rotateSelectedCanvasElement(by: translationsFromCenter)
             }
             .onEnded { _ in
@@ -87,15 +92,13 @@ struct SelectionOverlayView: View {
                     .resizable()
                     .foregroundColor(overlayColor)
             }
-            .frame(width: rotationDragControlSize, height: rotationDragControlSize)
+            .frame(width: extendedControlSize, height: extendedControlSize)
             Rectangle()
                 .fill(overlayColor)
-                .frame(width: 1.0, height: rotationDragControlHandleLength)
+                .frame(width: 1.0, height: extendedControlHandleLength)
         }
         .gesture(rotationGesture)
-        .offset(y: rotationDragControlOffset)
-        // Force the rotation control to be the same size regardless of scale factor.
-        .scaleEffect(1.0 / viewModel.scaleFactor)
+        .offset(y: extendedControlOffsetY)
     }
 
     private var dragGesture: some Gesture {
@@ -112,16 +115,51 @@ struct SelectionOverlayView: View {
         VStack(spacing: .zero) {
             Rectangle()
                 .fill(overlayColor)
-                .frame(width: 1.0, height: rotationDragControlHandleLength)
+                .frame(width: 1.0, height: extendedControlHandleLength)
             Image(systemName: "arrow.up.and.down.and.arrow.left.and.right")
                 .resizable()
                 .foregroundColor(overlayColor)
-                .frame(width: rotationDragControlSize, height: rotationDragControlSize)
+                .frame(width: extendedControlSize, height: extendedControlSize)
         }
         .gesture(dragGesture)
-        .offset(y: -rotationDragControlOffset)
-        // Force the rotation control to be the same size regardless of scale factor.
-        .scaleEffect(1.0 / viewModel.scaleFactor)
+        .offset(y: -extendedControlOffsetY)
+    }
+
+    private var deleteAlert: Alert {
+        Alert(
+            title: Text("Are you sure?"),
+            message: Text("This will delete the element!"),
+            primaryButton: .destructive(Text("Delete"), action: {
+                viewModel.removeElement(element)
+            }),
+            secondaryButton: .cancel()
+        )
+    }
+
+    private var deleteGesture: some Gesture {
+        TapGesture()
+            .onEnded {
+                shouldDisplayDeleteAlert = true
+            }
+    }
+
+    private var deleteControl: some View {
+        HStack(spacing: .zero) {
+            Image(systemName: "trash.circle")
+                .resizable()
+                .foregroundColor(overlayDestructiveColor)
+                .frame(width: extendedControlSize, height: extendedControlSize)
+                // Always display the icon the right side up regardless of rotation.
+                .rotationEffect(.radians(-element.rotation))
+            Rectangle()
+                .fill(overlayDestructiveColor)
+                .frame(width: extendedControlHandleLength, height: 1.0)
+        }
+        .gesture(deleteGesture)
+        .offset(x: extendedControlOffsetX)
+        .alert(isPresented: $shouldDisplayDeleteAlert) { () -> Alert in
+            deleteAlert
+        }
     }
 
     private func makeResizeControl(_ resizeControl: ResizeControlAnchor) -> some View {
@@ -146,8 +184,13 @@ struct SelectionOverlayView: View {
     var body: some View {
         ZStack {
             outline
-            rotationControl
-            dragControl
+            ZStack {
+                rotationControl
+                dragControl
+                deleteControl
+            }
+            // Force the extended controls to be the same size regardless of scale factor.
+            .scaleEffect(1.0 / viewModel.scaleFactor)
             ForEach(ResizeControlAnchor.allCases, id: \.self) { corner in
                 makeResizeControl(corner)
             }
