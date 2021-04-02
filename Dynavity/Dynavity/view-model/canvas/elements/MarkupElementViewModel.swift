@@ -32,6 +32,7 @@ class MarkupElementViewModel: ObservableObject {
         let htmlPublisher = self.markupToHtmlExporter.getHtmlPublisher(markupText: markupElement.text,
                                                                        markupType: markupElement.markupType)
         self.htmlCancellable = htmlPublisher
+            .receive(on: RunLoop.main)
             .assign(to: \.rawHtml, on: self)
     }
 }
