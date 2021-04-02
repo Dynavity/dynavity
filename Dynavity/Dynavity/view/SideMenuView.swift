@@ -4,14 +4,17 @@ struct SideMenuView: View {
     @Binding var canvasName: String
 
     // TODO: replace these with actual linked and unlinked canvases
-    var linkedCanvases: [String] = (1...100).map({ "Canvas: \($0)" })
-    var unlinkedCanvases: [String] = (200...300).map({ "Canvas: \($0)" })
+    @State var linkedCanvases: [String] = (1...100).map({ "Canvas: \($0)" })
+    @State var selectedLinkedCanvases: [String] = []
+
+    @State var unlinkedCanvases: [String] = (200...300).map({ "Canvas: \($0)" })
+    @State var selectedUnlinkedCanvases: [String] = []
 
     var body: some View {
         VStack(alignment: .leading) {
             canvasMetadataView
             Divider().padding(.vertical)
-            linkedCanvasesView
+            backlinksView
             Spacer()
         }
         .padding()
@@ -29,23 +32,15 @@ struct SideMenuView: View {
         }
     }
 
-    var linkedCanvasesView: some View {
+    var backlinksView: some View {
         Group {
             SideMenuHeaderView(headerText: "Backlinks")
             SideMenuContentView(label: "Linked Canvases") {
-                List(linkedCanvases, id: \.self) { canvas in
-                    Text(canvas)
-                }
-                .listStyle(SidebarListStyle())
+                MultiSelectCanvasListView(items: $linkedCanvases, selections: $selectedLinkedCanvases)
             }
-
             upDownButtons
-
             SideMenuContentView(label: "Unlinked Canvases") {
-                List(unlinkedCanvases, id: \.self) { canvas in
-                    Text(canvas)
-                }
-                .listStyle(SidebarListStyle())
+                MultiSelectCanvasListView(items: $unlinkedCanvases, selections: $selectedUnlinkedCanvases)
             }
         }
     }
@@ -54,24 +49,48 @@ struct SideMenuView: View {
         HStack {
             Spacer()
             Button(action: {
-                print("UP!")
+                // TODO: create backlinks, update state (which should be computed from the array subtraction)
+                linkSelectedUnlinkedCanvases()
             }) {
                 Image(systemName: "arrow.up.square.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 30)
             }
+            .disabled(selectedUnlinkedCanvases.isEmpty)
             Button(action: {
-                print("DOWN!")
+                unlinkSelectedLinkedCanvases()
             }) {
                 Image(systemName: "arrow.down.square.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(height: 30)
             }
+            .disabled(selectedLinkedCanvases.isEmpty)
             Spacer()
         }
+    }
+}
 
+// MARK: Linking and unlinking of canvases
+extension SideMenuView {
+    // TODO: replace these with actual implementations
+    private func linkSelectedUnlinkedCanvases() {
+        linkedCanvases.append(contentsOf: selectedUnlinkedCanvases)
+        unlinkedCanvases = unlinkedCanvases.filter {
+            !selectedUnlinkedCanvases.contains($0)
+        }
+        selectedUnlinkedCanvases = []
+        linkedCanvases.sort()
+    }
+
+    private func unlinkSelectedLinkedCanvases() {
+        unlinkedCanvases.append(contentsOf: selectedLinkedCanvases)
+        linkedCanvases = linkedCanvases.filter {
+            !selectedLinkedCanvases.contains($0)
+        }
+        selectedLinkedCanvases = []
+        unlinkedCanvases.sort()
     }
 }
 
