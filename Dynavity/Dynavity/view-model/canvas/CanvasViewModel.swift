@@ -31,8 +31,7 @@ class CanvasViewModel: ObservableObject {
     // Uml element connectors
     @Published var umlConnectorStart: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     @Published var umlConnectorEnd: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
-    var canvasViewportWidth: CGFloat = 0.0
-    var canvasViewportHeight: CGFloat = 0.0
+    var canvasViewport: CGSize = .zero
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -51,8 +50,7 @@ class CanvasViewModel: ObservableObject {
     }
 
     private var viewportOffset: CGSize {
-        let canvasViewport = CGSize(width: canvasViewportWidth, height: canvasViewportHeight)
-        return canvasViewport / 2.0 * (scaleFactor - 1.0)
+        canvasViewport / 2.0 * (scaleFactor - 1.0)
     }
 
     var canvasViewportOffset: CGSize {
@@ -78,8 +76,7 @@ class CanvasViewModel: ObservableObject {
     }
 
     func setCanvasViewport(size: CGSize) {
-        canvasViewportWidth = size.width
-        canvasViewportHeight = size.height
+        canvasViewport = size
     }
 }
 
