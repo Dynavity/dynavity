@@ -1,7 +1,7 @@
 # Dynavity
 
 
-## Setting up the project
+## Setting up XcodeGen
 
 This project uses [XcodeGen](https://github.com/yonaskolb/XcodeGen) to generate Xcode project files. As such, a prerequisite is to install XcodeGen.
 
@@ -38,3 +38,16 @@ echo -e '#!/bin/sh\nxcodegen --spec Dynavity/project.yml --use-cache' > .git/hoo
 chmod +x .git/hooks/post-merge
 
 ```
+
+## Setting up CocoaPods
+
+[CocoaPods](https://github.com/CocoaPods/CocoaPods) is used to manage third-party dependencies such as Firebase.
+Before opening the project in Xcode, run the following command in the project root directory (`Dynavity/`).
+
+```sh
+pod install
+```
+
+Please take note of the following to avoid issues when building the project:
+- Once `pod install` is done, do **not** re-run `xcodegen`. If you need to do so, re-run `pod install` after each `xcodegen`.
+- Open the project in Xcode using only `Dynavity.xcworkspace` and **not** `Dynavity.xcodeproj`.
