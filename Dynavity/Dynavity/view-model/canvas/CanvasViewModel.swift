@@ -43,9 +43,15 @@ class CanvasViewModel: ObservableObject {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
     }
 
+    var canvasViewportOffset: CGSize {
+        let originOffset = CGPoint(x: canvasCenterOffsetX, y: canvasCenterOffsetY)
+        let canvasViewport = CGSize(width: canvasViewportWidth, height: canvasViewportHeight)
+        let viewportOffset = canvasViewport / 2.0 * (scaleFactor - 1.0)
+        return viewportOffset - canvasOrigin - originOffset
+    }
+
     var canvasCenter: CGPoint {
         let originOffset = CGPoint(x: canvasCenterOffsetX, y: canvasCenterOffsetY)
-        print(originOffset)
         return canvasOrigin - originOffset
     }
 
