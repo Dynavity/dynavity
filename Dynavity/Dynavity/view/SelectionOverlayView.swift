@@ -120,6 +120,13 @@ struct SelectionOverlayView: View {
         .offset(y: -extendedControlOffsetY)
     }
 
+    private var deleteGesture: some Gesture {
+        TapGesture()
+            .onEnded {
+                viewModel.removeElement(element)
+            }
+    }
+
     private var deleteControl: some View {
         HStack(spacing: .zero) {
             Image(systemName: "trash.circle")
@@ -132,6 +139,7 @@ struct SelectionOverlayView: View {
                 .fill(overlayDestructiveColor)
                 .frame(width: extendedControlHandleLength, height: 1.0)
         }
+        .gesture(deleteGesture)
         .offset(x: extendedControlOffsetX)
     }
 

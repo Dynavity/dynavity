@@ -58,7 +58,7 @@ class CanvasViewModel: ObservableObject {
     }
 }
 
-// MARK: Adding of canvas elements
+// MARK: Adding/removing of canvas elements
 extension CanvasViewModel {
     func addImageElement(from image: UIImage) {
         let imageCanvasElement = ImageElement(position: canvasOrigin, image: image)
@@ -98,6 +98,10 @@ extension CanvasViewModel {
         case .rectangle:
             canvas.addElement(RectangleUmlElement(position: canvasOrigin))
         }
+    }
+
+    func removeElement(_ element: CanvasElementProtocol) {
+        canvas.removeElement(element)
     }
 }
 
