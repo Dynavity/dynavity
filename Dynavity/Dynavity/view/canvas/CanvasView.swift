@@ -7,6 +7,9 @@ struct CanvasView: View {
         GeometryReader { geometry in
             ZStack {
                 AnnotationCanvasView(viewModel: viewModel, isDrawingDisabled: true)
+                    .onTapGesture {
+                        viewModel.unselectCanvasElement()
+                    }
                 CanvasElementMapView(viewModel: viewModel)
                     .scaleEffect(viewModel.scaleFactor)
                     .offset(viewModel.canvasViewportOffset)
