@@ -34,13 +34,13 @@ class GraphMapViewModel: ObservableObject {
         }
     }
 
-    func getLinkedNodes(for item: BacklinkNode) -> [BacklinkNode] {
-        backlinkEngine.getBacklinks(for: item)
+    func getLinkedNodes(for id: UUID) -> [BacklinkNode] {
+        backlinkEngine.getBacklinks(for: id)
     }
 
-    func getUnlinkedNodes(for item: BacklinkNode) -> [BacklinkNode] {
+    func getUnlinkedNodes(for id: UUID) -> [BacklinkNode] {
         Array(Set(self.getNodes())
-                .subtracting(self.getLinkedNodes(for: item))
+                .subtracting(self.getLinkedNodes(for: id))
         )
     }
 }

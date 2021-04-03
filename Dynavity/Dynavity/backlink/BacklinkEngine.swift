@@ -39,12 +39,19 @@ struct BacklinkEngine {
         graph.addLinkBetween(firstNode, and: secondNode)
     }
 
-    mutating func removeLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
-        graph.removeLinkBetween(firstItem, and: secondItem)
+    mutating func removeLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
+        guard let firstNode = getBacklinkNodeWithId(id: firstItemId),
+              let secondNode = getBacklinkNodeWithId(id: secondItemId) else {
+            return
+        }
+        graph.removeLinkBetween(firstNode, and: secondNode)
     }
 
-    func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
-        graph.getBacklinks(for: item)
+    func getBacklinks(for id: UUID) -> [BacklinkNode] {
+        guard let node = getBacklinkNodeWithId(id: id) else {
+            return []
+        }
+        return graph.getBacklinks(for: node)
     }
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
