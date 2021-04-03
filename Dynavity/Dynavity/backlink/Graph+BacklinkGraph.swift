@@ -13,6 +13,15 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         }
     }
 
+    func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
+        let node = Node(item)
+        return self.adjacentNodesFromNode(node).map({ $0.label })
+    }
+
+    mutating func addNode(_ node: BacklinkNode) {
+        self.addNode(Node(node))
+    }
+
     mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
         assert(!self.isDirected)
         let edge = createEdgeBetween(firstItem, and: secondItem)
@@ -22,11 +31,6 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
     mutating func removeLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
         let edge = createEdgeBetween(firstItem, and: secondItem)
         self.removeEdge(edge)
-    }
-
-    func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
-        let node = Node(item)
-        return self.adjacentNodesFromNode(node).map({ $0.label })
     }
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {

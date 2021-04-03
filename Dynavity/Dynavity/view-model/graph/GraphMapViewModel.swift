@@ -24,14 +24,24 @@ class GraphMapViewModel: ObservableObject {
 
     // TODO: replace the implementation of this function: load from file and rebuild the links
     private func initialiseBacklinkEngine() {
-        let nodes: [BacklinkNode] = (0..<20).map { i in
-            BacklinkNode(id: UUID(), name: "Node \(i)", position: CGPoint(x: Int.random(in: 0...700),
-                                                                          y: Int.random(in: 0...700)))
+        let ids: [UUID] = (0..<20).map({ _ in UUID() })
+        for id in ids {
+            backlinkEngine.addNode(id: id, name: id.uuidString)
         }
 
-        for i in 0..<nodes.endIndex - 1 {
-            backlinkEngine.addLinkBetween(nodes[i], and: nodes[i + 1])
+        for i in 0..<ids.endIndex - 1 {
+            backlinkEngine.addLinkBetween(ids[i], and: ids[i + 1])
         }
+    }
+
+    func getLinkedNodes(for item: BacklinkNode) -> [BacklinkNode] {
+        backlinkEngine.getBacklinks(for: item)
+    }
+
+    func getUnlinkedNodes(for item: BacklinkNode) -> [BacklinkNode] {
+        Array(Set(self.getNodes())
+                .subtracting(self.getLinkedNodes(for: item))
+        )
     }
 }
 

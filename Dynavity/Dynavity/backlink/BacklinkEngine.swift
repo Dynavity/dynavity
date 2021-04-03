@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 
 /// An engine that supports:
 /// - Creation of backlinks between items
@@ -24,8 +25,18 @@ struct BacklinkEngine {
         return output
     }
 
-    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
-        graph.addLinkBetween(firstItem, and: secondItem)
+    mutating func addNode(id: UUID, name: String) {
+        // TODO: figure out a way to position new nodes
+        let node = BacklinkNode(id: id, name: name, position: .zero)
+        graph.addNode(node)
+    }
+
+    mutating func addLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
+        guard let firstNode = getBacklinkNodeWithId(id: firstItemId),
+              let secondNode = getBacklinkNodeWithId(id: secondItemId) else {
+            return
+        }
+        graph.addLinkBetween(firstNode, and: secondNode)
     }
 
     mutating func removeLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
@@ -38,5 +49,9 @@ struct BacklinkEngine {
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
         graph.moveBacklinkNode(backlinkNode, to: updatedPos)
+    }
+
+    private func getBacklinkNodeWithId(id: UUID?) -> BacklinkNode? {
+        self.nodes.first(where: { $0.id == id })
     }
 }
