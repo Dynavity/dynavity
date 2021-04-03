@@ -4,9 +4,20 @@ import PencilKit
 struct AnnotationCanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var annotationCanvasView = PKCanvasWrapperView()
+    private let isDrawingDisabled: Bool
+
+    private var shouldUpdateViewport: Bool {
+        isDrawingDisabled && viewModel.canvasMode != .selection
+            || !isDrawingDisabled && viewModel.canvasMode == .selection
+    }
+
+    init(viewModel: CanvasViewModel, isDrawingDisabled: Bool) {
+        self.viewModel = viewModel
+        self.isDrawingDisabled = isDrawingDisabled
+    }
 
     init(viewModel: CanvasViewModel) {
-        self.viewModel = viewModel
+        self.init(viewModel: viewModel, isDrawingDisabled: false)
     }
 }
 
@@ -23,11 +34,15 @@ extension AnnotationCanvasView {
     }
 
     func didZoom(to scale: CGFloat) {
-        viewModel.scaleFactor = scale
+        if !shouldUpdateViewport {
+            viewModel.scaleFactor = scale
+        }
     }
 
     func didScroll(to offset: CGPoint) {
-        viewModel.canvasTopLeftOffset = offset
+        if !shouldUpdateViewport {
+            viewModel.canvasTopLeftOffset = offset
+        }
     }
 }
 
@@ -59,6 +74,17 @@ extension AnnotationCanvasView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
+        if shouldUpdateViewport {
+            annotationCanvasView.zoomScale = viewModel.scaleFactor
+            annotationCanvasView.contentOffset = viewModel.canvasTopLeftOffset
+        }
+
+        // Disable drawing by setting the tool to the eraser.
+        if isDrawingDisabled {
+            annotationCanvasView.tool = PKEraserTool(.vector)
+            return
+        }
+
         // Update annotation tool
         annotationCanvasView.tool = viewModel.getCurrentTool()
     }
