@@ -3,18 +3,13 @@ import SwiftUI
 struct ConnectorSelectionOverlayView: View {
     var connector: UmlConnector
     @ObservedObject var viewModel: CanvasViewModel
-    @State private var shouldDisplayDeleteAlert = true
 
     private let overlayDestructiveColor: Color = .red
+    private let deleteControlBackgroundColor: Color = .white
     private let extendedControlSize: CGFloat = 25.0
-    private let extendedControlHandleLength: CGFloat = 15.0
 
     private let connectorOverlayColor: Color = .orange
     private let connectorOverlayWidth: CGFloat = 5.0
-
-    private var extendedControlOffsetX: CGFloat {
-        -(viewModel.scaleFactor + extendedControlSize + extendedControlHandleLength) / 2.0
-    }
 
     private func generateConnectorOverlay(_ connector: UmlConnector) -> some View {
         var points = connector.points
@@ -27,25 +22,19 @@ struct ConnectorSelectionOverlayView: View {
             }
         }
         .stroke(connectorOverlayColor, lineWidth: connectorOverlayWidth)
-        .offset(x: viewModel.canvasOrigin.x, y: viewModel.canvasOrigin.y)
+        .onTapGesture {
+            viewModel.select(umlConnector: connector)
+        }
     }
 
-    private var deleteAlert: Alert {
-        Alert(
-            title: Text("Are you sure?"),
-            message: Text("This will delete the element!"),
-            primaryButton: .destructive(Text("Delete"), action: {
-                viewModel.removeUmlConnector(connector)
-            }),
-            secondaryButton: .cancel()
-        )
-    }
-
-    private var deleteGesture: some Gesture {
-        TapGesture()
-            .onEnded {
-                shouldDisplayDeleteAlert = true
-            }
+    private func getConnectorBend() -> CGPoint {
+        let points = connector.points
+        // Only source and dest, no bends
+        if points.count == 2 {
+            return CGPoint(x: (points[0].x + points[1].x) / 2,
+                           y: (points[0].y + points[1].y) / 2)
+        }
+        return points[(points.count / 2)]
     }
 
     private var deleteControl: some View {
@@ -53,30 +42,19 @@ struct ConnectorSelectionOverlayView: View {
             Image(systemName: "trash.circle")
                 .resizable()
                 .foregroundColor(overlayDestructiveColor)
+                .background(deleteControlBackgroundColor)
                 .frame(width: extendedControlSize, height: extendedControlSize)
-            Rectangle()
-                .fill(overlayDestructiveColor)
-                .frame(width: extendedControlHandleLength, height: 1.0)
         }
-        .gesture(deleteGesture)
-        .offset(x: extendedControlOffsetX)
-        .alert(isPresented: $shouldDisplayDeleteAlert) { () -> Alert in
-            deleteAlert
+        .position(getConnectorBend() - viewModel.canvasOrigin + viewModel.canvasViewport / 2.0)
+        .onTapGesture {
+            viewModel.removeUmlConnector(connector)
         }
-    }
-
-    private var popoverMenu: some View {
-        VStack {
-            deleteControl
-        }
-        .frame(width: 200, height: 200, alignment: .center)
-        .background(Color.blue)
     }
 
     var body: some View {
-        VStack {
+        ZStack {
             generateConnectorOverlay(connector)
-            popoverMenu
+            deleteControl
         }
     }
 }

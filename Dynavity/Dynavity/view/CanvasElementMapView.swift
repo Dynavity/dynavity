@@ -29,6 +29,9 @@ struct CanvasElementMapView: View {
             }
         }
         .stroke(umlConnectorLineColor, lineWidth: umlConnectorLineWidth)
+        .overlay(isSelected(umlConnector: connector)
+                    ? ConnectorSelectionOverlayView(connector: connector, viewModel: viewModel)
+                    : nil)
         .offset(x: viewModel.canvasOrigin.x, y: viewModel.canvasOrigin.y)
     }
 
@@ -39,9 +42,6 @@ struct CanvasElementMapView: View {
                     .onTapGesture {
                         viewModel.select(umlConnector: connector)
                     }
-                    .overlay(isSelected(umlConnector: connector)
-                                ? ConnectorSelectionOverlayView(connector: connector, viewModel: viewModel)
-                                : nil)
             }
 
             ForEach(viewModel.getCanvasElements(), id: \.id) { element in
