@@ -65,8 +65,13 @@ extension AnnotationCanvasView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        annotationCanvasView.zoomScale = viewModel.scaleFactor
-        annotationCanvasView.contentOffset = viewModel.canvasTopLeftOffset
+        if annotationCanvasView.zoomScale != viewModel.scaleFactor {
+            annotationCanvasView.zoomScale = viewModel.scaleFactor
+        }
+
+        if annotationCanvasView.contentOffset != viewModel.canvasTopLeftOffset {
+            annotationCanvasView.contentOffset = viewModel.canvasTopLeftOffset
+        }
 
         // Disable drawing by setting the tool to the eraser.
         if isDrawingDisabled {
