@@ -16,13 +16,17 @@ struct CanvasElementMapView: View {
 
     private func generateUmlConnectors(_ connector: UmlConnector) -> some View {
         var points = connector.points
+        let viewOffset = (viewModel.canvasViewport / 2.0) - viewModel.canvasOrigin
+        let endPoint = points[points.count - 1]
+        let secondEndPoint = points[points.count - 2]
         return Path { path in
             let origin = points.removeFirst()
-            // Translate point to account of CanvasView offset
-            path.move(to: origin - viewModel.canvasOrigin + viewModel.canvasViewport / 2.0)
+            path.move(to: origin + viewOffset)
             points.forEach {
-                path.addLine(to: $0 - viewModel.canvasOrigin + viewModel.canvasViewport / 2.0)
+                path.addLine(to: $0 + viewOffset)
             }
+            path.addArrow(start: secondEndPoint + viewOffset,
+                          end: endPoint + viewOffset)
         }
         .stroke(umlConnectorLineColor, lineWidth: umlConnectorLineWidth)
         .gesture(testGesture)
