@@ -5,12 +5,9 @@ struct SideMenuView: View {
 
     @Binding var canvasName: String
 
-    // TODO: replace these with actual linked and unlinked canvases
-    @State var linkedCanvases: [String] = (1...100).map({ "Canvas: \($0)" })
-    @State var selectedLinkedCanvases: [String] = []
-
-    @State var unlinkedCanvases: [String] = (200...300).map({ "Canvas: \($0)" })
-    @State var selectedUnlinkedCanvases: [String] = []
+    // TODO: refactor this and listview to not directly interfact with model
+    @State var selectedLinkedNodes: [BacklinkNode] = []
+    @State var selectedUnlinkedNodes: [BacklinkNode] = []
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -38,11 +35,13 @@ struct SideMenuView: View {
         Group {
             SideMenuHeaderView(headerText: "Backlinks")
             SideMenuContentView(label: "Linked Canvases") {
-                MultiSelectCanvasListView(items: linkedCanvases, selections: $selectedLinkedCanvases)
+                MultiSelectListView(nodes: graphMapViewModel.getLinkedNodes(for: testId),
+                                    selections: $selectedLinkedNodes)
             }
             upDownButtons
             SideMenuContentView(label: "Unlinked Canvases") {
-                MultiSelectCanvasListView(items: unlinkedCanvases, selections: $selectedUnlinkedCanvases)
+                MultiSelectListView(nodes: graphMapViewModel.getUnlinkedNodes(for: testId),
+                                    selections: $selectedUnlinkedNodes)
             }
         }
     }
@@ -59,7 +58,7 @@ struct SideMenuView: View {
                     .scaledToFit()
                     .frame(height: 30)
             }
-            .disabled(selectedUnlinkedCanvases.isEmpty)
+            .disabled(selectedUnlinkedNodes.isEmpty)
             Button(action: {
                 unlinkSelectedLinkedCanvases()
             }) {
@@ -68,7 +67,7 @@ struct SideMenuView: View {
                     .scaledToFit()
                     .frame(height: 30)
             }
-            .disabled(selectedLinkedCanvases.isEmpty)
+            .disabled(selectedLinkedNodes.isEmpty)
             Spacer()
         }
     }
@@ -78,21 +77,17 @@ struct SideMenuView: View {
 extension SideMenuView {
     // TODO: replace these with actual implementations
     private func linkSelectedUnlinkedCanvases() {
-        linkedCanvases.append(contentsOf: selectedUnlinkedCanvases)
-        unlinkedCanvases = unlinkedCanvases.filter {
-            !selectedUnlinkedCanvases.contains($0)
+        for unlinkedNode in selectedUnlinkedNodes {
+            graphMapViewModel.addLinkBetween(testId, and: unlinkedNode.id)
         }
-        selectedUnlinkedCanvases = []
-        linkedCanvases.sort()
+        selectedUnlinkedNodes = []
     }
 
     private func unlinkSelectedLinkedCanvases() {
-        unlinkedCanvases.append(contentsOf: selectedLinkedCanvases)
-        linkedCanvases = linkedCanvases.filter {
-            !selectedLinkedCanvases.contains($0)
+        for linkedNode in selectedLinkedNodes {
+            graphMapViewModel.removeLinkBetween(testId, and: linkedNode.id)
         }
-        selectedLinkedCanvases = []
-        unlinkedCanvases.sort()
+        selectedLinkedNodes = []
     }
 }
 

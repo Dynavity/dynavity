@@ -2,6 +2,9 @@ import CoreGraphics
 import SwiftUI
 import Foundation
 
+// TODO: remove this once canvases are fully integrated
+let testId = UUID()
+
 class GraphMapViewModel: ObservableObject {
     @Published var backlinkEngine = BacklinkEngine()
 
@@ -24,24 +27,38 @@ class GraphMapViewModel: ObservableObject {
 
     // TODO: replace the implementation of this function: load from file and rebuild the links
     private func initialiseBacklinkEngine() {
+        backlinkEngine.addNode(id: testId, name: "TEST")
+
         let ids: [UUID] = (0..<20).map({ _ in UUID() })
         for id in ids {
             backlinkEngine.addNode(id: id, name: id.uuidString)
         }
 
         for i in 0..<ids.endIndex - 1 {
+            backlinkEngine.addLinkBetween(testId, and: ids[i])
             backlinkEngine.addLinkBetween(ids[i], and: ids[i + 1])
         }
     }
 
     func getLinkedNodes(for id: UUID) -> [BacklinkNode] {
-        backlinkEngine.getBacklinks(for: id)
+        backlinkEngine.getBacklinks(for: id).sorted(by: { $0.name < $1.name })
     }
 
     func getUnlinkedNodes(for id: UUID) -> [BacklinkNode] {
-        Array(Set(self.getNodes())
-                .subtracting(self.getLinkedNodes(for: id))
-        )
+        let unlinkedNodes = Set(self.getNodes()).subtracting(self.getLinkedNodes(for: id))
+
+        return Array(unlinkedNodes)
+            // Exclude the input node
+            .filter({ $0.id != id })
+            .sorted(by: { $0.name < $1.name })
+    }
+
+    func addLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
+        backlinkEngine.addLinkBetween(firstItemId, and: secondItemId)
+    }
+
+    func removeLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
+        backlinkEngine.removeLinkBetween(firstItemId, and: secondItemId)
     }
 }
 

@@ -27,7 +27,9 @@ struct BacklinkEngine {
 
     mutating func addNode(id: UUID, name: String) {
         // TODO: figure out a way to position new nodes
-        let node = BacklinkNode(id: id, name: name, position: .zero)
+        let randomPoint = CGPoint(x: Int.random(in: -300...300),
+                                  y: Int.random(in: -300...300))
+        let node = BacklinkNode(id: id, name: name, position: randomPoint)
         graph.addNode(node)
     }
 
