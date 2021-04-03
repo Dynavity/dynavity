@@ -25,6 +25,14 @@ extension CGPoint {
         CGSize(width: firstPoint.x - secondPoint.x, height: firstPoint.y - secondPoint.y)
     }
 
+    static func * (point: CGPoint, scalar: CGFloat) -> CGPoint {
+        CGPoint(x: point.x * scalar, y: point.y * scalar)
+    }
+
+    static func / (point: CGPoint, scalar: CGFloat) -> CGPoint {
+        CGPoint(x: point.x / scalar, y: point.y / scalar)
+    }
+
     static func += (point: inout CGPoint, size: CGSize) {
         point.x += size.width
         point.y += size.height

@@ -14,8 +14,7 @@ class CanvasViewModel: ObservableObject {
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
-    @Published var canvasCenterOffsetX: CGFloat = 0.0
-    @Published var canvasCenterOffsetY: CGFloat = 0.0
+    @Published var canvasTopLeftOffset: CGPoint = .zero
     @Published var scaleFactor: CGFloat = 1.0
     @Published var selectedCanvasElementId: UUID?
     @Published var canvasMode: CanvasMode {
@@ -32,8 +31,7 @@ class CanvasViewModel: ObservableObject {
     // Uml element connectors
     @Published var umlConnectorStart: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     @Published var umlConnectorEnd: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
-    var canvasViewportWidth: CGFloat = 0.0
-    var canvasViewportHeight: CGFloat = 0.0
+    var canvasViewport: CGSize = .zero
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
@@ -43,10 +41,24 @@ class CanvasViewModel: ObservableObject {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
     }
 
-    var canvasCenter: CGPoint {
-        let originOffset = CGPoint(x: canvasCenterOffsetX, y: canvasCenterOffsetY)
-        print(originOffset)
-        return canvasOrigin - originOffset
+    private var originOffset: CGPoint {
+        canvasTopLeftOffset - canvasOrigin
+    }
+
+    private var scaledOriginOffset: CGPoint {
+        canvasTopLeftOffset / scaleFactor - canvasOrigin
+    }
+
+    private var viewportOffset: CGSize {
+        canvasViewport / 2.0 * (scaleFactor - 1.0)
+    }
+
+    var canvasViewportOffset: CGSize {
+        viewportOffset - originOffset - canvasOrigin
+    }
+
+    private var canvasCenter: CGPoint {
+        canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
     init(canvasSize: CGFloat) {
@@ -64,12 +76,11 @@ class CanvasViewModel: ObservableObject {
     }
 
     func setCanvasViewport(size: CGSize) {
-        canvasViewportWidth = size.width
-        canvasViewportHeight = size.height
+        canvasViewport = size
     }
 }
 
-// MARK: Adding/removing of canvas elements
+// MARK: Adding of canvas elements
 extension CanvasViewModel {
     func addImageElement(from image: UIImage) {
         let imageCanvasElement = ImageElement(position: canvasCenter, image: image)
@@ -109,10 +120,6 @@ extension CanvasViewModel {
         case .rectangle:
             canvas.addElement(RectangleUmlElement(position: canvasCenter))
         }
-    }
-
-    func removeElement(_ element: CanvasElementProtocol) {
-        canvas.removeElement(element)
     }
 }
 
@@ -210,6 +217,10 @@ extension CanvasViewModel {
 
         canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
     }
+
+    func removeElement(_ element: CanvasElementProtocol) {
+        canvas.removeElement(element)
+    }
 }
 
 // MARK: Reposition drag gesture
@@ -236,60 +247,6 @@ extension CanvasViewModel {
     func handleDragEnd() {
         dragStartLocation = nil
         element = nil
-    }
-}
-
-// MARK: Annotation palette controls
-extension CanvasViewModel {
-    func getAnnotationWidths() -> [CGFloat] {
-        AnnotationPalette.annotationWidths
-    }
-
-    func getAnnotationColors() -> [UIColor] {
-        AnnotationPalette.annotationColors
-    }
-
-    func getCurrentTool() -> PKTool {
-        annotationPalette.getSelectedTool()
-    }
-}
-
-// MARK: Annotation palette controls button handlers
-extension CanvasViewModel {
-    func clearSelectedAnnotationTool() {
-        canvasMode = .selection
-    }
-
-    func selectPenAnnotationTool() {
-        shouldShowAnnotationMenu = canvasMode == .pen
-        canvasMode = .pen
-        annotationPalette.switchTool(.pen)
-    }
-
-    func selectMarkerAnnotationTool() {
-        shouldShowAnnotationMenu = canvasMode == .marker
-        canvasMode = .marker
-        annotationPalette.switchTool(.marker)
-    }
-
-    func selectEraserAnnotationTool() {
-        canvasMode = .eraser
-        annotationPalette.switchTool(.eraser)
-    }
-
-    func selectLassoAnnotationTool() {
-        canvasMode = .lasso
-        annotationPalette.switchTool(.lasso)
-    }
-
-    func selectAnnotationWidth(_ width: CGFloat) {
-        annotationPalette.setAnnotationWidth(width)
-        shouldShowAnnotationMenu = false
-    }
-
-    func selectAnnotationColor(_ color: UIColor) {
-        annotationPalette.setAnnotationColor(color)
-        shouldShowAnnotationMenu = false
     }
 }
 
