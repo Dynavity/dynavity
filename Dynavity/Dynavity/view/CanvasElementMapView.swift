@@ -10,6 +10,10 @@ struct CanvasElementMapView: View {
         viewModel.selectedCanvasElementId == element.id
     }
 
+    private func isSelected(umlConnector: UmlConnector) -> Bool {
+        viewModel.selectedUmlConnectorId == umlConnector.id
+    }
+
     private func shouldShowUmlSelectionOverlay(_ element: CanvasElementProtocol) -> Bool {
         element is UmlElementProtocol && (viewModel.umlConnectorStart != nil || isSelected(element))
     }
@@ -25,19 +29,19 @@ struct CanvasElementMapView: View {
             }
         }
         .stroke(umlConnectorLineColor, lineWidth: umlConnectorLineWidth)
-        .gesture(testGesture)
         .offset(x: viewModel.canvasOrigin.x, y: viewModel.canvasOrigin.y)
-    }
-
-    // TODO: Change this guesture to select uml connector
-    var testGesture: some Gesture {
-        TapGesture().onEnded({ _ in print("Tap gesture UML connector") })
     }
 
     var body: some View {
         ZStack {
             ForEach(viewModel.getCanvasUmlConnectors(), id: \.id) { connector in
                 generateUmlConnectors(connector)
+                    .onTapGesture {
+                        viewModel.select(umlConnector: connector)
+                    }
+                    .overlay(isSelected(umlConnector: connector)
+                                ? ConnectorSelectionOverlayView(connector: connector, viewModel: viewModel)
+                                : nil)
             }
 
             ForEach(viewModel.getCanvasElements(), id: \.id) { element in
