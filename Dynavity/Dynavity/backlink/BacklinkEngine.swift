@@ -28,6 +28,10 @@ struct BacklinkEngine {
         graph.addLinkBetween(firstItem, and: secondItem)
     }
 
+    mutating func removeLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
+        graph.removeLinkBetween(firstItem, and: secondItem)
+    }
+
     func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
         graph.getBacklinks(for: item)
     }
