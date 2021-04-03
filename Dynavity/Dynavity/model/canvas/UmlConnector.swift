@@ -4,7 +4,7 @@ import CoreGraphics
 /**
  Encapsulates a connector between two UML shapes.
  */
-struct UmlConnector: Codable {
+struct UmlConnector {
     var id: UUID
     var points: [CGPoint]
     // UUID of UmlElementProtocol, actual element is in [CanvasElementProtocol] in Canvas
@@ -23,7 +23,9 @@ struct UmlConnector: Codable {
     mutating func addPoint(_ point: CGPoint) {
         points.append(point)
     }
+}
 
+extension UmlConnector: Codable {
     private enum CodingKeys: String, CodingKey {
         case id, points, fromElement, toElement, fromSide, toSide
     }
