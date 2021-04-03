@@ -48,7 +48,6 @@ struct SideMenuView: View {
         HStack {
             Spacer()
             Button(action: {
-                // TODO: create backlinks, update state (which should be computed from the array subtraction)
                 linkSelectedUnlinkedCanvases()
             }) {
                 Image(systemName: "arrow.up.square.fill")
@@ -73,7 +72,6 @@ struct SideMenuView: View {
 
 // MARK: Linking and unlinking of canvases
 extension SideMenuView {
-    // TODO: replace these with actual implementations
     private func linkSelectedUnlinkedCanvases() {
         for unlinkedNode in sideMenuViewModel.selectedUnlinkedNodes {
             graphMapViewModel.addLinkBetween(testId, and: unlinkedNode.id)
