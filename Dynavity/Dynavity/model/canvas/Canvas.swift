@@ -76,4 +76,12 @@ extension Canvas {
 
         umlConnectors[index] = connector
     }
+
+    mutating func removeUmlConnector(_ connector: UmlConnector) {
+        guard let index = umlConnectors.firstIndex(where: { $0.id == connector.id }) else {
+            return
+        }
+
+        umlConnectors.remove(at: index)
+    }
 }

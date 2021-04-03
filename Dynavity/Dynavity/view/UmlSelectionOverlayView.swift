@@ -43,7 +43,7 @@ struct UmlSelectionOverlayView: View {
                 guard let element = element as? UmlElementProtocol else {
                     return
                 }
-                viewModel.handleConnectorTap(element, anchor: connectorControl)
+                viewModel.handleConnectionPointTap(element, anchor: connectorControl)
             }
 
         return Group {
