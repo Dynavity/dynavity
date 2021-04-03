@@ -44,7 +44,7 @@ struct CanvasElementMapView: View {
                     }
             }
 
-            ForEach(viewModel.getCanvasElements(), id: \.id) { element in
+            ForEach(viewModel.canvasElements, id: \.id) { element in
                 elementViewFactory.createView(element: element)
                     .frame(width: element.width, height: element.height)
                     .shouldAddCardOverlay(shouldAdd: !(element is UmlElementProtocol))

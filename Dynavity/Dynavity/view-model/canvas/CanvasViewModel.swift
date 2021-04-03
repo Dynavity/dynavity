@@ -72,7 +72,7 @@ class CanvasViewModel: ObservableObject {
         self.init(canvasSize: 500_000)
     }
 
-    func getCanvasElements() -> [CanvasElementProtocol] {
+    var canvasElements: [CanvasElementProtocol] {
         canvas.canvasElements
     }
 
