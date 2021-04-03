@@ -6,6 +6,11 @@ struct AnnotationCanvasView: View {
     @State private var annotationCanvasView = PKCanvasWrapperView()
     private let isDrawingDisabled: Bool
 
+    private var shouldUpdateViewport: Bool {
+        isDrawingDisabled && viewModel.canvasMode != .selection
+            || !isDrawingDisabled && viewModel.canvasMode == .selection
+    }
+
     init(viewModel: CanvasViewModel, isDrawingDisabled: Bool) {
         self.viewModel = viewModel
         self.isDrawingDisabled = isDrawingDisabled
@@ -29,11 +34,15 @@ extension AnnotationCanvasView {
     }
 
     func didZoom(to scale: CGFloat) {
-        viewModel.scaleFactor = scale
+        if !shouldUpdateViewport {
+            viewModel.scaleFactor = scale
+        }
     }
 
     func didScroll(to offset: CGPoint) {
-        viewModel.canvasTopLeftOffset = offset
+        if !shouldUpdateViewport {
+            viewModel.canvasTopLeftOffset = offset
+        }
     }
 }
 
@@ -65,11 +74,8 @@ extension AnnotationCanvasView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
-        if annotationCanvasView.zoomScale != viewModel.scaleFactor {
+        if shouldUpdateViewport {
             annotationCanvasView.zoomScale = viewModel.scaleFactor
-        }
-
-        if annotationCanvasView.contentOffset != viewModel.canvasTopLeftOffset {
             annotationCanvasView.contentOffset = viewModel.canvasTopLeftOffset
         }
 
