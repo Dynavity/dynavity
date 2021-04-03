@@ -247,8 +247,10 @@ struct Graph<T: Hashable> {
     }
 
     /// Checks the representation invariants.
-    /// TODO: remember to disable this / ship app in production
     private func checkRepresentation() -> Bool {
+        // TODO: remember to disable this / ship app in production
+        // The next line is here for ease of commenting / uncommenting this function out
+//        true ||
         checkDirectedUndirectedInvariant()
             && hasUniqueLabelsOnNodes()
             && checkAdjancencyListImpl()

@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 
 /// An engine that supports:
 /// - Creation of backlinks between items
@@ -24,15 +25,42 @@ struct BacklinkEngine {
         return output
     }
 
-    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
-        graph.addLinkBetween(firstItem, and: secondItem)
+    mutating func addNode(id: UUID, name: String) {
+        // TODO: figure out a way to position new nodes
+        let randomPoint = CGPoint(x: Int.random(in: -300...300),
+                                  y: Int.random(in: -300...300))
+        let node = BacklinkNode(id: id, name: name, position: randomPoint)
+        graph.addNode(node)
     }
 
-    func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
-        graph.getBacklinks(for: item)
+    mutating func addLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
+        guard let firstNode = getBacklinkNodeWithId(id: firstItemId),
+              let secondNode = getBacklinkNodeWithId(id: secondItemId) else {
+            return
+        }
+        graph.addLinkBetween(firstNode, and: secondNode)
+    }
+
+    mutating func removeLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
+        guard let firstNode = getBacklinkNodeWithId(id: firstItemId),
+              let secondNode = getBacklinkNodeWithId(id: secondItemId) else {
+            return
+        }
+        graph.removeLinkBetween(firstNode, and: secondNode)
+    }
+
+    func getBacklinks(for id: UUID) -> [BacklinkNode] {
+        guard let node = getBacklinkNodeWithId(id: id) else {
+            return []
+        }
+        return graph.getBacklinks(for: node)
     }
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
         graph.moveBacklinkNode(backlinkNode, to: updatedPos)
+    }
+
+    private func getBacklinkNodeWithId(id: UUID?) -> BacklinkNode? {
+        self.nodes.first(where: { $0.id == id })
     }
 }

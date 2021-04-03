@@ -13,17 +13,24 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         }
     }
 
-    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
-        assert(!self.isDirected)
-        let firstNode = Node(firstItem)
-        let secondNode = Node(secondItem)
-        let edge = Edge(source: firstNode, destination: secondNode)
-        self.addEdge(edge)
-    }
-
     func getBacklinks(for item: BacklinkNode) -> [BacklinkNode] {
         let node = Node(item)
         return self.adjacentNodesFromNode(node).map({ $0.label })
+    }
+
+    mutating func addNode(_ node: BacklinkNode) {
+        self.addNode(Node(node))
+    }
+
+    mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
+        assert(!self.isDirected)
+        let edge = createEdgeBetween(firstItem, and: secondItem)
+        self.addEdge(edge)
+    }
+
+    mutating func removeLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
+        let edge = createEdgeBetween(firstItem, and: secondItem)
+        self.removeEdge(edge)
     }
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
@@ -34,6 +41,12 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         let updatedBacklinkNode = originalNode.label.moving(to: updatedPos)
 
         self.updateNode(originalNode, to: Node(updatedBacklinkNode))
+    }
+
+    private func createEdgeBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) -> Edge<BacklinkNode> {
+        let firstNode = Node(firstItem)
+        let secondNode = Node(secondItem)
+        return Edge(source: firstNode, destination: secondNode)
     }
 
     private func getNodeWithId(id: UUID?) -> Node<BacklinkNode>? {
