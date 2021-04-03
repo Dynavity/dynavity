@@ -38,11 +38,11 @@ struct SideMenuView: View {
         Group {
             SideMenuHeaderView(headerText: "Backlinks")
             SideMenuContentView(label: "Linked Canvases") {
-                MultiSelectCanvasListView(items: $linkedCanvases, selections: $selectedLinkedCanvases)
+                MultiSelectCanvasListView(items: linkedCanvases, selections: $selectedLinkedCanvases)
             }
             upDownButtons
             SideMenuContentView(label: "Unlinked Canvases") {
-                MultiSelectCanvasListView(items: $unlinkedCanvases, selections: $selectedUnlinkedCanvases)
+                MultiSelectCanvasListView(items: unlinkedCanvases, selections: $selectedUnlinkedCanvases)
             }
         }
     }

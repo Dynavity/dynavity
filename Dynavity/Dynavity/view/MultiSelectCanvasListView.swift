@@ -2,7 +2,7 @@ import SwiftUI
 
 struct MultiSelectCanvasListView: View {
     // TODO: replace these with actual canvases
-    @Binding var items: [String]
+    var items: [String]
     @Binding var selections: [String]
 
     var body: some View {
