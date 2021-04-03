@@ -6,6 +6,7 @@ struct CanvasView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                AnnotationCanvasView(viewModel: viewModel, isDrawingDisabled: true)
                 CanvasElementMapView(viewModel: viewModel)
                     .scaleEffect(viewModel.scaleFactor)
                     .offset(viewModel.canvasViewportOffset)

@@ -4,9 +4,15 @@ import PencilKit
 struct AnnotationCanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var annotationCanvasView = PKCanvasWrapperView()
+    private let isDrawingDisabled: Bool
+
+    init(viewModel: CanvasViewModel, isDrawingDisabled: Bool) {
+        self.viewModel = viewModel
+        self.isDrawingDisabled = isDrawingDisabled
+    }
 
     init(viewModel: CanvasViewModel) {
-        self.viewModel = viewModel
+        self.init(viewModel: viewModel, isDrawingDisabled: false)
     }
 }
 
@@ -59,6 +65,12 @@ extension AnnotationCanvasView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PKCanvasView, context: Context) {
+        // Disable drawing by setting the tool to the eraser.
+        if isDrawingDisabled {
+            annotationCanvasView.tool = PKEraserTool(.vector)
+            return
+        }
+
         // Update annotation tool
         annotationCanvasView.tool = viewModel.getCurrentTool()
     }
