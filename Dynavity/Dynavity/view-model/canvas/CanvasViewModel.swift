@@ -12,8 +12,14 @@ class CanvasViewModel: ObservableObject {
         case lasso
     }
 
+    // to prevent an infinite loop of didSet when loading changes
+    private var enableWriteBack = true
     @Published var canvas = Canvas() {
-        didSet { saveToFirebase() }
+        didSet {
+            if enableWriteBack {
+                saveToFirebase()
+            }
+        }
     }
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
@@ -96,9 +102,7 @@ extension CanvasViewModel {
         db.getData { _, snapshot in
             self.loadSnapshot(snapshot)
         }
-        db.observe(.value) { snapshot in
-            self.loadSnapshot2(snapshot)
-        }
+        db.observe(.value, with: loadSnapshot)
     }
 
     private func loadSnapshot(_ snapshot: DataSnapshot) {
@@ -106,18 +110,9 @@ extension CanvasViewModel {
            let loaded = try? FirebaseDecoder().decode(Canvas.self, from: data) {
             // replace the local snapshot
             DispatchQueue.main.async {
+                self.enableWriteBack = false
                 self.canvas = loaded
-            }
-        }
-    }
-
-    private func loadSnapshot2(_ snapshot: DataSnapshot) {
-        if let data = snapshot.value,
-           let loaded = try? FirebaseDecoder().decode(Canvas.self, from: data) {
-            // replace the local snapshot
-            DispatchQueue.main.async {
-                self.canvas = loaded
-                print(loaded)
+                self.enableWriteBack = true
             }
         }
     }
