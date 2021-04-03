@@ -1,5 +1,7 @@
 import SwiftUI
 import PencilKit
+import FirebaseDatabase
+import CodableFirebase
 
 class CanvasViewModel: ObservableObject {
     enum CanvasMode {
@@ -10,7 +12,9 @@ class CanvasViewModel: ObservableObject {
         case lasso
     }
 
-    @Published var canvas = Canvas()
+    @Published var canvas = Canvas() {
+        didSet { saveToFirebase() }
+    }
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
@@ -65,6 +69,7 @@ class CanvasViewModel: ObservableObject {
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
         self.canvasMode = .pen
+        loadFromFirebase()
     }
 
     convenience init() {
@@ -78,6 +83,48 @@ class CanvasViewModel: ObservableObject {
 
     func setCanvasViewport(size: CGSize) {
         canvasViewport = size
+    }
+}
+
+// MARK: Firebase synchronization
+extension CanvasViewModel {
+    private var db: DatabaseReference {
+        Database.database().reference(withPath: canvas.name)
+    }
+
+    private func loadFromFirebase() {
+        db.getData { _, snapshot in
+            self.loadSnapshot(snapshot)
+        }
+        db.observe(.value) { snapshot in
+            self.loadSnapshot2(snapshot)
+        }
+    }
+
+    private func loadSnapshot(_ snapshot: DataSnapshot) {
+        if let data = snapshot.value,
+           let loaded = try? FirebaseDecoder().decode(Canvas.self, from: data) {
+            // replace the local snapshot
+            DispatchQueue.main.async {
+                self.canvas = loaded
+            }
+        }
+    }
+
+    private func loadSnapshot2(_ snapshot: DataSnapshot) {
+        if let data = snapshot.value,
+           let loaded = try? FirebaseDecoder().decode(Canvas.self, from: data) {
+            // replace the local snapshot
+            DispatchQueue.main.async {
+                self.canvas = loaded
+                print(loaded)
+            }
+        }
+    }
+
+    private func saveToFirebase() {
+        let data = try? FirebaseEncoder().encode(canvas)
+        db.setValue(data)
     }
 }
 
