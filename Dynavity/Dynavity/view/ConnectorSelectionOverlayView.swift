@@ -27,7 +27,7 @@ struct ConnectorSelectionOverlayView: View {
         }
     }
 
-    private func getConnectorBend() -> CGPoint {
+    private func getConnectorMidPoint() -> CGPoint {
         let points = connector.points
         // Only source and dest, no bends
         if points.count == 2 {
@@ -45,7 +45,7 @@ struct ConnectorSelectionOverlayView: View {
                 .background(deleteControlBackgroundColor)
                 .frame(width: extendedControlSize, height: extendedControlSize)
         }
-        .position(getConnectorBend() - viewModel.canvasOrigin + viewModel.canvasViewport / 2.0)
+        .position(getConnectorMidPoint() - viewModel.canvasOrigin + viewModel.canvasViewport / 2.0)
         .onTapGesture {
             viewModel.removeUmlConnector(connector)
         }
