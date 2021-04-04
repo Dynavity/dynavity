@@ -95,7 +95,15 @@ class CanvasViewModel: ObservableObject {
     }
 
     var elementObserver: ElementChangeListener {
-        ElementChangeListener { newValue in
+        ElementChangeListener { element in
+            var newValue = element
+            if let oldValue = self.canvas.getElementBy(id: newValue.id) {
+                // use the existing position, height, width, rotation
+                newValue.position = oldValue.position
+                newValue.height = oldValue.height
+                newValue.width = oldValue.width
+                newValue.rotation = oldValue.rotation
+            }
             self.canvas.replaceElement(newValue)
         }
     }
