@@ -13,6 +13,7 @@ struct TodoElement: CanvasElementProtocol {
     var minimumHeight: CGFloat {
         60.0
     }
+    var observers = [ElementChangeListener]()
 
     // MARK: TodosElement-specific attributes
     var todos: [Todo] = []

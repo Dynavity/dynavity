@@ -12,6 +12,7 @@ struct MarkupElement: TextElementProtocol {
     var width: CGFloat = 500.0
     var height: CGFloat = 500.0
     var rotation: Double = .zero
+    var observers = [ElementChangeListener]()
 
     // MARK: TextElementProtocol
     var text: String = ""
@@ -25,4 +26,14 @@ struct MarkupElement: TextElementProtocol {
     }
 }
 
-extension MarkupElement: Equatable {}
+extension MarkupElement: Codable {
+    private enum CodingKeys: CodingKey {
+        case id, position, width, height, rotation, text, markupType
+    }
+}
+
+extension MarkupElement: Equatable {
+    static func == (lhs: MarkupElement, rhs: MarkupElement) -> Bool {
+        lhs.checkId(rhs)
+    }
+}

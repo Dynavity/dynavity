@@ -13,9 +13,16 @@ struct RectangleUmlElement: UmlElementProtocol {
     var minimumHeight: CGFloat {
         60.0
     }
+    var observers = [ElementChangeListener]()
 
     // MARK: UmlElementProtocol
     var label: String = "Process"
     var umlType: UmlType = .activityDiagram
     var umlShape: UmlShape = .rectangle
+}
+
+extension RectangleUmlElement: Codable {
+    private enum CodingKeys: CodingKey {
+        case id, position, width, height, rotation, label, umlType, umlShape
+    }
 }

@@ -13,6 +13,24 @@ protocol CanvasElementProtocol: Codable {
     mutating func move(by translation: CGSize)
     mutating func resize(by translation: CGSize)
     mutating func rotate(to rotation: Double)
+
+    var observers: [ElementChangeListener] { get set }
+}
+
+protocol ElementChangeListener {
+    func notifyDidChange(newObj: CanvasElementProtocol)
+}
+
+extension CanvasElementProtocol {
+    mutating func addObserver(_ observer: ElementChangeListener) {
+        observers.append(observer)
+    }
+
+    func notifyObservers() {
+        observers.forEach {
+            $0.notifyDidChange(newObj: self)
+        }
+    }
 }
 
 // MARK: Default implementations
@@ -94,5 +112,10 @@ extension CanvasElementProtocol {
                            size: CGSize(width: width, height: height)
                             .rotate(by: CGFloat(rotation)))
         return frame.contains(point)
+    }
+
+    // Helper to implement Equatable
+    func checkId(_ other: CanvasElementProtocol) -> Bool {
+        self.id == other.id
     }
 }

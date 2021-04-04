@@ -14,6 +14,7 @@ struct CodeElement: TextElementProtocol {
     var minimumHeight: CGFloat {
         60.0
     }
+    var observers = [ElementChangeListener]()
 
     // MARK: TextElementProtocol
     var text: String = ""
@@ -103,5 +104,11 @@ struct CodeElement: TextElementProtocol {
             processed = processed.replacingOccurrences(of: $0.0, with: $0.1)
         }
         self.text = processed
+    }
+}
+
+extension CodeElement: Codable {
+    private enum CodingKeys: CodingKey {
+        case id, position, width, height, rotation, text, language
     }
 }
