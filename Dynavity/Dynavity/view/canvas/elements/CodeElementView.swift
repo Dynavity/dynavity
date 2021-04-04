@@ -22,9 +22,6 @@ struct CodeElementView: View {
                 .font(.custom("Courier", size: viewModel.codeElement.fontSize))
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onChange(of: viewModel.codeElement.text) {_ in
-                    viewModel.convertQuotes()
-                }
             Divider()
             HStack {
                 Picker("Language", selection: $viewModel.codeElement.language) {

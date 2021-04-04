@@ -13,6 +13,7 @@ class CodeElementViewModel: ObservableObject {
     }
 
     func runCode() {
+        convertQuotes()
         let program = codeElement.text
         guard !program.isEmpty else {
             // backend will not accept an empty program
