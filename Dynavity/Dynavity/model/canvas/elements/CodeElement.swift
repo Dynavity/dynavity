@@ -17,10 +17,14 @@ struct CodeElement: TextElementProtocol {
     var observers = [ElementChangeListener]()
 
     // MARK: TextElementProtocol
-    var text: String = ""
+    var text: String = "" {
+        didSet { notifyObservers() }
+    }
 
     // MARK: CodeElement-specific attributes
-    var language = CodeLanguage.python
+    var language = CodeLanguage.python {
+        didSet { notifyObservers() }
+    }
 
     init(position: CGPoint) {
         self.position = position

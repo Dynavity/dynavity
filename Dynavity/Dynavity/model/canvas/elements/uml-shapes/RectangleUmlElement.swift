@@ -16,7 +16,9 @@ struct RectangleUmlElement: UmlElementProtocol {
     var observers = [ElementChangeListener]()
 
     // MARK: UmlElementProtocol
-    var label: String = "Process"
+    var label: String = "Process" {
+        didSet { notifyObservers() }
+    }
     var umlType: UmlType = .activityDiagram
     var umlShape: UmlShape = .rectangle
 }

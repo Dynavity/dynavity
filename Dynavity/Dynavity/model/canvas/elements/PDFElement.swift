@@ -8,7 +8,9 @@ struct PDFElement: CanvasElementProtocol {
     var rotation: Double = .zero
     var observers = [ElementChangeListener]()
 
-    var file: URL
+    var file: URL {
+        didSet { notifyObservers() }
+    }
 }
 
 extension PDFElement: Codable {

@@ -16,7 +16,9 @@ struct DiamondUmlElement: UmlElementProtocol {
     var observers = [ElementChangeListener]()
 
     // MARK: UmlElementProtocol
-    var label: String = "Decision"
+    var label: String = "Decision" {
+        didSet { notifyObservers() }
+    }
     var umlType: UmlType = .activityDiagram
     var umlShape: UmlShape = .diamond
 }

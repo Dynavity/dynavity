@@ -11,7 +11,9 @@ struct PlainTextElement: TextElementProtocol {
     var observers = [ElementChangeListener]()
 
     // MARK: TextElementProtocol
-    var text: String = ""
+    var text: String = "" {
+        didSet { notifyObservers() }
+    }
 }
 
 extension PlainTextElement: Codable {

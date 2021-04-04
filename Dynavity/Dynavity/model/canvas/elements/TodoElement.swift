@@ -20,10 +20,12 @@ struct TodoElement: CanvasElementProtocol {
 
     mutating func removeTodo(at index: Int) {
         todos.remove(at: index)
+        notifyObservers()
     }
 
     mutating func addTodo(label: String) {
         todos.append(Todo(label: label))
+        notifyObservers()
     }
 }
 

@@ -8,7 +8,9 @@ struct ImageElement: CanvasElementProtocol {
     var rotation: Double = .zero
     var observers = [ElementChangeListener]()
 
-    private var codeImage: CodableImage
+    private var codeImage: CodableImage {
+        didSet { notifyObservers() }
+    }
     var image: UIImage {
         codeImage.image
     }

@@ -17,8 +17,8 @@ protocol CanvasElementProtocol: Codable {
     var observers: [ElementChangeListener] { get set }
 }
 
-protocol ElementChangeListener {
-    func notifyDidChange(newObj: CanvasElementProtocol)
+struct ElementChangeListener {
+    let notifyDidChange: (CanvasElementProtocol) -> Void
 }
 
 extension CanvasElementProtocol {
@@ -28,7 +28,7 @@ extension CanvasElementProtocol {
 
     func notifyObservers() {
         observers.forEach {
-            $0.notifyDidChange(newObj: self)
+            $0.notifyDidChange(self)
         }
     }
 }

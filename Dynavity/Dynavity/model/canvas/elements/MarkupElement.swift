@@ -15,10 +15,14 @@ struct MarkupElement: TextElementProtocol {
     var observers = [ElementChangeListener]()
 
     // MARK: TextElementProtocol
-    var text: String = ""
+    var text: String = "" {
+        didSet { notifyObservers() }
+    }
 
     // MARK: MarkupElement-specific attributes
-    var markupType: MarkupType
+    var markupType: MarkupType {
+        didSet { notifyObservers() }
+    }
 
     init(position: CGPoint, markupType: MarkupType) {
         self.position = position
