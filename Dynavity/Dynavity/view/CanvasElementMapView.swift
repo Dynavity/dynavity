@@ -6,7 +6,7 @@ struct CanvasElementMapView: View {
     private let umlConnectorLineWidth: CGFloat = 1.0
     private let umlConnectorLineColor: Color = .black
     private let umlConnectorHitboxWidth: CGFloat = 20.0
-    private let umlConnectorHitboxOpacity: Double = 0.0001
+    private let umlConnectorHitboxOpacity: Double = 0.001
 
     private func isSelected(_ element: CanvasElementProtocol) -> Bool {
         viewModel.selectedCanvasElementId == element.id

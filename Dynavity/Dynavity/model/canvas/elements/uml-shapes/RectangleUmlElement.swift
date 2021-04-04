@@ -16,6 +16,6 @@ struct RectangleUmlElement: UmlElementProtocol {
 
     // MARK: UmlElementProtocol
     var label: String = "Process"
-    var umlType: UmlTypes = .activityDiagram
-    var umlShape: UmlShapes = .rectangle
+    var umlType: UmlType = .activityDiagram
+    var umlShape: UmlShape = .rectangle
 }

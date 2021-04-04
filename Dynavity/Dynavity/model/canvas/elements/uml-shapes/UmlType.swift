@@ -1,4 +1,4 @@
-enum UmlTypes: Int, Codable {
+enum UmlType: Int, Codable {
     // TODO: Add more UML Diagram Types
     case classDiagram, activityDiagram
 }

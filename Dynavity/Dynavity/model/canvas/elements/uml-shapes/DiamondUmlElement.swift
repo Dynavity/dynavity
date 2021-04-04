@@ -16,6 +16,6 @@ struct DiamondUmlElement: UmlElementProtocol {
 
     // MARK: UmlElementProtocol
     var label: String = "Decision"
-    var umlType: UmlTypes = .activityDiagram
-    var umlShape: UmlShapes = .diamond
+    var umlType: UmlType = .activityDiagram
+    var umlShape: UmlShape = .diamond
 }
