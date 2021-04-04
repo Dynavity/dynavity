@@ -24,7 +24,7 @@ struct DiamondUmlView: View {
             Diamond().stroke(Color.black, lineWidth: viewModel.shapeBorderWidth)
             TextField("", text: $viewModel.umlElement.label)
                 .multilineTextAlignment(.center)
-        }
+        }.background(Color.white)
     }
 }
 

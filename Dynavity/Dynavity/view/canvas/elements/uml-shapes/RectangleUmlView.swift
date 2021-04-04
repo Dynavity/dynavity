@@ -24,7 +24,7 @@ struct RectangleUmlView: View {
             Rectangle().stroke(Color.black, lineWidth: viewModel.shapeBorderWidth)
             TextField("", text: $viewModel.umlElement.label)
                 .multilineTextAlignment(.center)
-        }
+        }.background(Color.white)
     }
 }
 
