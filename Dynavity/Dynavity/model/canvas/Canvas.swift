@@ -101,7 +101,6 @@ extension Canvas: Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         let wrappedElements = canvasElements
-            .filter { !($0 is TestElement) } // TODO remove when testelements are gone
             .map(TypeWrappedCanvasElement.init)
         try container.encode(wrappedElements, forKey: .canvasElements)
         try container.encode(self.umlConnectors, forKey: .umlConnectors)
