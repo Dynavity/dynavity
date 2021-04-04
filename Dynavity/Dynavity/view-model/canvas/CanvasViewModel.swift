@@ -93,6 +93,18 @@ class CanvasViewModel: ObservableObject {
     func setCanvasViewport(size: CGSize) {
         canvasViewport = size
     }
+
+    var elementObserver: ElementChangeListener {
+        ElementChangeListener { newValue in
+            self.canvas.replaceElement(newValue)
+        }
+    }
+
+    func addObserver(element: CanvasElementProtocol) -> CanvasElementProtocol {
+        var observedElement = element
+        observedElement.addObserver(elementObserver)
+        return observedElement
+    }
 }
 
 // MARK: Firebase synchronization
@@ -119,6 +131,7 @@ extension CanvasViewModel {
                    let selectedCanvasElement = self.canvas.getElementBy(id: id) {
                     loadedCanvas.replaceElement(selectedCanvasElement)
                 }
+                loadedCanvas.canvasElements = loadedCanvas.canvasElements.map(self.addObserver)
                 self.canvas = loadedCanvas
                 self.enableWriteBack = true
             }
@@ -133,30 +146,34 @@ extension CanvasViewModel {
 
 // MARK: Adding of canvas elements
 extension CanvasViewModel {
+    func addElement(_ element: CanvasElementProtocol) {
+        canvas.addElement(addObserver(element: element))
+    }
+
     func addImageElement(from image: UIImage) {
         let imageCanvasElement = ImageElement(position: canvasCenter, image: image)
-        canvas.addElement(imageCanvasElement)
+        addElement(imageCanvasElement)
     }
 
     func addPdfElement(from file: URL) {
         let pdfCanvasElement = PDFElement(position: canvasCenter, file: file)
-        canvas.addElement(pdfCanvasElement)
+        addElement(pdfCanvasElement)
     }
 
     func addTodoElement() {
-        canvas.addElement(TodoElement(position: canvasCenter))
+        addElement(TodoElement(position: canvasCenter))
     }
 
     func addPlainTextElement() {
-        canvas.addElement(PlainTextElement(position: canvasCenter))
+        addElement(PlainTextElement(position: canvasCenter))
     }
 
     func addCodeElement() {
-        canvas.addElement(CodeElement(position: canvasCenter))
+        addElement(CodeElement(position: canvasCenter))
     }
 
     func addMarkupElement(markupType: MarkupElement.MarkupType) {
-        canvas.addElement(MarkupElement(position: canvasCenter, markupType: markupType))
+        addElement(MarkupElement(position: canvasCenter, markupType: markupType))
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {
@@ -167,9 +184,9 @@ extension CanvasViewModel {
         // TODO: Apply factory pattern here
         switch umlElement.umlShape {
         case .diamond:
-            canvas.addElement(DiamondUmlElement(position: canvasCenter))
+            addElement(DiamondUmlElement(position: canvasCenter))
         case .rectangle:
-            canvas.addElement(RectangleUmlElement(position: canvasCenter))
+            addElement(RectangleUmlElement(position: canvasCenter))
         }
     }
 }
