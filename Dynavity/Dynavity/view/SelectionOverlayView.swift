@@ -200,6 +200,6 @@ struct SelectionOverlayView: View {
 
 struct SelectionOverlayView_Previews: PreviewProvider {
     static var previews: some View {
-        SelectionOverlayView(element: TestElement(), viewModel: CanvasViewModel())
+        SelectionOverlayView(element: PlainTextElement(position: .zero), viewModel: CanvasViewModel())
     }
 }

@@ -25,3 +25,22 @@ struct TodoElement: CanvasElementProtocol {
         todos.append(Todo(label: label))
     }
 }
+
+extension TodoElement: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case id, position, width, height, rotation, todos
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        func getOrDefault<T: Decodable>(type: T.Type, key: CodingKeys, orElse: T) -> T {
+            (try? container.decode(type, forKey: key)) ?? orElse
+        }
+        self.init(id: try container.decode(UUID.self, forKey: .id),
+                  position: try container.decode(CGPoint.self, forKey: .position),
+                  width: try container.decode(CGFloat.self, forKey: .width),
+                  height: try container.decode(CGFloat.self, forKey: .height),
+                  rotation: try container.decode(Double.self, forKey: .rotation),
+                  todos: getOrDefault(type: [Todo].self, key: .todos, orElse: []))
+    }
+}

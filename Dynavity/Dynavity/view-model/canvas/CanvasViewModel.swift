@@ -1,5 +1,7 @@
 import SwiftUI
 import PencilKit
+import FirebaseDatabase
+import CodableFirebase
 
 class CanvasViewModel: ObservableObject {
     enum CanvasMode {
@@ -10,7 +12,18 @@ class CanvasViewModel: ObservableObject {
         case lasso
     }
 
-    @Published var canvas = Canvas()
+    // to prevent an infinite loop of didSet when loading changes
+    private var enableWriteBack = true
+    @Published var canvas = Canvas() {
+        didSet {
+            if enableWriteBack {
+                // Prevent the saving to Firebase operation from freezing the main thread.
+                DispatchQueue.global(qos: .userInteractive).async {
+                    self.saveToFirebase()
+                }
+            }
+        }
+    }
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
@@ -65,6 +78,7 @@ class CanvasViewModel: ObservableObject {
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
         self.canvasMode = .pen
+        loadFromFirebase()
     }
 
     convenience init() {
@@ -72,12 +86,43 @@ class CanvasViewModel: ObservableObject {
         self.init(canvasSize: 500_000)
     }
 
-    func getCanvasElements() -> [CanvasElementProtocol] {
+    var canvasElements: [CanvasElementProtocol] {
         canvas.canvasElements
     }
 
     func setCanvasViewport(size: CGSize) {
         canvasViewport = size
+    }
+}
+
+// MARK: Firebase synchronization
+extension CanvasViewModel {
+    private var db: DatabaseReference {
+        Database.database().reference(withPath: canvas.name)
+    }
+
+    private func loadFromFirebase() {
+        db.getData { _, snapshot in
+            self.loadSnapshot(snapshot)
+        }
+        db.observe(.value, with: loadSnapshot)
+    }
+
+    private func loadSnapshot(_ snapshot: DataSnapshot) {
+        if let data = snapshot.value,
+           let loaded = try? FirebaseDecoder().decode(Canvas.self, from: data) {
+            // replace the local snapshot
+            DispatchQueue.main.async {
+                self.enableWriteBack = false
+                self.canvas = loaded
+                self.enableWriteBack = true
+            }
+        }
+    }
+
+    private func saveToFirebase() {
+        let data = try? FirebaseEncoder().encode(canvas)
+        db.setValue(data)
     }
 }
 

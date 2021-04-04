@@ -21,7 +21,7 @@ class CanvasElementViewFactory: ViewFactory {
             case let umlElement as UmlElementProtocol:
                 umlElementFactory.createView(element: umlElement)
             default:
-                TestElementView(element: element)
+                fatalError("Unable to render unrecognized canvas element!")
             }
         }
     }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MainView: View {
-    @ObservedObject private var canvasViewModel = CanvasViewModel()
+    @StateObject private var canvasViewModel = CanvasViewModel()
     @State private var shouldShowMenu = false
 
     static let umlMenuButtonWidth: CGFloat = 25.0

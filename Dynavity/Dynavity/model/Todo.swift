@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct Todo {
-    let id = UUID()
+struct Todo: Codable {
+    var id = UUID()
     var label: String
     var isCompleted = false
 }
