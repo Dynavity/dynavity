@@ -178,8 +178,7 @@ extension CanvasViewModel {
 extension CanvasViewModel {
     func select(canvasElement: CanvasElementProtocol) {
         if selectedCanvasElementId == canvasElement.id {
-            selectedCanvasElementId = nil
-            umlConnectorStart = nil
+            unselectCanvasElement()
             return
         }
         selectedCanvasElementId = canvasElement.id
@@ -187,6 +186,7 @@ extension CanvasViewModel {
 
     func unselectCanvasElement() {
         selectedCanvasElementId = nil
+        umlConnectorStart = nil
     }
 
     func moveSelectedCanvasElement(by translation: CGSize) {
