@@ -17,7 +17,10 @@ class CanvasViewModel: ObservableObject {
     @Published var canvas = Canvas() {
         didSet {
             if enableWriteBack {
-                saveToFirebase()
+                // Prevent the saving to Firebase operation from freezing the main thread.
+                DispatchQueue.global(qos: .userInteractive).async {
+                    self.saveToFirebase()
+                }
             }
         }
     }
