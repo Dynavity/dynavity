@@ -110,11 +110,16 @@ extension CanvasViewModel {
 
     private func loadSnapshot(_ snapshot: DataSnapshot) {
         if let data = snapshot.value,
-           let loaded = try? FirebaseDecoder().decode(Canvas.self, from: data) {
+           var loadedCanvas = try? FirebaseDecoder().decode(Canvas.self, from: data) {
             // replace the local snapshot
             DispatchQueue.main.async {
                 self.enableWriteBack = false
-                self.canvas = loaded
+                // Do not update the currently selected canvas element.
+                if let id = self.selectedCanvasElementId,
+                   let selectedCanvasElement = self.canvas.getElementBy(id: id) {
+                    loadedCanvas.replaceElement(selectedCanvasElement)
+                }
+                self.canvas = loadedCanvas
                 self.enableWriteBack = true
             }
         }
