@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct CanvasElementProperties {
+struct CanvasElementProperties: Codable {
     var position: CGPoint
     var width: CGFloat = 500.0
     var height: CGFloat = 500.0
