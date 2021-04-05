@@ -1,21 +1,24 @@
 import SwiftUI
 
-struct DiamondUmlElement: UmlElementProtocol {
+class DiamondUmlElement: UmlElementProtocol {
     // MARK: CanvasElementProtocol
-    var id = UUID()
-    var position: CGPoint
-    var width: CGFloat = 150.0
-    var height: CGFloat = 150.0
-    var rotation: Double = .zero
-    var minimumWidth: CGFloat {
-        60.0
-    }
-    var minimumHeight: CGFloat {
-        60.0
-    }
+    var canvasProperties: CanvasElementProperties
 
     // MARK: UmlElementProtocol
-    var label: String = "Decision"
-    var umlType: UmlType = .activityDiagram
-    var umlShape: UmlShape = .diamond
+    var label: String
+    var umlType: UmlType
+    var umlShape: UmlShape
+
+    init(position: CGPoint) {
+        self.canvasProperties = CanvasElementProperties(
+            position: position,
+            width: 150.0,
+            height: 150.0,
+            minimumWidth: 60.0,
+            minimumHeight: 60.0
+        )
+        self.label = "Decision"
+        self.umlType = .activityDiagram
+        self.umlShape = .diamond
+    }
 }

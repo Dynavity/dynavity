@@ -1,17 +1,12 @@
 import CoreGraphics
 import Foundation
 
-struct PlainTextElement: TextElementProtocol {
-    // TODO: Replace these with actual values
-    // MARK: CanvasElementProtocol
-    var id = UUID()
-    var position: CGPoint
-    var width: CGFloat = 500.0
-    var height: CGFloat = 500.0
-    var rotation: Double = .zero
+class PlainTextElement: TextElementProtocol {
+    var canvasProperties: CanvasElementProperties
+    var text: String
 
-    // MARK: TextElementProtocol
-    var text: String = ""
+    init(position: CGPoint) {
+        self.canvasProperties = CanvasElementProperties(position: position)
+        self.text = ""
+    }
 }
-
-extension PlainTextElement: Equatable {}

@@ -7,11 +7,7 @@ struct MarkupElement: TextElementProtocol {
     }
 
     // MARK: CanvasElementProtocol
-    var id = UUID()
-    var position: CGPoint
-    var width: CGFloat = 500.0
-    var height: CGFloat = 500.0
-    var rotation: Double = .zero
+    var canvasProperties: CanvasElementProperties
 
     // MARK: TextElementProtocol
     var text: String = ""
@@ -20,9 +16,7 @@ struct MarkupElement: TextElementProtocol {
     var markupType: MarkupType
 
     init(position: CGPoint, markupType: MarkupType) {
-        self.position = position
+        self.canvasProperties = CanvasElementProperties(position: position)
         self.markupType = markupType
     }
 }
-
-extension MarkupElement: Equatable {}

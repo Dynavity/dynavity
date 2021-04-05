@@ -1,13 +1,11 @@
 import SwiftUI
 
-struct PDFElement: CanvasElementProtocol {
-    var id = UUID()
-    var position: CGPoint
+class PDFElement: CanvasElementProtocol {
+    var canvasProperties: CanvasElementProperties
     var file: URL
-    var width: CGFloat = 500.0
-    var height: CGFloat = 500.0
-    var rotation: Double = .zero
-}
 
-// MARK: Equatable
-extension PDFElement: Equatable {}
+    init(position: CGPoint, file: URL) {
+        self.canvasProperties = CanvasElementProperties(position: position)
+        self.file = file
+    }
+}
