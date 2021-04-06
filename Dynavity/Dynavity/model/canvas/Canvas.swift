@@ -6,14 +6,14 @@ class Canvas: ObservableObject {
     @Published private(set) var canvasElements: [CanvasElementProtocol] = []
     @Published private(set) var umlConnectors: [UmlConnector] = []
     var name: String = "common"
-    private var cancellables: [AnyCancellable] = []
+    private var canvasElementCancellables: [AnyCancellable] = []
 
     func addElement(_ element: CanvasElementProtocol) {
         canvasElements.append(element)
         let cancellable = element.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
-        cancellables.append(cancellable)
+        canvasElementCancellables.append(cancellable)
     }
 
     func removeElement(_ element: CanvasElementProtocol) {
@@ -22,7 +22,7 @@ class Canvas: ObservableObject {
         }
 
         canvasElements.remove(at: index)
-        cancellables.remove(at: index)
+        canvasElementCancellables.remove(at: index)
     }
 }
 
