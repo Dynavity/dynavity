@@ -196,7 +196,7 @@ struct ToolbarView: View {
         NavigationLink(destination: CanvasSelectionView(canvases: [])
                         .navigationBarHidden(true)
                         .navigationBarBackButtonHidden(true)) {
-            Text("Back")
+            Image(systemName: "house")
         }
         .navigationBarHidden(true)
 
