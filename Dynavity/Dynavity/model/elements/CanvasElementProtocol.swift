@@ -1,7 +1,6 @@
 import Foundation
 import CoreGraphics
 
-// Conforming to `AnyObject` forces this to be a class-only protocol.
 protocol CanvasElementProtocol: AnyObservableObject {
     var canvasProperties: CanvasElementProperties { get set }
 
