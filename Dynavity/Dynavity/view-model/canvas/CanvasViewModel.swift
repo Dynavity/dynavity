@@ -29,12 +29,12 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasSize: CGFloat
     @Published var canvasTopLeftOffset: CGPoint = .zero
     @Published var scaleFactor: CGFloat = 1.0
-    @Published var selectedCanvasElementId: UUID?
+    @Published var selectedCanvasElement: CanvasElementProtocol?
     @Published var canvasMode: CanvasMode {
         didSet {
             // Reset canvas element selection on selecting some other mode.
             if oldValue == .selection && canvasMode != oldValue {
-                selectedCanvasElementId = nil
+                selectedCanvasElement = nil
             }
         }
     }
@@ -110,15 +110,15 @@ extension CanvasViewModel {
 
     private func loadSnapshot(_ snapshot: DataSnapshot) {
         if let data = snapshot.value,
-           var loadedCanvas = try? FirebaseDecoder().decode(Canvas.self, from: data) {
+           let loadedCanvas = try? FirebaseDecoder().decode(Canvas.self, from: data) {
             // replace the local snapshot
             DispatchQueue.main.async {
                 self.enableWriteBack = false
                 // Do not update the currently selected canvas element.
-                if let id = self.selectedCanvasElementId,
-                   let selectedCanvasElement = self.canvas.getElementBy(id: id) {
-                    loadedCanvas.replaceElement(selectedCanvasElement)
-                }
+                // TODO: Fix this for classes.
+                // if let selectedCanvasElement = self.selectedCanvasElement {
+                //     loadedCanvas.replaceElement(selectedCanvasElement)
+                // }
                 self.canvas = loadedCanvas
                 self.enableWriteBack = true
             }
@@ -177,30 +177,31 @@ extension CanvasViewModel {
 // MARK: Editing/deleting of canvas elements
 extension CanvasViewModel {
     func select(canvasElement: CanvasElementProtocol) {
-        if selectedCanvasElementId == canvasElement.id {
+        if selectedCanvasElement != nil {
             unselectCanvasElement()
             return
         }
-        selectedCanvasElementId = canvasElement.id
+        selectedCanvasElement = canvasElement
     }
 
     func unselectCanvasElement() {
-        selectedCanvasElementId = nil
+        selectedCanvasElement = nil
         umlConnectorStart = nil
     }
 
     func moveSelectedCanvasElement(by translation: CGSize) {
-        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+        guard let element = selectedCanvasElement else {
             return
         }
 
         let rotation = element.rotation
         let rotatedTranslation = translation.rotate(by: CGFloat(rotation))
-        canvas.moveCanvasElement(id: selectedCanvasElementId, by: rotatedTranslation)
+        element.move(by: rotatedTranslation)
     }
 
     private func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
-        guard var element = element,
+        // TODO: Look into simplifying this now that we use classes.
+        guard let element = element,
               let originalElement = self.element else {
             return
         }
@@ -244,8 +245,6 @@ extension CanvasViewModel {
         let rotation = element.rotation
         let centerTranslation = clampedTranslation.rotate(by: CGFloat(rotation)) / 2.0
         element.move(by: centerTranslation)
-
-        canvas.replaceElement(element)
     }
 
     func rotateSelectedCanvasElement(by translation: CGSize) {
@@ -255,7 +254,7 @@ extension CanvasViewModel {
             return
         }
 
-        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+        guard let element = selectedCanvasElement else {
             return
         }
 
@@ -266,7 +265,7 @@ extension CanvasViewModel {
         let rotationOffset = Double.pi / 2.0
         let rotation = Double(atan2(rotatedTranslation.height, rotatedTranslation.width)) + rotationOffset
 
-        canvas.rotateCanvasElement(id: selectedCanvasElementId, to: rotation)
+        element.rotate(to: rotation)
     }
 
     func removeElement(_ element: CanvasElementProtocol) {
@@ -278,7 +277,7 @@ extension CanvasViewModel {
 extension CanvasViewModel {
     func handleDragChange(_ value: DragGesture.Value, anchor: SelectionOverlayView.ResizeControlAnchor) {
         if dragStartLocation == nil {
-            guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+            guard let element = selectedCanvasElement else {
                 return
             }
             dragStartLocation = value.startLocation

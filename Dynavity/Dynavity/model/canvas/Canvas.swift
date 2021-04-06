@@ -11,47 +11,11 @@ struct Canvas {
     }
 
     mutating func removeElement(_ element: CanvasElementProtocol) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == element.id }) else {
+        guard let index = canvasElements.firstIndex(where: { $0 === element }) else {
             return
         }
 
         canvasElements.remove(at: index)
-    }
-
-    mutating func replaceElement(_ element: CanvasElementProtocol) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == element.id }) else {
-            return
-        }
-
-        canvasElements[index] = element
-    }
-
-    func getElementBy(id: UUID?) -> CanvasElementProtocol? {
-        canvasElements.first(where: { $0.id == id })
-    }
-
-    mutating func moveCanvasElement(id: UUID?, by translation: CGSize) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
-            return
-        }
-
-        canvasElements[index].move(by: translation)
-    }
-
-    mutating func resizeCanvasElement(id: UUID?, by translation: CGSize) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
-            return
-        }
-
-        canvasElements[index].resize(by: translation)
-    }
-
-    mutating func rotateCanvasElement(id: UUID?, to rotation: Double) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
-            return
-        }
-
-        canvasElements[index].rotate(to: rotation)
     }
 }
 
