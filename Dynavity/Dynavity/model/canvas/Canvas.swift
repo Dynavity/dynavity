@@ -42,6 +42,7 @@ extension Canvas {
     }
 }
 
+/* TODO: Fix this.
 extension Canvas: Codable {
     private enum CodingKeys: String, CodingKey {
         case canvasElements, umlConnectors, name
@@ -71,3 +72,4 @@ extension Canvas: Codable {
         try container.encode(self.name, forKey: .name)
     }
 }
+*/

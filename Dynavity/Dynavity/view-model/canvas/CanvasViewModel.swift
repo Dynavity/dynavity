@@ -109,6 +109,7 @@ extension CanvasViewModel {
     }
 
     private func loadSnapshot(_ snapshot: DataSnapshot) {
+        /* TODO: Fix this.
         if let data = snapshot.value,
            let loadedCanvas = try? FirebaseDecoder().decode(Canvas.self, from: data) {
             // replace the local snapshot
@@ -123,11 +124,14 @@ extension CanvasViewModel {
                 self.enableWriteBack = true
             }
         }
+        */
     }
 
     private func saveToFirebase() {
+        /* TODO: Fix this.
         let data = try? FirebaseEncoder().encode(canvas)
         db.setValue(data)
+        */
     }
 }
 
