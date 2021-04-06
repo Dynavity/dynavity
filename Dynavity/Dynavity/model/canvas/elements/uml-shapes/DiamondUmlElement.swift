@@ -1,6 +1,6 @@
 import SwiftUI
 
-class DiamondUmlElement: UmlElementProtocol {
+class DiamondUmlElement: CanvasElementProtocol, UmlElementProtocol {
     // MARK: CanvasElementProtocol
     var canvasProperties: CanvasElementProperties
 

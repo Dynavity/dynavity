@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-class CodeElement: TextElementProtocol {
+class CodeElement: CanvasElementProtocol, TextElementProtocol {
     // MARK: CanvasElementProtocol
     var canvasProperties: CanvasElementProperties
 

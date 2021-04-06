@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-class PlainTextElement: TextElementProtocol {
+class PlainTextElement: CanvasElementProtocol, TextElementProtocol {
     var canvasProperties: CanvasElementProperties
     var text: String
 

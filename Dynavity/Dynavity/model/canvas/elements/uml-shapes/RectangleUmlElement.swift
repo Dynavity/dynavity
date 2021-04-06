@@ -1,6 +1,6 @@
 import SwiftUI
 
-class RectangleUmlElement: UmlElementProtocol {
+class RectangleUmlElement: CanvasElementProtocol, UmlElementProtocol {
     // MARK: CanvasElementProtocol
     var canvasProperties: CanvasElementProperties
 

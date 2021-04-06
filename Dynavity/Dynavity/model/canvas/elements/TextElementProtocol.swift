@@ -1,6 +1,6 @@
 import CoreGraphics
 
-protocol TextElementProtocol: CanvasElementProtocol {
+protocol TextElementProtocol {
     var text: String { get set }
     /// TODO: once we've implemented the ability to change font sizes, update this to `set` as well
     var fontSize: CGFloat { get }

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-struct MarkupElement: TextElementProtocol {
+class MarkupElement: CanvasElementProtocol, TextElementProtocol {
     enum MarkupType: String, Codable {
         case markdown, latex
     }
