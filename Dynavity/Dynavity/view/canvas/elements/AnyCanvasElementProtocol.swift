@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct AnyCanvasElementProtocol: Identifiable {
-    let id = UUID()
+    var id: ObjectIdentifier {
+        ObjectIdentifier(canvasElement)
+    }
     let canvasElement: CanvasElementProtocol
 }

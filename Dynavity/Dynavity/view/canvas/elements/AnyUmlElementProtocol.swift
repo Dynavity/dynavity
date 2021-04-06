@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct AnyUmlElementProtocol: Identifiable {
-    let id = UUID()
+    var id: ObjectIdentifier {
+        ObjectIdentifier(umlElement)
+    }
     let umlElement: UmlElementProtocol
 }
