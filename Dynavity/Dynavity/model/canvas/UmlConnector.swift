@@ -5,14 +5,15 @@ import CoreGraphics
  Encapsulates a connector between two UML shapes.
  */
 struct UmlConnector {
+    // TODO: Should this be updated to not use ID as well?
     var id: UUID
     var points: [CGPoint]
     // UUID of UmlElementProtocol, actual element is in [CanvasElementProtocol] in Canvas
-    var connects: (fromElement: UUID, toElement: UUID)
+    var connects: (fromElement: UmlElementProtocol, toElement: UmlElementProtocol)
     var connectingSide: (fromSide: ConnectorConnectingSide, toSide: ConnectorConnectingSide)
 
     init(points: [CGPoint],
-         connects: (fromElement: UUID, toElement: UUID),
+         connects: (fromElement: UmlElementProtocol, toElement: UmlElementProtocol),
          connectingSide: (fromSide: ConnectorConnectingSide, toSide: ConnectorConnectingSide)) {
         self.id = UUID()
         self.points = points
@@ -25,6 +26,7 @@ struct UmlConnector {
     }
 }
 
+/* TODO: Fix this.
 extension UmlConnector: Codable {
     private enum CodingKeys: String, CodingKey {
         case id, points, fromElement, toElement, fromSide, toSide
@@ -52,3 +54,4 @@ extension UmlConnector: Codable {
         try container.encode(connectingSide.toSide, forKey: .toSide)
     }
 }
+*/

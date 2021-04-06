@@ -1,67 +1,38 @@
+import Combine
 import Foundation
 import CoreGraphics
 
-struct Canvas {
-    var canvasElements: [CanvasElementProtocol] = []
-    var umlConnectors: [UmlConnector] = []
+class Canvas: ObservableObject {
+    @Published private(set) var canvasElements: [CanvasElementProtocol] = []
+    @Published private(set) var umlConnectors: [UmlConnector] = []
     var name: String = "common"
+    private var canvasElementCancellables: [AnyCancellable] = []
 
-    mutating func addElement(_ element: CanvasElementProtocol) {
+    func addElement(_ element: CanvasElementProtocol) {
         canvasElements.append(element)
+        let cancellable = element.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
+        canvasElementCancellables.append(cancellable)
     }
 
-    mutating func removeElement(_ element: CanvasElementProtocol) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == element.id }) else {
+    func removeElement(_ element: CanvasElementProtocol) {
+        guard let index = canvasElements.firstIndex(where: { $0 === element }) else {
             return
         }
 
         canvasElements.remove(at: index)
-    }
-
-    mutating func replaceElement(_ element: CanvasElementProtocol) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == element.id }) else {
-            return
-        }
-
-        canvasElements[index] = element
-    }
-
-    func getElementBy(id: UUID?) -> CanvasElementProtocol? {
-        canvasElements.first(where: { $0.id == id })
-    }
-
-    mutating func moveCanvasElement(id: UUID?, by translation: CGSize) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
-            return
-        }
-
-        canvasElements[index].move(by: translation)
-    }
-
-    mutating func resizeCanvasElement(id: UUID?, by translation: CGSize) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
-            return
-        }
-
-        canvasElements[index].resize(by: translation)
-    }
-
-    mutating func rotateCanvasElement(id: UUID?, to rotation: Double) {
-        guard let index = canvasElements.firstIndex(where: { $0.id == id }) else {
-            return
-        }
-
-        canvasElements[index].rotate(to: rotation)
+        canvasElementCancellables.remove(at: index)
     }
 }
 
 // MARK: UML Connectors
 extension Canvas {
-    mutating func addUmlConnector(_ connector: UmlConnector) {
+    func addUmlConnector(_ connector: UmlConnector) {
         umlConnectors.append(connector)
     }
 
-    mutating func replaceUmlConnector(_ connector: UmlConnector) {
+    func replaceUmlConnector(_ connector: UmlConnector) {
         guard let index = umlConnectors.firstIndex(where: { $0.id == connector.id }) else {
             return
         }
@@ -69,7 +40,7 @@ extension Canvas {
         umlConnectors[index] = connector
     }
 
-    mutating func removeUmlConnector(_ connector: UmlConnector) {
+    func removeUmlConnector(_ connector: UmlConnector) {
         guard let index = umlConnectors.firstIndex(where: { $0.id == connector.id }) else {
             return
         }
@@ -78,6 +49,7 @@ extension Canvas {
     }
 }
 
+/* TODO: Fix this.
 extension Canvas: Codable {
     private enum CodingKeys: String, CodingKey {
         case canvasElements, umlConnectors, name
@@ -107,3 +79,4 @@ extension Canvas: Codable {
         try container.encode(self.name, forKey: .name)
     }
 }
+*/

@@ -1,3 +1,4 @@
+/* TODO: Fix this.
 import Foundation
 
 enum TypeWrappedCanvasElement: Codable {
@@ -145,3 +146,4 @@ enum TypeWrappedCanvasElement: Codable {
         try container.encode(type.rawValue, forKey: .type)
     }
 }
+*/

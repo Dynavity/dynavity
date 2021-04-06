@@ -66,7 +66,7 @@ struct ConnectorSelectionOverlayView_Previews: PreviewProvider {
         let destElement = DiamondUmlElement(position: viewModel.canvasOrigin
                                                 + CGPoint(x: 250, y: 250))
         let umlConnector = UmlConnector(points: [],
-                                        connects: (fromElement: sourceElement.id, toElement: destElement.id),
+                                        connects: (fromElement: sourceElement, toElement: destElement),
                                         connectingSide: (fromSide: ConnectorConnectingSide.middleRight,
                                                          toSide: ConnectorConnectingSide.middleLeft))
         ConnectorSelectionOverlayView(connector: umlConnector, viewModel: viewModel)

@@ -1,17 +1,14 @@
+import Combine
 import CoreGraphics
 import Foundation
 
-struct MarkupElement: TextElementProtocol {
+class MarkupElement: ObservableObject, CanvasElementProtocol, TextElementProtocol {
     enum MarkupType: String, Codable {
         case markdown, latex
     }
 
     // MARK: CanvasElementProtocol
-    var id = UUID()
-    var position: CGPoint
-    var width: CGFloat = 500.0
-    var height: CGFloat = 500.0
-    var rotation: Double = .zero
+    @Published var canvasProperties: CanvasElementProperties
 
     // MARK: TextElementProtocol
     var text: String = ""
@@ -20,9 +17,7 @@ struct MarkupElement: TextElementProtocol {
     var markupType: MarkupType
 
     init(position: CGPoint, markupType: MarkupType) {
-        self.position = position
+        self.canvasProperties = CanvasElementProperties(position: position)
         self.markupType = markupType
     }
 }
-
-extension MarkupElement: Equatable {}

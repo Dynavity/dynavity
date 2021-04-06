@@ -27,7 +27,8 @@ struct UmlSideMenuView: View {
 
     var umlContent: some View {
         LazyVGrid(columns: columns, spacing: 200) {
-            ForEach(self.umlElements, id: \.id) { umlElement in
+            ForEach(self.umlElements.map({ AnyUmlElementProtocol(umlElement: $0) })) { umlElementWrapper in
+                let umlElement = umlElementWrapper.umlElement
                 Button(action: {
                     viewModel.addUmlElement(umlElement: umlElement)
                 }) {
