@@ -2,20 +2,12 @@ import Combine
 import CoreGraphics
 import Foundation
 
-class CodeElement: ObservableObject, CanvasElementProtocol, TextElementProtocol {
-    // MARK: CanvasElementProtocol
-    @Published var canvasProperties: CanvasElementProperties
+class CodeElement: PlainTextElement {
+    @Published var language: CodeLanguage
 
-    // MARK: TextElementProtocol
-    var text: String
-
-    // MARK: CodeElement-specific attributes
-    var language: CodeLanguage
-
-    init(position: CGPoint) {
-        self.canvasProperties = CanvasElementProperties(position: position)
-        self.text = ""
+    override init(position: CGPoint) {
         self.language = CodeLanguage.python
+        super.init(position: position)
         resetCodeTemplate()
     }
 
