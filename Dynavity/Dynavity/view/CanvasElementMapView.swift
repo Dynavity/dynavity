@@ -21,7 +21,8 @@ struct CanvasElementMapView: View {
                     }
             }
 
-            ForEach(viewModel.canvasElements, id: \.id) { element in
+            ForEach(viewModel.canvasElements.map({ AnyCanvasElementProtocol(canvasElement: $0) })) { elementWrapper in
+                let element = elementWrapper.canvasElement
                 elementViewFactory.createView(element: element)
                     .frame(width: element.width, height: element.height)
                     .shouldAddCardOverlay(shouldAdd: !(element is UmlElementProtocol))
