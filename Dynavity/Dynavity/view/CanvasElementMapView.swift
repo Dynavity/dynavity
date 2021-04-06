@@ -5,7 +5,7 @@ struct CanvasElementMapView: View {
     private let elementViewFactory = CanvasElementViewFactory()
 
     private func isSelected(_ element: CanvasElementProtocol) -> Bool {
-        viewModel.selectedCanvasElementId == element.id
+        viewModel.selectedCanvasElement === element
     }
 
     private func shouldShowUmlSelectionOverlay(_ element: CanvasElementProtocol) -> Bool {
