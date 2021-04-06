@@ -2,7 +2,7 @@ import Foundation
 import CoreGraphics
 
 // Conforming to `AnyObject` forces this to be a class-only protocol.
-protocol CanvasElementProtocol: AnyObject, Codable {
+protocol CanvasElementProtocol: AnyObservableObject {
     var canvasProperties: CanvasElementProperties { get set }
 
     func move(by translation: CGSize)

@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import PencilKit
 import FirebaseDatabase
@@ -24,6 +25,7 @@ class CanvasViewModel: ObservableObject {
             }
         }
     }
+    private var anyCancellable: AnyCancellable?
     @Published var annotationCanvas = AnnotationCanvas()
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
@@ -78,6 +80,9 @@ class CanvasViewModel: ObservableObject {
     init(canvasSize: CGFloat) {
         self.canvasSize = canvasSize
         self.canvasMode = .pen
+        self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
         loadFromFirebase()
     }
 

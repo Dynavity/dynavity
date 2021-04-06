@@ -1,7 +1,8 @@
+import Combine
 import SwiftUI
 
-class ImageElement: CanvasElementProtocol {
-    var canvasProperties: CanvasElementProperties
+class ImageElement: ObservableObject, CanvasElementProtocol {
+    @Published var canvasProperties: CanvasElementProperties
     private var codeImage: CodableImage
 
     var image: UIImage {

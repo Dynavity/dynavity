@@ -1,9 +1,10 @@
+import Combine
 import CoreGraphics
 import Foundation
 
-class CodeElement: CanvasElementProtocol, TextElementProtocol {
+class CodeElement: ObservableObject, CanvasElementProtocol, TextElementProtocol {
     // MARK: CanvasElementProtocol
-    var canvasProperties: CanvasElementProperties
+    @Published var canvasProperties: CanvasElementProperties
 
     // MARK: TextElementProtocol
     var text: String

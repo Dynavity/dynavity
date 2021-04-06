@@ -1,13 +1,14 @@
+import Combine
 import CoreGraphics
 import Foundation
 
-class MarkupElement: CanvasElementProtocol, TextElementProtocol {
+class MarkupElement: ObservableObject, CanvasElementProtocol, TextElementProtocol {
     enum MarkupType: String, Codable {
         case markdown, latex
     }
 
     // MARK: CanvasElementProtocol
-    var canvasProperties: CanvasElementProperties
+    @Published var canvasProperties: CanvasElementProperties
 
     // MARK: TextElementProtocol
     var text: String = ""

@@ -1,8 +1,9 @@
+import Combine
 import SwiftUI
 
-class DiamondUmlElement: CanvasElementProtocol, UmlElementProtocol {
+class DiamondUmlElement: ObservableObject, CanvasElementProtocol, UmlElementProtocol {
     // MARK: CanvasElementProtocol
-    var canvasProperties: CanvasElementProperties
+    @Published var canvasProperties: CanvasElementProperties
 
     // MARK: UmlElementProtocol
     var label: String

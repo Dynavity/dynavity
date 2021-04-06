@@ -1,8 +1,9 @@
+import Combine
 import SwiftUI
 
-class TodoElement: CanvasElementProtocol {
+class TodoElement: ObservableObject, CanvasElementProtocol {
     // MARK: CanvasElementProtocol
-    var canvasProperties: CanvasElementProperties
+    @Published var canvasProperties: CanvasElementProperties
 
     // MARK: TodosElement-specific attributes
     var todos: [Todo] = []

@@ -1,7 +1,8 @@
+import Combine
 import SwiftUI
 
-class PDFElement: CanvasElementProtocol {
-    var canvasProperties: CanvasElementProperties
+class PDFElement: ObservableObject, CanvasElementProtocol {
+    @Published var canvasProperties: CanvasElementProperties
     var file: URL
 
     init(position: CGPoint, file: URL) {

@@ -1,8 +1,9 @@
+import Combine
 import SwiftUI
 
-class RectangleUmlElement: CanvasElementProtocol, UmlElementProtocol {
+class RectangleUmlElement: ObservableObject, CanvasElementProtocol, UmlElementProtocol {
     // MARK: CanvasElementProtocol
-    var canvasProperties: CanvasElementProperties
+    @Published var canvasProperties: CanvasElementProperties
 
     // MARK: UmlElementProtocol
     var label: String
