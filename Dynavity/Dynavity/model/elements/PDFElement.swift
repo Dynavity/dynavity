@@ -1,12 +1,13 @@
 import Combine
 import SwiftUI
+import PDFKit
 
 class PDFElement: ObservableObject, CanvasElementProtocol {
     @Published var canvasProperties: CanvasElementProperties
-    var file: URL
+    var pdfDocument: PDFDocument
 
-    init(position: CGPoint, file: URL) {
+    init(position: CGPoint, pdfDocument: PDFDocument) {
         self.canvasProperties = CanvasElementProperties(position: position)
-        self.file = file
+        self.pdfDocument = pdfDocument
     }
 }

@@ -13,7 +13,7 @@ struct PDFElementView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UIViewType {
         let pdfView = PDFView()
-        pdfView.document = PDFDocument(url: viewModel.pdfElement.file)
+        pdfView.document = viewModel.pdfElement.pdfDocument
         pdfView.autoScales = true
         return pdfView
     }
