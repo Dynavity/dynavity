@@ -33,5 +33,3 @@ extension BacklinkNode: Hashable {
         hasher.combine(self.id)
     }
 }
-
-extension BacklinkNode: Codable {}
