@@ -1,6 +1,6 @@
 import CoreGraphics
 
-protocol CanvasElementProtocolDTO {
+protocol CanvasElementProtocolDTO: Codable {
     var position: CGPoint { get }
     var width: CGFloat { get }
     var height: CGFloat { get }

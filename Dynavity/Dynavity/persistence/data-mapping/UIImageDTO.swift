@@ -12,3 +12,5 @@ struct UIImageDTO: Mappable {
         return image
     }
 }
+
+extension UIImageDTO: Codable {}

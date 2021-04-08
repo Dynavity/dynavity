@@ -4,7 +4,7 @@ import Foundation
 struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
     typealias T = TodoElement
 
-    struct TodoDTO: Mappable {
+    struct TodoDTO: Mappable, Codable {
         let id: UUID
         let label: String
         let isCompleted: Bool

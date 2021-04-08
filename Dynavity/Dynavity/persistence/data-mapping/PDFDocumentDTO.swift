@@ -12,3 +12,5 @@ struct PDFDocumentDTO: Mappable {
         return pdf
     }
 }
+
+extension PDFDocumentDTO: Codable {}
