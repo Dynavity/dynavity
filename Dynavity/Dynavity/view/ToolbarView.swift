@@ -191,7 +191,6 @@ struct ToolbarView: View {
     }
 
     private var backButton: some View {
-
         // TODO: replace canvases parameter with actual canvases
         NavigationLink(destination: CanvasSelectionView(canvases: [])
                         .navigationBarHidden(true)
@@ -199,7 +198,6 @@ struct ToolbarView: View {
             Image(systemName: "house")
         }
         .navigationBarHidden(true)
-
     }
 
     var body: some View {
