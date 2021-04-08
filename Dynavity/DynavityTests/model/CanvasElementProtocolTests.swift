@@ -13,7 +13,7 @@ class CanvasElementProtocolTests: XCTestCase {
     }
 
     func testGetRotatedElementCorners() {
-        var rotatedElement = element
+        let rotatedElement = element
         let fourtyFiveClockwise = 0.785
         rotatedElement.rotate(to: fourtyFiveClockwise)
         XCTAssertEqual(rotatedElement.topLeftCorner.x.rounded(), 1_000)
@@ -30,7 +30,7 @@ class CanvasElementProtocolTests: XCTestCase {
     }
 
     func testGetMinMaxPoints() {
-        var rotatedElement = element
+        let rotatedElement = element
         let fourtyFiveClockwise = 0.785
         rotatedElement.rotate(to: fourtyFiveClockwise)
 
