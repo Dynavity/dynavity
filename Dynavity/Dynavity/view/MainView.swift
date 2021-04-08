@@ -44,22 +44,25 @@ struct MainView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .leading) {
-            VStack(spacing: 0.0) {
-                ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu)
-                Divider()
-                CanvasView(viewModel: canvasViewModel)
-            }
-            .disabled(self.shouldShowMenu)
-            .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
+        NavigationView {
+            ZStack(alignment: .leading) {
+                VStack(spacing: 0.0) {
+                    ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu)
+                    Divider()
+                    CanvasView(viewModel: canvasViewModel)
+                }
+                .disabled(self.shouldShowMenu)
+                .overlay(shouldShowMenu ? translucentBlackOverlay : nil)
 
-            if !canvasViewModel.shouldShowUmlMenu {
-                umlMenuButton
-            }
+                if !canvasViewModel.shouldShowUmlMenu {
+                    umlMenuButton
+                }
 
-            sideMenu
-            umlMenu
-        }
+                sideMenu
+                umlMenu
+            }
+            .navigationBarHidden(true)
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 
     var translucentBlackOverlay: some View {
