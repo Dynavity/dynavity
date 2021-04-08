@@ -1,28 +1,13 @@
+import Combine
 import CoreGraphics
 import Foundation
 
-struct CodeElement: TextElementProtocol {
-    // MARK: CanvasElementProtocol
-    var id = UUID()
-    var position: CGPoint
-    var width: CGFloat = 500.0
-    var height: CGFloat = 500.0
-    var rotation: Double = .zero
-    var minimumWidth: CGFloat {
-        60.0
-    }
-    var minimumHeight: CGFloat {
-        60.0
-    }
+class CodeElement: PlainTextElement {
+    @Published var language: CodeLanguage
 
-    // MARK: TextElementProtocol
-    var text: String = ""
-
-    // MARK: CodeElement-specific attributes
-    var language = CodeLanguage.python
-
-    init(position: CGPoint) {
-        self.position = position
+    override init(position: CGPoint) {
+        self.language = CodeLanguage.python
+        super.init(position: position)
         resetCodeTemplate()
     }
 
@@ -87,11 +72,11 @@ struct CodeElement: TextElementProtocol {
         }
     }
 
-    mutating func resetCodeTemplate() {
+    func resetCodeTemplate() {
         self.text = language.template
     }
 
-    mutating func convertQuotes() {
+    func convertQuotes() {
         let charsToReplace = [
             ("\u{201c}", "\""),
             ("\u{201d}", "\""),

@@ -41,34 +41,25 @@ extension CanvasViewModel {
     }
 
     func handleUmlElementUpdated() {
-        guard let element = canvas.getElementBy(id: selectedCanvasElementId) else {
+        guard let element = selectedCanvasElement as? UmlElementProtocol else {
             return
         }
-        if element is UmlElementProtocol {
-            updateUmlConnections(id: selectedCanvasElementId)
-        }
+        updateUmlConnections(element: element)
     }
 
-    func updateUmlConnections(id: UUID?) {
-        guard let id = id else {
-            return
-        }
+    func updateUmlConnections(element: UmlElementProtocol) {
         var idsToRemove: [UUID] = []
         for var connector in canvas.umlConnectors {
-            if connector.connects.fromElement != id
-                    && connector.connects.toElement != id {
+            if connector.connects.fromElement !== element
+                    && connector.connects.toElement !== element {
                 continue
             }
             idsToRemove.append(connector.id)
-            let sourceId = connector.connects.fromElement
-            let destId = connector.connects.toElement
-            guard let source = canvas.getElementBy(id: sourceId) as? UmlElementProtocol,
-                  let dest = canvas.getElementBy(id: destId) as? UmlElementProtocol else {
-                return
-            }
+            let sourceElement = connector.connects.fromElement
+            let destElement = connector.connects.toElement
             let sourceAnchor = connector.connectingSide.fromSide
             let destAnchor = connector.connectingSide.toSide
-            let newPoints = OrthogonalConnector(from: source, to: dest)
+            let newPoints = OrthogonalConnector(from: sourceElement, to: destElement)
                 .generateRoute(sourceAnchor, destAnchor: destAnchor)
             connector.points = newPoints
             canvas.replaceUmlConnector(connector)
@@ -92,13 +83,13 @@ extension CanvasViewModel {
         let points = OrthogonalConnector(from: startUmlElement, to: element)
             .generateRoute(startAnchor, destAnchor: newEndAnchor)
         canvas.addUmlConnector(UmlConnector(points: points,
-                                            connects: (fromElement: startUmlElement.id,
-                                                       toElement: element.id),
+                                            connects: (fromElement: startUmlElement,
+                                                       toElement: element),
                                             connectingSide: (fromSide: startAnchor,
                                                              toSide: newEndAnchor)))
         umlConnectorStart = nil
         umlConnectorEnd = nil
-        selectedCanvasElementId = nil
+        selectedCanvasElement = nil
     }
 }
 

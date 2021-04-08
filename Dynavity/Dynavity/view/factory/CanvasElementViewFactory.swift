@@ -12,12 +12,13 @@ class CanvasElementViewFactory: ViewFactory {
                 PDFElementView(pdfElement: pdfElement)
             case let todoElement as TodoElement:
                 TodoElementView(todoElement: todoElement)
-            case let plainTextElement as PlainTextElement:
-                PlainTextElementView(plainTextElement: plainTextElement)
             case let codeElement as CodeElement:
                 CodeElementView(codeElement: codeElement)
             case let markupElement as MarkupElement:
                 MarkupElementView(markupElement: markupElement)
+            // Note: PlainTextElement must be checked after its subclasses
+            case let plainTextElement as PlainTextElement:
+                PlainTextElementView(plainTextElement: plainTextElement)
             case let umlElement as UmlElementProtocol:
                 umlElementFactory.createView(element: umlElement)
             default:
