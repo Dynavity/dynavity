@@ -49,7 +49,7 @@ extension Canvas {
     }
 }
 
-/* TODO: Fix this.
+/* TODO: Fix this. (or remove this)
 extension Canvas: Codable {
     private enum CodingKeys: String, CodingKey {
         case canvasElements, umlConnectors, name

@@ -3,11 +3,7 @@ import SwiftUI
 
 class ImageElement: ObservableObject, CanvasElementProtocol {
     @Published var canvasProperties: CanvasElementProperties
-    private var codeImage: CodableImage
-
-    var image: UIImage {
-        codeImage.image
-    }
+    var image: UIImage
 
     init(position: CGPoint, image: UIImage) {
         self.canvasProperties = CanvasElementProperties(
@@ -15,6 +11,6 @@ class ImageElement: ObservableObject, CanvasElementProtocol {
             width: image.size.width,
             height: image.size.height
         )
-        self.codeImage = CodableImage(image: image)
+        self.image = image
     }
 }

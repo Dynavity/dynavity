@@ -1,3 +1,4 @@
+// TODO: look into removing codable for this and updating DTO to store a primitive instead
 /**
  Side of the `UmlElementProtocol` on which the uml diagram connector connects to.
  
