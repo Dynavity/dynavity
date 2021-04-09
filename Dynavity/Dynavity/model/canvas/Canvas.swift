@@ -7,6 +7,7 @@ class Canvas: ObservableObject {
     @Published private(set) var umlConnectors: [UmlConnector] = []
     var name: String = "common"
     private var canvasElementCancellables: [AnyCancellable] = []
+    private var umlConnectorCancellables: [AnyCancellable] = []
 
     func addElement(_ element: CanvasElementProtocol) {
         canvasElements.append(element)
@@ -30,6 +31,10 @@ class Canvas: ObservableObject {
 extension Canvas {
     func addUmlConnector(_ connector: UmlConnector) {
         umlConnectors.append(connector)
+        let cancellable = connector.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
+        umlConnectorCancellables.append(cancellable)
     }
 
     func removeUmlConnector(_ connector: UmlConnector) {
@@ -37,7 +42,7 @@ extension Canvas {
             return
         }
         umlConnectors.remove(at: index)
-
+        umlConnectorCancellables.remove(at: index)
     }
 }
 
