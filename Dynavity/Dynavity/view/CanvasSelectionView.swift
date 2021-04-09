@@ -50,7 +50,7 @@ struct CanvasSelectionView: View {
                             viewModel.toggleSelectedCanvas(canvas)
                         }
                 } else {
-                    NavigationLink(destination: MainView()
+                    NavigationLink(destination: MainView(canvas: canvas)
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
                         CanvasThumbnailView(canvasName: canvas.name,

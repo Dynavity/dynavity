@@ -14,9 +14,12 @@ class CanvasViewModel: ObservableObject {
         case lasso
     }
 
+    private let canvasRepo = CanvasRepository()
+    private var timer: Timer?
+
     // to prevent an infinite loop of didSet when loading changes
     private var enableWriteBack = true
-    @Published var canvas = Canvas() {
+    @Published var canvas: Canvas {
         didSet {
             if enableWriteBack {
                 // Prevent the saving to Firebase operation from freezing the main thread.
@@ -78,18 +81,24 @@ class CanvasViewModel: ObservableObject {
         canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
-    init(canvasSize: CGFloat) {
+    init(canvas: Canvas, canvasSize: CGFloat) {
+        self.canvas = canvas
         self.canvasSize = canvasSize
         self.canvasMode = .pen
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
         loadFromFirebase()
+        initialiseAutoSaveTimer()
+    }
+
+    convenience init(canvas: Canvas) {
+        // Arbitrarily large value for the "infinite" canvas.
+        self.init(canvas: canvas, canvasSize: 500_000)
     }
 
     convenience init() {
-        // Arbitrarily large value for the "infinite" canvas.
-        self.init(canvasSize: 500_000)
+        self.init(canvas: Canvas())
     }
 
     var canvasElements: [CanvasElementProtocol] {
@@ -98,6 +107,17 @@ class CanvasViewModel: ObservableObject {
 
     func setCanvasViewport(size: CGSize) {
         canvasViewport = size
+    }
+}
+
+// MARK: Local storage autosaving
+extension CanvasViewModel {
+    // TODO: add manual saving when clicking certain buttons
+    func initialiseAutoSaveTimer() {
+        // Auto saves every 5 seconds
+        self.timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
+            self.canvasRepo.save(model: self.canvas)
+        }
     }
 }
 

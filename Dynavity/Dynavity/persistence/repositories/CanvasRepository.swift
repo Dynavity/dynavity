@@ -9,6 +9,7 @@ struct CanvasRepository: Repository {
     }
 
     /// Returns true if the canvas was successfully saved. False otherwise.
+    @discardableResult
     func save(model: Canvas) -> Bool {
         let canvasDTO = CanvasDTO(model: model)
         do {
@@ -19,6 +20,7 @@ struct CanvasRepository: Repository {
         }
     }
 
+    @discardableResult
     func delete(model: Canvas) -> Bool {
         let canvasDTO = CanvasDTO(model: model)
         do {
@@ -29,6 +31,7 @@ struct CanvasRepository: Repository {
         }
     }
 
+    @discardableResult
     func deleteMany(models: [Canvas]) -> Bool {
         let canvasDTOs = models.map({ delete(model: $0) })
         // Returns true if and only if all the canvases were successfully deleted

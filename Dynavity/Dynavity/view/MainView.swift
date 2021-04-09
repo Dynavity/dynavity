@@ -1,12 +1,20 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject private var canvasViewModel = CanvasViewModel()
+    @StateObject private var canvasViewModel: CanvasViewModel
     @State private var shouldShowMenu = false
 
     static let umlMenuButtonWidth: CGFloat = 25.0
     static let umlMenuButtonHeight: CGFloat = 40.0
     private let umlMenuButtonOffset: CGFloat = -5.0
+
+    init(canvas: Canvas) {
+        self._canvasViewModel = StateObject(wrappedValue: CanvasViewModel(canvas: canvas))
+    }
+
+    init() {
+        self.init(canvas: Canvas())
+    }
 
     var sideMenu: some View {
         GeometryReader { geometry in
