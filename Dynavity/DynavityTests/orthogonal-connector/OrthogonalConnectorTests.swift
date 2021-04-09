@@ -208,8 +208,8 @@ class OrthogonalConnectorTests: XCTestCase {
     func testGenerateRouteRotatedElement_middleTopToMiddleBottom_returnsOrthogonalPath() {
         let fourtyFiveDegClockwise = 0.785
         let fourtyFiveDegAntiClockwise = -0.785
-        var rotatedSource = sourceUmlElement
-        var rotatedDest = destinationUmlElement
+        let rotatedSource = sourceUmlElement
+        let rotatedDest = destinationUmlElement
         rotatedSource.rotate(to: fourtyFiveDegClockwise)
         rotatedDest.rotate(to: fourtyFiveDegAntiClockwise)
         let orthogonalConnector = OrthogonalConnector(from: rotatedSource,

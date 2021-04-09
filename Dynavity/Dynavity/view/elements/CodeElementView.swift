@@ -30,9 +30,6 @@ struct CodeElementView: View {
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: viewModel.codeElement.language) {_ in
-                    viewModel.resetCodeTemplate()
-                }
                 Button(action: viewModel.runCode, label: {
                     Text("Run")
                 })
