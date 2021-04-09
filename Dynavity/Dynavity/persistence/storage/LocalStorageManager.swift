@@ -64,6 +64,15 @@ extension LocalStorageManager: StorageManager {
         }
     }
 
+    func deleteCanvas(canvas: CanvasDTO) throws {
+        let fileURL = getFileURL(from: canvas.name, ext: LocalStorageManager.canvasFileExt)
+        do {
+            try fileManager.removeItem(at: fileURL)
+        } catch {
+            throw IOError.writeError("Failed to delete canvas: \(error.localizedDescription)")
+        }
+    }
+
     private func readCanvasFromFile(withURL url: URL) throws -> CanvasDTO? {
         guard let data = readFile(withURL: url) else {
             return nil
