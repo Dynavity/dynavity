@@ -3,7 +3,11 @@ import CoreGraphics
 import Foundation
 
 class CodeElement: PlainTextElement {
-    @Published var language: CodeLanguage
+    var language: CodeLanguage {
+        didSet {
+            resetCodeTemplate()
+        }
+    }
 
     override init(position: CGPoint) {
         self.language = CodeLanguage.python
