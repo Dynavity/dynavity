@@ -18,15 +18,13 @@ class MarkupElementViewModel: ObservableObject {
 
         // Introduces a debounce so that we don't fetch the HTML that many times.
         // Implementation referenced from: https://stackoverflow.com/a/57365773
-        /* TODO: Fix this.
-        cancellationToken = AnyCancellable($markupElement.removeDuplicates()
+        cancellationToken = AnyCancellable($markupElement
                                             .debounce(for: .seconds(MarkupElementViewModel.debounceDelay),
                                                       scheduler: RunLoop.main)
                                             .sink { _ in
                                                 self.exportToHtml()
                                             }
         )
-        */
     }
 
     // Exported HTML will be assigned to `rawHtml` variable
