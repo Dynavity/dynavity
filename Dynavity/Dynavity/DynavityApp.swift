@@ -16,7 +16,7 @@ struct DynavityApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            CanvasSelectionView()
                 .environmentObject(graphMapViewModel)
         }
     }

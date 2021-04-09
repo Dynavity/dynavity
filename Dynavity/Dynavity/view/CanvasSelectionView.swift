@@ -5,13 +5,12 @@ struct CanvasSelectionView: View {
         case grid
         case graph
     }
-    // TODO: Use actual canvas model instead, this is a temporary substitute
-    struct CanvasDetail: Hashable {
-        var title: String
-        var isSelected: Bool
-    }
 
-    @State var canvases: [CanvasDetail]
+    private let canvasRepo = CanvasRepository()
+    var canvases: [Canvas] {
+        canvasRepo.queryAll()
+    }
+    @State var selectedCanvases: [Canvas] = []
     @State private var searchQuery: String = ""
     @State private var isEditing = false
     @State private var selectionMode: SelectionMode = .grid
@@ -23,19 +22,17 @@ struct CanvasSelectionView: View {
         GridItem(.flexible())
     ]
 
-    var filteredCanvases: [CanvasDetail] {
+    var filteredCanvases: [Canvas] {
         canvases.filter {
             if searchQuery.isEmpty {
                 return true
             }
-        return $0.title.lowercased().contains(self.searchQuery.lowercased())
+        return $0.name.lowercased().contains(self.searchQuery.lowercased())
         }
     }
 
     var noCanvasSelected: Bool {
-        canvases.allSatisfy {
-            !$0.isSelected
-        }
+        selectedCanvases.isEmpty
     }
 
     var body: some View {
@@ -61,15 +58,15 @@ struct CanvasSelectionView: View {
         LazyVGrid(columns: columns, spacing: 200) {
             ForEach(self.filteredCanvases, id: \.self) { canvas in
                 if isEditing {
-                    CanvasThumbnailView(canvasName: canvas.title, isSelected: canvas.isSelected)
+                    CanvasThumbnailView(canvasName: canvas.name, isSelected: isCanvasSelected(canvas))
                         .onTapGesture {
-                            toggleSelectedCanvas(canvas.title)
+                            toggleSelectedCanvas(canvas)
                         }
                 } else {
                     NavigationLink(destination: MainView()
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
-                        CanvasThumbnailView(canvasName: canvas.title, isSelected: canvas.isSelected)
+                        CanvasThumbnailView(canvasName: canvas.name, isSelected: isCanvasSelected(canvas))
                     }
                 }
             }
@@ -130,7 +127,7 @@ struct CanvasSelectionView: View {
 
 struct CanvasSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        CanvasSelectionView(canvases: [])
+        CanvasSelectionView()
     }
 }
 
@@ -143,28 +140,24 @@ extension CanvasSelectionView {
         }
     }
 
-    func toggleSelectedCanvas(_ title: String) {
-        canvases = canvases.map {
-            if $0.title == title {
-                return CanvasSelectionView.CanvasDetail(title: $0.title,
-                                                        isSelected: !$0.isSelected)
-            }
-            return $0
+    func toggleSelectedCanvas(_ canvas: Canvas) {
+        let wasCanvasSelected = isCanvasSelected(canvas)
+        if wasCanvasSelected {
+            selectedCanvases.filter({ $0 != canvas })
+        } else {
+            selectedCanvases.append(canvas)
         }
+    }
+
+    func isCanvasSelected(_ canvas: Canvas) -> Bool {
+        selectedCanvases.contains(canvas)
     }
 
     func clearSelectedCanvases() {
-        canvases = canvases.map {
-            CanvasSelectionView.CanvasDetail(title: $0.title, isSelected: false)
-        }
+        selectedCanvases = []
     }
 
-    func deleteSelectedCanvases() {
-        canvases = canvases.compactMap {
-            if $0.isSelected {
-                return nil
-            }
-            return CanvasSelectionView.CanvasDetail(title: $0.title, isSelected: false)
-        }
+    func deleteSelectedCanvases() -> Bool {
+        canvasRepo.deleteMany(models: selectedCanvases)
     }
 }

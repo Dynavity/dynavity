@@ -80,3 +80,14 @@ extension Canvas: Codable {
     }
 }
 */
+
+extension Canvas: Hashable {
+    // TODO: fix this. Current implementation assumes name uniquely identifies a canvas
+    static func == (lhs: Canvas, rhs: Canvas) -> Bool {
+        lhs.name == rhs.name
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
+}
