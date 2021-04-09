@@ -42,13 +42,26 @@ struct LocalStorageManager {
     }
 }
 
-// Canvas-specific operations
 extension LocalStorageManager: StorageManager {
     private static let canvasFileExt: String = "json"
 
     func readAllCanvases() throws -> [CanvasDTO] {
         let canvasURLs = try getAllURLsInDocumentDirectory(with: LocalStorageManager.canvasFileExt)
         return canvasURLs.compactMap({ try? readCanvasFromFile(withURL: $0) })
+    }
+
+    /// Canvases will be saved in the documents directory with the file name: `\(canvasName).json`
+    func saveCanvas(canvas: CanvasDTO) throws {
+        // TODO: perform validation here before saving if necessary (e.g. ensure canvas name is unique etc)
+
+        if let encodedData = try? encoder.encode(canvas) {
+            let fileURL = getFileURL(from: canvas.name, ext: LocalStorageManager.canvasFileExt)
+            do {
+                try encodedData.write(to: fileURL, options: .atomic)
+            } catch {
+                throw IOError.writeError("Failed to save canvas: \(error.localizedDescription)")
+            }
+        }
     }
 
     private func readCanvasFromFile(withURL url: URL) throws -> CanvasDTO? {
