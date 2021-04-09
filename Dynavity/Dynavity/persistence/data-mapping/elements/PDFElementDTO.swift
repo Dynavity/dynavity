@@ -1,7 +1,7 @@
 import CoreGraphics
 
 struct PDFElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias T = PDFElement
+    typealias Model = PDFElement
 
     let position: CGPoint
     let width: CGFloat

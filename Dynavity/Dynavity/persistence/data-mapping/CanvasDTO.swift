@@ -1,5 +1,5 @@
 struct CanvasDTO: Mappable {
-    typealias T = Canvas
+    typealias Model = Canvas
 
     let canvasElements: [TypeWrappedCanvasElementDTO]
     // TODO: add umlconnectors

@@ -1,5 +1,5 @@
 struct BacklinkEngineDTO: Mappable {
-    typealias T = BacklinkEngine
+    typealias Model = BacklinkEngine
 
     fileprivate let backlinkNodes: [BacklinkNodeDTO]
     fileprivate let backlinkEdges: [BacklinkEdgeDTO]

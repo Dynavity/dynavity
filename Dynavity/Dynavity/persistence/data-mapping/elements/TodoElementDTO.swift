@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 
 struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias T = TodoElement
+    typealias Model = TodoElement
 
     struct TodoDTO: Mappable, Codable {
         let id: UUID

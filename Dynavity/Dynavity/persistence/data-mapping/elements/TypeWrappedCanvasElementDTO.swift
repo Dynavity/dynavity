@@ -2,6 +2,8 @@ import Foundation
 
 // TODO: complete this with uml DTOs
 enum TypeWrappedCanvasElementDTO: Mappable {
+    typealias Model = CanvasElementProtocol
+
     case image(ImageElementDTO)
     case pdf(PDFElementDTO)
     case todo(TodoElementDTO)

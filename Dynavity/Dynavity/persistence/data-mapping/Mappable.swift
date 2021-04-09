@@ -1,4 +1,4 @@
 protocol Mappable {
-    associatedtype T
-    func toModel() -> T
+    associatedtype Model
+    func toModel() -> Model
 }

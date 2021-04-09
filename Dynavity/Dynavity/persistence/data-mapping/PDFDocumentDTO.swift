@@ -1,7 +1,7 @@
 import PDFKit
 
 struct PDFDocumentDTO: Mappable {
-    typealias T = PDFDocument
+    typealias Model = PDFDocument
 
     let pdfData: Data
 

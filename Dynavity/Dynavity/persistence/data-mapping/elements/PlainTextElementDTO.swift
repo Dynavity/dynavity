@@ -1,7 +1,7 @@
 import CoreGraphics
 
 struct PlainTextElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias T = PlainTextElement
+    typealias Model = PlainTextElement
 
     let position: CGPoint
     let width: CGFloat

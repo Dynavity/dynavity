@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct UIImageDTO: Mappable {
-    typealias T = UIImage
+    typealias Model = UIImage
 
     let pngData: Data
 

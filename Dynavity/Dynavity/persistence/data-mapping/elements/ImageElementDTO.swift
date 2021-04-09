@@ -1,7 +1,7 @@
 import CoreGraphics
 
 struct ImageElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias T = ImageElement
+    typealias Model = ImageElement
 
     let position: CGPoint
     let width: CGFloat

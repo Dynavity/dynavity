@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 
 struct BacklinkNodeDTO: Mappable {
-    typealias T = BacklinkNode
+    typealias Model = BacklinkNode
 
     let id: UUID
     let name: String
