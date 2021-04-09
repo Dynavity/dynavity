@@ -6,12 +6,7 @@ struct CanvasSelectionView: View {
         case graph
     }
 
-    private let canvasRepo = CanvasRepository()
-    var canvases: [Canvas] {
-        canvasRepo.queryAll()
-    }
-    @State var selectedCanvases: [Canvas] = []
-    @State private var searchQuery: String = ""
+    @StateObject private var viewModel = CanvasSelectionViewModel()
     @State private var isEditing = false
     @State private var selectionMode: SelectionMode = .grid
 
@@ -22,17 +17,8 @@ struct CanvasSelectionView: View {
         GridItem(.flexible())
     ]
 
-    var filteredCanvases: [Canvas] {
-        canvases.filter {
-            if searchQuery.isEmpty {
-                return true
-            }
-        return $0.name.lowercased().contains(self.searchQuery.lowercased())
-        }
-    }
-
     var noCanvasSelected: Bool {
-        selectedCanvases.isEmpty
+        viewModel.selectedCanvases.isEmpty
     }
 
     var body: some View {
@@ -46,7 +32,7 @@ struct CanvasSelectionView: View {
                         canvasesGrid
                     }
                 case .graph:
-                    GraphView(searchQuery: $searchQuery)
+                    GraphView(searchQuery: $viewModel.searchQuery)
                 }
             }
             .navigationBarHidden(true)
@@ -56,17 +42,19 @@ struct CanvasSelectionView: View {
 
     var canvasesGrid: some View {
         LazyVGrid(columns: columns, spacing: 200) {
-            ForEach(self.filteredCanvases, id: \.self) { canvas in
+            ForEach(viewModel.getFilteredCanvases(), id: \.self) { canvas in
                 if isEditing {
-                    CanvasThumbnailView(canvasName: canvas.name, isSelected: isCanvasSelected(canvas))
+                    CanvasThumbnailView(canvasName: canvas.name,
+                                        isSelected: viewModel.isCanvasSelected(canvas))
                         .onTapGesture {
-                            toggleSelectedCanvas(canvas)
+                            viewModel.toggleSelectedCanvas(canvas)
                         }
                 } else {
                     NavigationLink(destination: MainView()
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
-                        CanvasThumbnailView(canvasName: canvas.name, isSelected: isCanvasSelected(canvas))
+                        CanvasThumbnailView(canvasName: canvas.name,
+                                            isSelected: viewModel.isCanvasSelected(canvas))
                     }
                 }
             }
@@ -98,20 +86,20 @@ struct CanvasSelectionView: View {
                     toggleEditMode()
                 }
                 Button(action: {
-                    deleteSelectedCanvases()
+                    viewModel.deleteSelectedCanvases()
                     toggleEditMode()
                 }) {
                     Image(systemName: "trash")
                 }.disabled(noCanvasSelected)
 
-                SearchBarView(text: $searchQuery)
+                SearchBarView(text: $viewModel.searchQuery)
             } else {
                 if selectionMode != .graph {
                     Button("Edit") {
                         toggleEditMode()
                     }
                 }
-                SearchBarView(text: $searchQuery)
+                SearchBarView(text: $viewModel.searchQuery)
                 // TODO: Implement saving the newly created canvas to state & db
                 selectionModeToggleButton
 
@@ -136,28 +124,7 @@ extension CanvasSelectionView {
         isEditing.toggle()
 
         if !isEditing {
-            clearSelectedCanvases()
+            viewModel.clearSelectedCanvases()
         }
-    }
-
-    func toggleSelectedCanvas(_ canvas: Canvas) {
-        let wasCanvasSelected = isCanvasSelected(canvas)
-        if wasCanvasSelected {
-            selectedCanvases.filter({ $0 != canvas })
-        } else {
-            selectedCanvases.append(canvas)
-        }
-    }
-
-    func isCanvasSelected(_ canvas: Canvas) -> Bool {
-        selectedCanvases.contains(canvas)
-    }
-
-    func clearSelectedCanvases() {
-        selectedCanvases = []
-    }
-
-    func deleteSelectedCanvases() -> Bool {
-        canvasRepo.deleteMany(models: selectedCanvases)
     }
 }
