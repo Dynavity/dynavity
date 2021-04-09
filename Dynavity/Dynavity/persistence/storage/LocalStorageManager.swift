@@ -47,19 +47,8 @@ extension LocalStorageManager: StorageManager {
     private static let canvasFileExt: String = "json"
 
     func readAllCanvases() throws -> [CanvasDTO] {
-        var canvases: [CanvasDTO] = []
-
         let canvasURLs = try getAllURLsInDocumentDirectory(with: LocalStorageManager.canvasFileExt)
-        for url in canvasURLs {
-            if let canvas = try? readCanvasFromFile(withURL: url) {
-                canvases.append(canvas)
-            } else {
-                print("Failed to read contents or from file \(url.path)")
-                print("Omitting \(url.path)")
-            }
-        }
-
-        return canvases
+        return canvasURLs.compactMap({ try? readCanvasFromFile(withURL: $0) })
     }
 
     private func readCanvasFromFile(withURL url: URL) throws -> CanvasDTO? {
