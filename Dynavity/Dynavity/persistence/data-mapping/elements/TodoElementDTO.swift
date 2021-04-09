@@ -9,23 +9,29 @@ struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
         let label: String
         let isCompleted: Bool
 
+        init(model: Todo) {
+            self.id = model.id
+            self.label = model.label
+            self.isCompleted = model.isCompleted
+        }
+
         func toModel() -> Todo {
             Todo(id: id, label: label, isCompleted: isCompleted)
         }
     }
 
-    let position: CGPoint
-    let width: CGFloat
-    let height: CGFloat
-    let rotation: Double
+    let canvasProperties: CanvasElementPropertiesDTO
 
     let todos: [TodoDTO]
 
+    init(model: TodoElement) {
+        self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
+        self.todos = model.todos.map({ TodoDTO(model: $0) })
+    }
+
     func toModel() -> TodoElement {
-        let model = TodoElement(position: position)
-        model.width = width
-        model.height = height
-        model.rotation = rotation
+        let model = TodoElement(position: canvasProperties.position)
+        model.canvasProperties = canvasProperties.toModel()
         model.todos = todos.map({ $0.toModel() })
         return model
     }

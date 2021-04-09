@@ -3,19 +3,20 @@ import CoreGraphics
 struct MarkupElementDTO: CanvasElementProtocolDTO, Mappable {
     typealias Model = MarkupElement
 
-    let position: CGPoint
-    let width: CGFloat
-    let height: CGFloat
-    let rotation: Double
+    let canvasProperties: CanvasElementPropertiesDTO
 
     let text: String
     let markupType: MarkupElement.MarkupType
 
+    init(model: MarkupElement) {
+        self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
+        self.text = model.text
+        self.markupType = model.markupType
+    }
+
     func toModel() -> MarkupElement {
-        let model = MarkupElement(position: position, markupType: markupType)
-        model.width = width
-        model.height = height
-        model.rotation = rotation
+        let model = MarkupElement(position: canvasProperties.position, markupType: markupType)
+        model.canvasProperties = canvasProperties.toModel()
         model.text = text
         return model
     }

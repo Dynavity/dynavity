@@ -3,18 +3,18 @@ import CoreGraphics
 struct ImageElementDTO: CanvasElementProtocolDTO, Mappable {
     typealias Model = ImageElement
 
-    let position: CGPoint
-    let width: CGFloat
-    let height: CGFloat
-    let rotation: Double
+    let canvasProperties: CanvasElementPropertiesDTO
 
     let imageDTO: UIImageDTO
 
+    init(model: ImageElement) {
+        self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
+        self.imageDTO = UIImageDTO(model: model.image)
+    }
+
     func toModel() -> ImageElement {
-        let model = ImageElement(position: position, image: imageDTO.toModel())
-        model.width = width
-        model.height = height
-        model.rotation = rotation
+        let model = ImageElement(position: canvasProperties.position, image: imageDTO.toModel())
+        model.canvasProperties = canvasProperties.toModel()
         return model
     }
 }

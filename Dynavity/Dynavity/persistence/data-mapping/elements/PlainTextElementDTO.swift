@@ -3,18 +3,18 @@ import CoreGraphics
 struct PlainTextElementDTO: CanvasElementProtocolDTO, Mappable {
     typealias Model = PlainTextElement
 
-    let position: CGPoint
-    let width: CGFloat
-    let height: CGFloat
-    let rotation: Double
+    let canvasProperties: CanvasElementPropertiesDTO
 
     let text: String
 
+    init(model: PlainTextElement) {
+        self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
+        self.text = model.text
+    }
+
     func toModel() -> PlainTextElement {
-        let model = PlainTextElement(position: position)
-        model.width = width
-        model.height = height
-        model.rotation = rotation
+        let model = PlainTextElement(position: canvasProperties.position)
+        model.canvasProperties = canvasProperties.toModel()
         model.text = text
         return model
     }

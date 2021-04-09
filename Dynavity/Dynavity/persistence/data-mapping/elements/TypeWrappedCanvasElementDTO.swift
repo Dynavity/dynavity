@@ -87,20 +87,21 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         }
     }
 
-    init(element: CanvasElementProtocolDTO) {
+    init(model element: CanvasElementProtocol) {
         switch element {
-        case let imageElement as ImageElementDTO:
-            self = .image(imageElement)
-        case let pdfElement as PDFElementDTO:
-            self = .pdf(pdfElement)
-        case let todoElement as TodoElementDTO:
-            self = .todo(todoElement)
-        case let plainTextElement as PlainTextElementDTO:
-            self = .text(plainTextElement)
-        case let codeElement as CodeElementDTO:
-            self = .code(codeElement)
-        case let markupElement as MarkupElementDTO:
-            self = .markup(markupElement)
+        case let imageElement as ImageElement:
+            self = .image(ImageElementDTO(model: imageElement))
+        case let pdfElement as PDFElement:
+            self = .pdf(PDFElementDTO(model: pdfElement))
+        case let todoElement as TodoElement:
+            self = .todo(TodoElementDTO(model: todoElement))
+        case let codeElement as CodeElement:
+            self = .code(CodeElementDTO(model: codeElement))
+        case let markupElement as MarkupElement:
+            self = .markup(MarkupElementDTO(model: markupElement))
+        // Note: PlainTextElement must be checked after its subclassse
+        case let plainTextElement as PlainTextElement:
+            self = .text(PlainTextElementDTO(model: plainTextElement))
 //        case let diamondUmlElement as DiamondUmlElement:
 //            self = .umlDiamond(diamondUmlElement)
 //        case let rectangleUmlElement as RectangleUmlElement:

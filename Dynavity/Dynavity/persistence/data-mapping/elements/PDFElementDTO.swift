@@ -3,18 +3,18 @@ import CoreGraphics
 struct PDFElementDTO: CanvasElementProtocolDTO, Mappable {
     typealias Model = PDFElement
 
-    let position: CGPoint
-    let width: CGFloat
-    let height: CGFloat
-    let rotation: Double
+    let canvasProperties: CanvasElementPropertiesDTO
 
     let pdfDocumentDTO: PDFDocumentDTO
 
+    init(model: PDFElement) {
+        self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
+        self.pdfDocumentDTO = PDFDocumentDTO(model: model.pdfDocument)
+    }
+
     func toModel() -> PDFElement {
-        let model = PDFElement(position: position, pdfDocument: pdfDocumentDTO.toModel())
-        model.width = width
-        model.height = height
-        model.rotation = rotation
+        let model = PDFElement(position: canvasProperties.position, pdfDocument: pdfDocumentDTO.toModel())
+        model.canvasProperties = canvasProperties.toModel()
         return model
     }
 }
