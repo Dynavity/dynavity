@@ -40,10 +40,6 @@ class CodeElementViewModel: ObservableObject {
         output = ""
     }
 
-    func resetCodeTemplate() {
-        codeElement.resetCodeTemplate()
-    }
-
     func convertQuotes() {
         codeElement.convertQuotes()
     }
