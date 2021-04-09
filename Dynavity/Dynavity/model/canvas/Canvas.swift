@@ -32,20 +32,12 @@ extension Canvas {
         umlConnectors.append(connector)
     }
 
-    func replaceUmlConnector(_ connector: UmlConnector) {
-        guard let index = umlConnectors.firstIndex(where: { $0.id == connector.id }) else {
-            return
-        }
-
-        umlConnectors[index] = connector
-    }
-
     func removeUmlConnector(_ connector: UmlConnector) {
-        guard let index = umlConnectors.firstIndex(where: { $0.id == connector.id }) else {
+        guard let index = umlConnectors.firstIndex(where: { $0 === connector }) else {
             return
         }
-
         umlConnectors.remove(at: index)
+
     }
 }
 
