@@ -1,8 +1,6 @@
 import CoreGraphics
 
 struct MarkupElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias Model = MarkupElement
-
     let canvasProperties: CanvasElementPropertiesDTO
 
     let text: String

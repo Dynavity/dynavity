@@ -1,8 +1,6 @@
 import CoreGraphics
 
 struct ImageElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias Model = ImageElement
-
     let canvasProperties: CanvasElementPropertiesDTO
 
     let imageDTO: UIImageDTO

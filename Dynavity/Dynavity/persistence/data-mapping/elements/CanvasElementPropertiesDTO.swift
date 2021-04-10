@@ -1,8 +1,6 @@
 import CoreGraphics
 
 struct CanvasElementPropertiesDTO: Mappable {
-    typealias Model = CanvasElementProperties
-
     let position: CGPoint
     let width: CGFloat
     let height: CGFloat
