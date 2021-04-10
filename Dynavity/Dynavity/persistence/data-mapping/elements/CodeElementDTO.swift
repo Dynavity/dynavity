@@ -18,8 +18,9 @@ struct CodeElementDTO: CanvasElementProtocolDTO, Mappable {
         }
         let model = CodeElement(position: canvasProperties.position)
         model.canvasProperties = canvasProperties.toModel()
-        model.text = text
+        // Note: language must be set before text since setting language triggers a template reset
         model.language = language
+        model.text = text
         return model
     }
 }
