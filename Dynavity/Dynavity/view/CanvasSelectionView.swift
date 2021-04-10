@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CanvasSelectionView: View {
-    enum SelectionMode {
+    private enum SelectionMode {
         case grid
         case graph
     }
@@ -10,7 +10,7 @@ struct CanvasSelectionView: View {
     @State private var isEditing = false
     @State private var selectionMode: SelectionMode = .grid
 
-    let columns = [
+    private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible()),
@@ -40,7 +40,7 @@ struct CanvasSelectionView: View {
         .navigationViewStyle(StackNavigationViewStyle())
     }
 
-    var canvasesGrid: some View {
+    private var canvasesGrid: some View {
         LazyVGrid(columns: columns, spacing: 200) {
             ForEach(viewModel.getFilteredCanvases(), id: \.self) { canvas in
                 if isEditing {
@@ -55,6 +55,10 @@ struct CanvasSelectionView: View {
                                     .navigationBarBackButtonHidden(true)) {
                         CanvasThumbnailView(canvasName: canvas.name,
                                             isSelected: viewModel.isCanvasSelected(canvas))
+
+                    }
+                    .contextMenu {
+                        getContextMenuFor(canvas: canvas)
                     }
                 }
             }
@@ -62,7 +66,23 @@ struct CanvasSelectionView: View {
         .padding(.horizontal)
     }
 
-    var selectionModeToggleButton: some View {
+    private func getContextMenuFor(canvas: Canvas) -> some View {
+        Group {
+            Button {
+                onRenameButtonTap(canvas: canvas)
+            } label: {
+                Label("Rename", systemImage: "pencil")
+            }
+
+            Button {
+                onDeleteButtonTap(canvas: canvas)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+
+    private var selectionModeToggleButton: some View {
         switch selectionMode {
         case .grid:
             return Button(action: {
@@ -79,7 +99,7 @@ struct CanvasSelectionView: View {
         }
     }
 
-    var actionButtonGroup: some View {
+    private var actionButtonGroup: some View {
         HStack {
             if isEditing {
                 Button("Done") {
@@ -120,11 +140,57 @@ struct CanvasSelectionView_Previews: PreviewProvider {
 }
 
 extension CanvasSelectionView {
-    func toggleEditMode() {
+    private func toggleEditMode() {
         isEditing.toggle()
 
         if !isEditing {
             viewModel.clearSelectedCanvases()
         }
+    }
+}
+
+// MAKR: Alert handlers
+extension CanvasSelectionView {
+    private func onRenameButtonTap(canvas: Canvas) {
+        let alert = UIAlertController(title: "Rename canvas", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = "\(canvas.name)"
+        }
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+            guard let updatedName = alert.textFields?.first?.text else {
+                return
+            }
+
+            let isNewNameUnique = viewModel.isCanvasNameUnique(name: updatedName)
+
+            if isNewNameUnique {
+                viewModel.renameCanvas(canvas, updatedName: updatedName)
+            } else {
+                invalidCanvasNameHandler(canvas: canvas)
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.showAlert(alert: alert)
+    }
+
+    private func onDeleteButtonTap(canvas: Canvas) {
+        let alert = UIAlertController(title: "Delete canvas",
+                                      message: "This canvas will be deleted. This action cannot be undone.",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            viewModel.deleteCanvas(canvas)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.showAlert(alert: alert)
+    }
+
+    private func invalidCanvasNameHandler(canvas: Canvas) {
+        let errorAlert = UIAlertController(title: "Invalid canvas name!",
+                                           message: "Canvas names must be unique.",
+                                           preferredStyle: .alert)
+         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { _ in
+            onRenameButtonTap(canvas: canvas)
+         }))
+        self.showAlert(alert: errorAlert)
     }
 }

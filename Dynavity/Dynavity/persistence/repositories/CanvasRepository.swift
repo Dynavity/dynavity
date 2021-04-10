@@ -37,6 +37,5 @@ struct CanvasRepository: Repository {
         let canvasDTOs = models.map({ delete(model: $0) })
         // Returns true if and only if all the canvases were successfully deleted
         return canvasDTOs.allSatisfy({ $0 })
-
     }
 }

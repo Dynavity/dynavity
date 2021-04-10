@@ -32,9 +32,26 @@ class CanvasSelectionViewModel: ObservableObject {
         selectedCanvases = []
     }
 
-    @discardableResult
-    func deleteSelectedCanvases() -> Bool {
+    func deleteSelectedCanvases() {
         canvasRepo.deleteMany(models: selectedCanvases)
+        self.objectWillChange.send()
+    }
+
+    func deleteCanvas(_ canvas: Canvas) {
+        canvasRepo.delete(model: canvas)
+        self.objectWillChange.send()
+    }
+
+    func renameCanvas(_ canvas: Canvas, updatedName: String) {
+        canvasRepo.delete(model: canvas)
+        canvas.name = updatedName
+        canvasRepo.save(model: canvas)
+        self.objectWillChange.send()
+    }
+
+    // Case-insensitive checking
+    func isCanvasNameUnique(name: String) -> Bool {
+        !canvasRepo.queryAll().map({ $0.name.lowercased() }).contains(name.lowercased())
     }
 
     func isCanvasSelected(_ canvas: Canvas) -> Bool {
