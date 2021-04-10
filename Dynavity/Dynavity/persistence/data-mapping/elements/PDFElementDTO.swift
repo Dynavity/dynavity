@@ -1,8 +1,6 @@
 import CoreGraphics
 
 struct PDFElementDTO: CanvasElementProtocolDTO, Mappable {
-    typealias Model = PDFElement
-
     let canvasProperties: CanvasElementPropertiesDTO
 
     let pdfDocumentDTO: PDFDocumentDTO

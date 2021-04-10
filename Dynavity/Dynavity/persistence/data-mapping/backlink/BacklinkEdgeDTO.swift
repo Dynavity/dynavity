@@ -1,6 +1,4 @@
 struct BacklinkEdgeDTO: Mappable {
-    typealias Model = BacklinkEdge
-
     let source: BacklinkNodeDTO
     let destination: BacklinkNodeDTO
 
