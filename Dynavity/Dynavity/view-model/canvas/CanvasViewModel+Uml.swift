@@ -48,13 +48,11 @@ extension CanvasViewModel {
     }
 
     func updateUmlConnections(element: UmlElementProtocol) {
-        var idsToRemove: [UUID] = []
-        for var connector in canvas.umlConnectors {
+        for connector in canvas.umlConnectors {
             if connector.connects.fromElement !== element
                     && connector.connects.toElement !== element {
                 continue
             }
-            idsToRemove.append(connector.id)
             let sourceElement = connector.connects.fromElement
             let destElement = connector.connects.toElement
             let sourceAnchor = connector.connectingSide.fromSide
@@ -62,7 +60,6 @@ extension CanvasViewModel {
             let newPoints = OrthogonalConnector(from: sourceElement, to: destElement)
                 .generateRoute(sourceAnchor, destAnchor: destAnchor)
             connector.points = newPoints
-            canvas.replaceUmlConnector(connector)
         }
     }
 }
@@ -96,11 +93,11 @@ extension CanvasViewModel {
 // MARK: UML connector gestures
 extension CanvasViewModel {
     func select(umlConnector: UmlConnector) {
-        if selectedUmlConnectorId == umlConnector.id {
-            selectedUmlConnectorId = nil
+        if selectedUmlConnector === umlConnector {
+            selectedUmlConnector = nil
             return
         }
-        selectedUmlConnectorId = umlConnector.id
+        selectedUmlConnector = umlConnector
     }
 
     func removeUmlConnector(_ connector: UmlConnector) {

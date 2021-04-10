@@ -10,7 +10,7 @@ struct UmlConnectorView: View {
     private let umlConnectorHitboxOpacity: Double = 0.001
 
     private func isSelected(umlConnector: UmlConnector) -> Bool {
-        viewModel.selectedUmlConnectorId == umlConnector.id
+        viewModel.selectedUmlConnector === umlConnector
     }
 
     private func generatePathFromPoints(_ pathPoints: [CGPoint]) -> Path {

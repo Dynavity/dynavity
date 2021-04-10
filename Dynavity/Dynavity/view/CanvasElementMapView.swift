@@ -14,7 +14,7 @@ struct CanvasElementMapView: View {
 
     var body: some View {
         ZStack {
-            ForEach(viewModel.getCanvasUmlConnectors(), id: \.id) { connector in
+            ForEach(viewModel.getCanvasUmlConnectors()) { connector in
                 UmlConnectorView(viewModel: viewModel, connector: connector)
                     .onTapGesture {
                         viewModel.select(umlConnector: connector)
