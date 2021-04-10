@@ -1,27 +1,27 @@
 import Foundation
 import CoreGraphics
+import Combine
 
 /**
  Encapsulates a connector between two UML shapes.
  */
-struct UmlConnector {
-    // TODO: Should this be updated to not use ID as well?
-    var id: UUID
+class UmlConnector: Identifiable, AnyObservableObject {
+    var objectWillChange: ObservableObjectPublisher
+
     var points: [CGPoint]
-    // UUID of UmlElementProtocol, actual element is in [CanvasElementProtocol] in Canvas
     var connects: (fromElement: UmlElementProtocol, toElement: UmlElementProtocol)
     var connectingSide: (fromSide: ConnectorConnectingSide, toSide: ConnectorConnectingSide)
 
     init(points: [CGPoint],
          connects: (fromElement: UmlElementProtocol, toElement: UmlElementProtocol),
          connectingSide: (fromSide: ConnectorConnectingSide, toSide: ConnectorConnectingSide)) {
-        self.id = UUID()
         self.points = points
         self.connects = connects
         self.connectingSide = connectingSide
+        self.objectWillChange = ObservableObjectPublisher()
     }
 
-    mutating func addPoint(_ point: CGPoint) {
+    func addPoint(_ point: CGPoint) {
         points.append(point)
     }
 }

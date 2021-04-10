@@ -44,7 +44,7 @@ class CanvasViewModel: ObservableObject {
     @Published var shouldShowUmlMenu = false
 
     // Uml element connectors
-    @Published var selectedUmlConnectorId: UUID?
+    @Published var selectedUmlConnector: UmlConnector?
     @Published var umlConnectorStart: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     @Published var umlConnectorEnd: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     var canvasViewport: CGSize = .zero
