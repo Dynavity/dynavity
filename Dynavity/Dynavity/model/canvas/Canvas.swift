@@ -80,10 +80,10 @@ extension Canvas: Codable {
 
 extension Canvas: Hashable {
     static func == (lhs: Canvas, rhs: Canvas) -> Bool {
-        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+        lhs.name == rhs.name
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self))
+        hasher.combine(self.name)
     }
 }

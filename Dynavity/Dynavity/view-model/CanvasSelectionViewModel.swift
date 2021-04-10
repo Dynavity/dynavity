@@ -22,7 +22,7 @@ class CanvasSelectionViewModel: ObservableObject {
     func toggleSelectedCanvas(_ canvas: Canvas) {
         let wasCanvasSelected = isCanvasSelected(canvas)
         if wasCanvasSelected {
-            selectedCanvases = selectedCanvases.filter({ $0 != canvas })
+            selectedCanvases = selectedCanvases.filter({ $0 !== canvas })
         } else {
             selectedCanvases.append(canvas)
         }

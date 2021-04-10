@@ -106,8 +106,7 @@ struct CanvasSelectionView: View {
                     toggleEditMode()
                 }
                 Button(action: {
-                    viewModel.deleteSelectedCanvases()
-                    toggleEditMode()
+                    onBulkDeleteButtonTap()
                 }) {
                     Image(systemName: "trash")
                 }.disabled(noCanvasSelected)
@@ -179,6 +178,18 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteCanvas(canvas)
+            toggleEditMode()
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.showAlert(alert: alert)
+    }
+
+    private func onBulkDeleteButtonTap() {
+        let alert = UIAlertController(title: "Delete canvases",
+                                      message: "These canvases will be deleted. This action cannot be undone.",
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+            viewModel.deleteSelectedCanvases()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.showAlert(alert: alert)
