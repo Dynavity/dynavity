@@ -11,13 +11,13 @@ struct LocalStorageManager {
     }
 
     /// Returns the URL of the file in the documents directory
-    private func getFileURL(from name: String, ext: String) -> URL {
+    private func getFileURL(name: String, ext: String) -> URL {
         documentsDirectory.appendingPathComponent(name).appendingPathExtension(ext)
     }
 
     /// Checks if the file is in the documents directory
     private func doesFileExist(name: String, ext: String) -> Bool {
-        let url = getFileURL(from: name, ext: ext)
+        let url = getFileURL(name: name, ext: ext)
         return fileManager.fileExists(atPath: url.path)
     }
 
@@ -42,6 +42,7 @@ struct LocalStorageManager {
     }
 }
 
+// MARK: Canvas
 extension LocalStorageManager: StorageManager {
     private static let canvasFileExt: String = "json"
 
@@ -52,10 +53,8 @@ extension LocalStorageManager: StorageManager {
 
     /// Canvases will be saved in the documents directory with the file name: `\(id).json`
     func saveCanvas(canvas: CanvasDTO) throws {
-        // TODO: perform validation here before saving if necessary (e.g. ensure canvas name is unique etc)
-
         if let encodedData = try? encoder.encode(canvas) {
-            let fileURL = getFileURL(from: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
+            let fileURL = getFileURL(name: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
             do {
                 try encodedData.write(to: fileURL, options: .atomic)
             } catch {
@@ -65,7 +64,7 @@ extension LocalStorageManager: StorageManager {
     }
 
     func deleteCanvas(canvas: CanvasDTO) throws {
-        let fileURL = getFileURL(from: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
+        let fileURL = getFileURL(name: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
         do {
             try fileManager.removeItem(at: fileURL)
         } catch {
@@ -79,8 +78,43 @@ extension LocalStorageManager: StorageManager {
         }
 
         do {
-            let canvas = try decoder.decode(CanvasDTO.self, from: data)
-            return canvas
+            return try decoder.decode(CanvasDTO.self, from: data)
+        } catch {
+            throw IOError.readError("Attempted to read and decode a corrupted data file: \(url.path)")
+        }
+    }
+}
+
+// MARK: Backlink Engine
+extension LocalStorageManager {
+    private static let backlinkFileName: String = "backlink"
+    private static let backlinkFileExt: String = "graph"
+
+    func readBacklinkEngine() throws -> BacklinkEngineDTO? {
+        let url = getFileURL(name: LocalStorageManager.backlinkFileExt,
+                             ext: LocalStorageManager.backlinkFileExt)
+        return try? readBacklinkEngineFromFile(withURL: url)
+    }
+
+    func saveBacklinkEngine(backlinkEngine: BacklinkEngineDTO) throws {
+        if let encodedData = try? encoder.encode(backlinkEngine) {
+            let url = getFileURL(name: LocalStorageManager.backlinkFileExt,
+                                 ext: LocalStorageManager.backlinkFileExt)
+            do {
+                try encodedData.write(to: url, options: .atomic)
+            } catch {
+                throw IOError.writeError("Failed to save backlink engine: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func readBacklinkEngineFromFile(withURL url: URL) throws -> BacklinkEngineDTO? {
+        guard let data = readFile(withURL: url) else {
+            return nil
+        }
+
+        do {
+            return try decoder.decode(BacklinkEngineDTO.self, from: data)
         } catch {
             throw IOError.readError("Attempted to read and decode a corrupted data file: \(url.path)")
         }
