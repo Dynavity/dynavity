@@ -6,6 +6,8 @@ import FirebaseDatabase
 import CodableFirebase
 
 class CanvasViewModel: ObservableObject {
+    private static let autoSaveInterval = 3.0
+
     enum CanvasMode {
         case selection
         case pen
@@ -15,7 +17,18 @@ class CanvasViewModel: ObservableObject {
     }
 
     private let canvasRepo = CanvasRepository()
-    private var timer: Timer?
+    // We are not interested in the return value of each publisher,
+    // that's why the values are mapped away
+    let autoSavePublisher = Publishers.Merge(
+        // Publishes whenever app loses focus
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .map({ _ in () }),
+        // Publishes at fixed time intervals
+        Timer.publish(every: CanvasViewModel.autoSaveInterval, on: .main, in: .default)
+            .autoconnect()
+            .map({ _ in () })
+    )
 
     // to prevent an infinite loop of didSet when loading changes
     private var enableWriteBack = true
@@ -89,7 +102,6 @@ class CanvasViewModel: ObservableObject {
             self?.objectWillChange.send()
         }
         loadFromFirebase()
-        initialiseAutoSaveTimer()
     }
 
     convenience init(canvas: Canvas) {
@@ -112,12 +124,8 @@ class CanvasViewModel: ObservableObject {
 
 // MARK: Local storage autosaving
 extension CanvasViewModel {
-    // TODO: add manual saving when clicking certain buttons
-    func initialiseAutoSaveTimer() {
-        // Auto saves every 5 seconds
-        self.timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
-            self.canvasRepo.save(model: self.canvas)
-        }
+    func saveCanvas() {
+        self.canvasRepo.save(model: self.canvas)
     }
 }
 

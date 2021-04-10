@@ -19,6 +19,9 @@ struct CanvasView: View {
             .onAppear {
                 viewModel.setCanvasViewport(size: geometry.size)
             }
+            .onReceive(viewModel.autoSavePublisher, perform: { _ in
+                viewModel.saveCanvas()
+            })
         }
     }
 }
