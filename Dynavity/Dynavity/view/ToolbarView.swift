@@ -190,7 +190,7 @@ struct ToolbarView: View {
         .background(viewModel.canvasMode == .lasso ? Color.UI.grey : nil)
     }
 
-    private var backButton: some View {
+    private var homeButton: some View {
         NavigationLink(destination: CanvasSelectionView()
                         .navigationBarHidden(true)
                         .navigationBarBackButtonHidden(true)) {
@@ -201,7 +201,7 @@ struct ToolbarView: View {
 
     var body: some View {
         HStack {
-            backButton
+            homeButton
             // Add sufficient spacing to prevent UML side menu from blocking
             Spacer().frame(width: spacerWidth)
             // Grouped because SwiftUI's ViewBuilder only allows 10 views

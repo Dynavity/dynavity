@@ -22,6 +22,9 @@ struct CanvasView: View {
             .onReceive(viewModel.autoSavePublisher, perform: { _ in
                 viewModel.saveCanvas()
             })
+            .onDisappear {
+                viewModel.saveCanvas()
+            }
         }
     }
 }
