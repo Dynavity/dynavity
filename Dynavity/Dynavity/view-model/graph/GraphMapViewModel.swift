@@ -6,7 +6,9 @@ import Foundation
 let testId = UUID()
 
 class GraphMapViewModel: ObservableObject {
-    @Published var backlinkEngine = BacklinkEngine()
+    private let backlinkRepo = BacklinkRepository()
+
+    @Published var backlinkEngine: BacklinkEngine
 
     private var draggedNodeOriginalPosition: CGPoint?
     @Published var draggedNode: BacklinkNode?
@@ -14,7 +16,8 @@ class GraphMapViewModel: ObservableObject {
     @Published var longPressedNode: BacklinkNode?
 
     init() {
-        initialiseBacklinkEngine()
+        let backlinkEngine = backlinkRepo.queryAll().first ?? BacklinkEngine()
+        self.backlinkEngine = backlinkEngine
     }
 
     func getNodes() -> [BacklinkNode] {
@@ -23,21 +26,6 @@ class GraphMapViewModel: ObservableObject {
 
     func getEdges() -> [BacklinkEdge] {
         backlinkEngine.edges
-    }
-
-    // TODO: replace the implementation of this function: load from file and rebuild the links
-    private func initialiseBacklinkEngine() {
-        backlinkEngine.addNode(id: testId, name: "TEST")
-
-        let ids: [UUID] = (0..<20).map({ _ in UUID() })
-        for id in ids {
-            backlinkEngine.addNode(id: id, name: id.uuidString)
-        }
-
-        for i in 0..<ids.endIndex - 1 {
-            backlinkEngine.addLinkBetween(testId, and: ids[i])
-            backlinkEngine.addLinkBetween(ids[i], and: ids[i + 1])
-        }
     }
 
     func getLinkedNodes(for id: UUID) -> [BacklinkNode] {
