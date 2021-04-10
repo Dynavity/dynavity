@@ -122,9 +122,9 @@ struct CanvasSelectionView: View {
                 // TODO: Implement saving the newly created canvas to state & db
                 selectionModeToggleButton
 
-                NavigationLink(destination: MainView()
-                                .navigationBarHidden(true)
-                                .navigationBarBackButtonHidden(true)) {
+                Button(action: {
+                    onNewCanvasButtonTap()
+                }) {
                     Image(systemName: "doc.fill.badge.plus")
                 }
             }
@@ -160,12 +160,12 @@ extension CanvasSelectionView {
                 return
             }
 
-            let isNewNameUnique = viewModel.isCanvasNameUnique(name: updatedName)
+            let isNewNameUnique = viewModel.isValidCanvasName(name: updatedName)
 
             if isNewNameUnique {
                 viewModel.renameCanvas(canvas, updatedName: updatedName)
             } else {
-                invalidCanvasNameHandler(canvas: canvas)
+                invalidCanvasNameHandler()
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -195,13 +195,33 @@ extension CanvasSelectionView {
         self.showAlert(alert: alert)
     }
 
-    private func invalidCanvasNameHandler(canvas: Canvas) {
+    private func onNewCanvasButtonTap() {
+        let alert = UIAlertController(title: "New canvas", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "Enter canvas name here"
+        }
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+            guard let updatedName = alert.textFields?.first?.text else {
+                return
+            }
+
+            let isNewNameUnique = viewModel.isValidCanvasName(name: updatedName)
+
+            if isNewNameUnique {
+                viewModel.createCanvas(name: updatedName)
+            } else {
+                invalidCanvasNameHandler()
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.showAlert(alert: alert)
+    }
+
+    private func invalidCanvasNameHandler() {
         let errorAlert = UIAlertController(title: "Invalid canvas name!",
-                                           message: "Canvas names must be unique.",
+                                           message: "Canvas names must be unique and non-empty.",
                                            preferredStyle: .alert)
-         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: { _ in
-            onRenameButtonTap(canvas: canvas)
-         }))
+        errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.showAlert(alert: errorAlert)
     }
 }

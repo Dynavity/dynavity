@@ -42,6 +42,13 @@ class CanvasSelectionViewModel: ObservableObject {
         self.objectWillChange.send()
     }
 
+    func createCanvas(name: String) {
+        let canvas = Canvas()
+        canvas.name = name
+        canvasRepo.save(model: canvas)
+        self.objectWillChange.send()
+    }
+
     func renameCanvas(_ canvas: Canvas, updatedName: String) {
         canvasRepo.delete(model: canvas)
         canvas.name = updatedName
@@ -49,8 +56,12 @@ class CanvasSelectionViewModel: ObservableObject {
         self.objectWillChange.send()
     }
 
+    func isValidCanvasName(name: String) -> Bool {
+        !name.isEmpty && isCanvasNameUnique(name: name)
+    }
+
     // Case-insensitive checking
-    func isCanvasNameUnique(name: String) -> Bool {
+    private func isCanvasNameUnique(name: String) -> Bool {
         !canvasRepo.queryAll().map({ $0.name.lowercased() }).contains(name.lowercased())
     }
 
