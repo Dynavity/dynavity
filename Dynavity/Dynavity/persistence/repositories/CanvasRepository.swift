@@ -3,9 +3,11 @@ struct CanvasRepository: Repository {
 
     let storageManager: StorageManager = LocalStorageManager()
 
+    /// Canvases are sorted in ascending order based on their names (case-insensitive)
     func queryAll() -> [Canvas] {
         let canvasDTOs = (try? storageManager.readAllCanvases()) ?? []
         return canvasDTOs.map({ $0.toModel() })
+            .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
     }
 
     /// Returns true if the canvas was successfully saved. False otherwise.
