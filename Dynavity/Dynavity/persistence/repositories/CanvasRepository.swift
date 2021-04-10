@@ -31,6 +31,7 @@ struct CanvasRepository: Repository {
         }
     }
 
+    /// Note: this is not an atomic operation
     @discardableResult
     func deleteMany(models: [Canvas]) -> Bool {
         let canvasDTOs = models.map({ delete(model: $0) })

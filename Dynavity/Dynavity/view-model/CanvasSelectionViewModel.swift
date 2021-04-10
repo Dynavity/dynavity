@@ -32,6 +32,7 @@ class CanvasSelectionViewModel: ObservableObject {
         selectedCanvases = []
     }
 
+    @discardableResult
     func deleteSelectedCanvases() -> Bool {
         canvasRepo.deleteMany(models: selectedCanvases)
     }

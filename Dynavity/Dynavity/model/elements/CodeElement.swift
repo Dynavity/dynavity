@@ -15,11 +15,10 @@ class CodeElement: PlainTextElement {
         resetCodeTemplate()
     }
 
-    // TODO: look into removing codable for this and updating DTO to store a primitive instead
-    enum CodeLanguage: Int, CaseIterable, Identifiable, Codable {
+    enum CodeLanguage: String, CaseIterable, Identifiable {
         case python, java, c, javascript
 
-        var id: Int {
+        var id: String {
             self.rawValue
         }
 
