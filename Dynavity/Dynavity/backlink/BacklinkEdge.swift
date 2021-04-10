@@ -31,5 +31,3 @@ extension BacklinkEdge: Hashable {
         }
     }
 }
-
-extension BacklinkEdge: Codable {}

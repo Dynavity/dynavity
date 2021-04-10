@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import PDFKit
 import PencilKit
 import FirebaseDatabase
 import CodableFirebase
@@ -160,7 +161,10 @@ extension CanvasViewModel {
     }
 
     func addPdfElement(from file: URL) {
-        let pdfCanvasElement = PDFElement(position: canvasCenter, file: file)
+        guard let pdfDocument = PDFDocument(url: file) else {
+            return
+        }
+        let pdfCanvasElement = PDFElement(position: canvasCenter, pdfDocument: pdfDocument)
         canvas.addElement(pdfCanvasElement)
     }
 
