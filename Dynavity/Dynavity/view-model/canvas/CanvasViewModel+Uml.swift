@@ -93,7 +93,7 @@ extension CanvasViewModel {
 // MARK: UML connector gestures
 extension CanvasViewModel {
     func select(umlConnector: UmlConnector) {
-        if selectedUmlConnector != nil {
+        if selectedUmlConnector === umlConnector {
             selectedUmlConnector = nil
             return
         }
