@@ -9,6 +9,16 @@ class Canvas: ObservableObject {
     private var canvasElementCancellables: [AnyCancellable] = []
     private var umlConnectorCancellables: [AnyCancellable] = []
 
+    init() {}
+
+    init(canvas: Canvas) {
+        self.canvasElements = canvas.canvasElements
+        self.umlConnectors = canvas.umlConnectors
+        self.name = canvas.name
+        self.canvasElementCancellables = canvas.canvasElementCancellables
+        self.umlConnectorCancellables = canvas.umlConnectorCancellables
+    }
+
     func addElement(_ element: CanvasElementProtocol) {
         canvasElements.append(element)
         let cancellable = element.objectWillChange.sink { [weak self] _ in

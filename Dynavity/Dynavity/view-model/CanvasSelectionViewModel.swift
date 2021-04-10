@@ -50,9 +50,9 @@ class CanvasSelectionViewModel: ObservableObject {
     }
 
     func renameCanvas(_ canvas: Canvas, updatedName: String) {
-        canvasRepo.delete(model: canvas)
-        canvas.name = updatedName
-        canvasRepo.save(model: canvas)
+        let newCanvas = Canvas(canvas: canvas)
+        newCanvas.name = updatedName
+        canvasRepo.update(oldModel: canvas, newModel: newCanvas)
         self.objectWillChange.send()
     }
 

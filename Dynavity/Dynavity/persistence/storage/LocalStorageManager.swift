@@ -50,12 +50,12 @@ extension LocalStorageManager: StorageManager {
         return canvasURLs.compactMap({ try? readCanvasFromFile(withURL: $0) })
     }
 
-    /// Canvases will be saved in the documents directory with the file name: `\(canvasName).json`
+    /// Canvases will be saved in the documents directory with the file name: `\(id).json`
     func saveCanvas(canvas: CanvasDTO) throws {
         // TODO: perform validation here before saving if necessary (e.g. ensure canvas name is unique etc)
 
         if let encodedData = try? encoder.encode(canvas) {
-            let fileURL = getFileURL(from: canvas.name, ext: LocalStorageManager.canvasFileExt)
+            let fileURL = getFileURL(from: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
             do {
                 try encodedData.write(to: fileURL, options: .atomic)
             } catch {
@@ -65,7 +65,7 @@ extension LocalStorageManager: StorageManager {
     }
 
     func deleteCanvas(canvas: CanvasDTO) throws {
-        let fileURL = getFileURL(from: canvas.name, ext: LocalStorageManager.canvasFileExt)
+        let fileURL = getFileURL(from: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
         do {
             try fileManager.removeItem(at: fileURL)
         } catch {
