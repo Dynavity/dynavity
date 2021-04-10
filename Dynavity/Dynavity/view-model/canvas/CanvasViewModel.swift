@@ -31,7 +31,13 @@ class CanvasViewModel: ObservableObject {
     @Published var canvasSize: CGFloat
     @Published var canvasTopLeftOffset: CGPoint = .zero
     @Published var scaleFactor: CGFloat = 1.0
-    @Published var selectedCanvasElement: CanvasElementProtocol?
+    @Published var selectedCanvasElement: CanvasElementProtocol? {
+        didSet {
+            if selectedCanvasElement != nil {
+                selectedUmlConnector = nil
+            }
+        }
+    }
     @Published var canvasMode: CanvasMode {
         didSet {
             // Reset canvas element selection on selecting some other mode.
@@ -44,7 +50,13 @@ class CanvasViewModel: ObservableObject {
     @Published var shouldShowUmlMenu = false
 
     // Uml element connectors
-    @Published var selectedUmlConnector: UmlConnector?
+    @Published var selectedUmlConnector: UmlConnector? {
+        didSet {
+            if selectedUmlConnector != nil {
+                selectedCanvasElement = nil
+            }
+        }
+    }
     @Published var umlConnectorStart: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     @Published var umlConnectorEnd: (umlElement: UmlElementProtocol, anchor: ConnectorConnectingSide)?
     var canvasViewport: CGSize = .zero
