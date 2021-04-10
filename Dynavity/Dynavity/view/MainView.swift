@@ -19,7 +19,7 @@ struct MainView: View {
     var sideMenu: some View {
         GeometryReader { geometry in
             if self.shouldShowMenu {
-                SideMenuView(canvasName: $canvasViewModel.canvas.name)
+                SideMenuView(canvasName: canvasViewModel.canvas.name)
                     .frame(width: geometry.size.width / 3)
                     .offset(CGSize(width: geometry.size.width * (2 / 3), height: 0))
                     .transition(.move(edge: .trailing))
