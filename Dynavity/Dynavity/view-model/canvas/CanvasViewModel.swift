@@ -186,7 +186,7 @@ extension CanvasViewModel {
 // MARK: Editing/deleting of canvas elements
 extension CanvasViewModel {
     func select(canvasElement: CanvasElementProtocol) {
-        if selectedCanvasElement != nil {
+        if selectedCanvasElement === canvasElement {
             unselectCanvasElement()
             return
         }
