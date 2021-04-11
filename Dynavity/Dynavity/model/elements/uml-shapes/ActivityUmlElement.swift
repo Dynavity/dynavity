@@ -18,7 +18,7 @@ class ActivityUmlElement: ObservableObject, CanvasElementProtocol, UmlElementPro
             minimumWidth: 60.0,
             minimumHeight: 60.0
         )
-        self.label = shape == .rectangle ? "Process" : "Decision"
+        self.label = shape.label
         self.umlType = .activityDiagram
         self.umlShape = shape
     }

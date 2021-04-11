@@ -1,4 +1,12 @@
 enum UmlShape: String {
-    // TODO: Add more UML Shapes
     case rectangle, diamond
+
+    var label: String {
+        switch self {
+        case .rectangle:
+            return "Process"
+        case .diamond:
+            return "Decision"
+        }
+    }
 }
