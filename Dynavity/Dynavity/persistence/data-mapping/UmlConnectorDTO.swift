@@ -1,50 +1,75 @@
 import CoreGraphics
-import Foundation
 
-struct UmlConnectorDTO {
-    let points: [CGPoint]
-    let connectsFromId: UUID
-    let connectsToId: UUID
-    let connectingSideFrom: String
-    let connectingSideTo: String
+struct UmlConnectorDTO: Mappable {
+    var points: [CGPoint]
+    var connects: (fromElement: UmlElementId, toElement: UmlElementId)
+    var connectingSide: (fromSide: String, toSide: String)
 
-    init(
-        model: UmlConnector,
-        canvasElementDTOs: [TypeWrappedCanvasElementDTO],
-        canvasElements: [CanvasElementProtocol]
-    ) {
-        guard let connectsFromIndex = canvasElements.firstIndex(where: { $0 === model.connects.fromElement }),
-              let connectsToIndex = canvasElements.firstIndex(where: { $0 === model.connects.toElement }),
-              let connectsFrom = canvasElementDTOs[connectsFromIndex].data as? UmlElementProtocolDTO,
-              let connectsTo = canvasElementDTOs[connectsToIndex].data as? UmlElementProtocolDTO else {
-            fatalError("Failed to serialise UmlConnector")
-        }
-        self.points = model.points
-        self.connectsFromId = connectsFrom.id
-        self.connectsToId = connectsTo.id
-        self.connectingSideFrom = model.connectingSide.fromSide.rawValue
-        self.connectingSideTo = model.connectingSide.toSide.rawValue
+    static func generateIdFromReference(umlElement: UmlElementProtocol) -> UmlElementId {
+        UmlElementId(id: ObjectIdentifier(umlElement).hashValue)
     }
 
-    func toModel(
-        canvasElementDTOs: [TypeWrappedCanvasElementDTO],
-        canvasElements: [CanvasElementProtocol]
-    ) -> UmlConnector {
-        guard let connectsFromIndex =
-                canvasElementDTOs.firstIndex(where: { connectsFromId == ($0.data as? UmlElementProtocolDTO)?.id }),
-              let connectsToIndex =
-                canvasElementDTOs.firstIndex(where: { connectsToId == ($0.data as? UmlElementProtocolDTO)?.id }),
-              let connectsFrom = canvasElements[connectsFromIndex] as? UmlElementProtocol,
-              let connectsTo = canvasElements[connectsToIndex] as? UmlElementProtocol,
-              let fromSide = ConnectorConnectingSide(rawValue: connectingSideFrom),
-              let toSide = ConnectorConnectingSide(rawValue: connectingSideTo) else {
-            fatalError("Failed to deserialise UmlConnector")
+    init(model: UmlConnector) {
+        self.points = model.points
+        let fromId = UmlConnectorDTO.generateIdFromReference(umlElement: model.connects.fromElement)
+        let toId = UmlConnectorDTO.generateIdFromReference(umlElement: model.connects.toElement)
+        self.connects = (fromElement: fromId,
+                         toElement: toId)
+        self.connectingSide = (fromSide: model.connectingSide.fromSide.rawValue,
+                               toSide: model.connectingSide.toSide.rawValue)
+    }
+
+    func toModel(umlElements: [IdentifiedUmlElementWrapper]) -> UmlConnector {
+        guard let fromConnectingSide = ConnectorConnectingSide(rawValue: connectingSide.fromSide),
+              let toConnectingSide = ConnectorConnectingSide(rawValue: connectingSide.toSide) else {
+            fatalError("Failed to deserialise connector connecting side")
         }
-        let connectingSide = (fromSide: fromSide, toSide: toSide)
-        let connects = (fromElement: connectsFrom, toElement: connectsTo)
-        let model = UmlConnector(points: points, connects: connects, connectingSide: connectingSide)
+        let fromElement = umlElements.first { $0.id == connects.fromElement }
+        let toElement = umlElements.first { $0.id == connects.toElement }
+
+        guard let from = fromElement?.umlElement,
+              let to = toElement?.umlElement else {
+            fatalError("Failed to get connecting uml elements")
+        }
+        let model = UmlConnector(points: points,
+                                 connects: (fromElement: from,
+                                            toElement: to),
+                                 connectingSide: (fromSide: fromConnectingSide,
+                                                  toSide: toConnectingSide))
         return model
     }
 }
 
-extension UmlConnectorDTO: Codable {}
+extension UmlConnectorDTO: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case points, fromElement, toElement, fromSide, toSide
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.points = try container.decode([CGPoint].self, forKey: .points)
+        let fromElement = try container.decode(UmlElementId.self, forKey: .fromElement)
+        let toElement = try container.decode(UmlElementId.self, forKey: .toElement)
+        self.connects = (fromElement: fromElement, toElement: toElement)
+        let fromSide = try container.decode(String.self, forKey: .fromSide)
+        let toSide = try container.decode(String.self, forKey: .toSide)
+        self.connectingSide = (fromSide: fromSide,
+                               toSide: toSide)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(points, forKey: .points)
+        try container.encode(connects.fromElement, forKey: .fromElement)
+        try container.encode(connects.toElement, forKey: .toElement)
+        try container.encode(connectingSide.fromSide, forKey: .fromSide)
+        try container.encode(connectingSide.toSide, forKey: .toSide)
+    }
+
+}
+
+extension UmlConnectorDTO {
+    func toModel() -> UmlConnector {
+        fatalError("Should use overloaded toModel function for UmlConnectorDTO")
+    }
+}

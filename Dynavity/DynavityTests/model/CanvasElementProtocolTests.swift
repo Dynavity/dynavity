@@ -3,7 +3,7 @@ import CoreGraphics
 @testable import Dynavity
 
 class CanvasElementProtocolTests: XCTestCase {
-    var element: UmlElementProtocol = RectangleUmlElement(position: CGPoint(x: 1_000, y: 1_000))
+    var element: UmlElementProtocol = ActivityUmlElement(position: CGPoint(x: 1_000, y: 1_000), shape: .diamond)
 
     func testContainsPoint() {
         let internalPoint = CGPoint(x: 1_020, y: 1_000)

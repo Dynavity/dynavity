@@ -3,17 +3,28 @@ import Foundation
 struct CanvasDTO: Mappable {
     var id: UUID
     let canvasElements: [TypeWrappedCanvasElementDTO]
+    // Stored separately as umlCanvasElements require ID
+    let umlCanvasElements: [TypeWrappedUmlElementDTO]
     let umlConnectors: [UmlConnectorDTO]
     let name: String
 
     init(id: UUID, model: Canvas) {
         self.id = id
         self.name = model.name
-        let canvasElementDTOs = model.canvasElements.map({ TypeWrappedCanvasElementDTO(model: $0) })
-        self.canvasElements = canvasElementDTOs
-        self.umlConnectors = model.umlConnectors.map({ UmlConnectorDTO(model: $0,
-                                                                       canvasElementDTOs: canvasElementDTOs,
-                                                                       canvasElements: model.canvasElements) })
+        self.canvasElements = model.canvasElements
+            .filter({ !($0 is UmlElementProtocol) })
+            .map({ TypeWrappedCanvasElementDTO(model: $0) })
+        self.umlCanvasElements = model.canvasElements
+            .filter({ $0 is UmlElementProtocol })
+            .compactMap({
+                guard let umlElement = $0 as? UmlElementProtocol else {
+                    return nil
+                }
+                let id = UmlElementId(id: ObjectIdentifier(umlElement).hashValue)
+                let identifiedElement = IdentifiedUmlElementWrapper(id: id, umlElement: umlElement)
+                return TypeWrappedUmlElementDTO(model: identifiedElement)
+            })
+        self.umlConnectors = model.umlConnectors.map({ UmlConnectorDTO(model: $0) })
     }
 
     init(model: Canvas) {
@@ -26,9 +37,17 @@ struct CanvasDTO: Mappable {
         for ele in canvasElements {
             model.addElement(ele.toModel())
         }
-        for uml in umlConnectors {
-            model.addUmlConnector(uml.toModel(canvasElementDTOs: canvasElements,
-                                              canvasElements: model.canvasElements))
+
+        var identifiedUmlElements: [IdentifiedUmlElementWrapper] = []
+        for ele in umlCanvasElements {
+            let elementModel = ele.toModel()
+            identifiedUmlElements.append(elementModel)
+            model.addElement(elementModel.umlElement)
+        }
+
+        for connector in umlConnectors {
+            let connectorModel = connector.toModel(umlElements: identifiedUmlElements)
+            model.addUmlConnector(connectorModel)
         }
         return model
     }

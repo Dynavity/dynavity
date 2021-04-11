@@ -47,8 +47,8 @@ struct UmlConnectorView_Previews: PreviewProvider {
     @ObservedObject static var viewModel = CanvasViewModel()
     static var previews: some View {
         let connector = UmlConnector(points: [],
-                                     connects: (fromElement: DiamondUmlElement(position: .zero),
-                                                toElement: DiamondUmlElement(position: .zero)),
+                                     connects: (fromElement: ActivityUmlElement(position: .zero, shape: .diamond),
+                                                toElement: ActivityUmlElement(position: .zero, shape: .diamond)),
                                      connectingSide: (fromSide: ConnectorConnectingSide.middleRight,
                                                       toSide: ConnectorConnectingSide.middleLeft))
         UmlConnectorView(viewModel: viewModel, connector: connector)

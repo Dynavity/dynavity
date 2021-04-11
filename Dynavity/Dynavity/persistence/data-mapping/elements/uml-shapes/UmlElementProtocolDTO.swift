@@ -1,6 +1,6 @@
-import Foundation
-
 protocol UmlElementProtocolDTO: CanvasElementProtocolDTO {
-    // For storing UML connectors
-    var id: UUID { get }
+    var label: String { get set }
+    var umlType: String { get }
+    var umlShape: String { get }
+    var id: UmlElementId { get }
 }
