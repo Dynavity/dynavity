@@ -9,6 +9,31 @@ struct CanvasElementProperties {
     var minimumHeight: CGFloat = 30.0
 }
 
+// MARK: Default implementations
+extension CanvasElementProperties {
+    mutating func move(by translation: CGSize) {
+        self.position += translation
+    }
+
+    mutating func resize(by translation: CGSize) {
+        self.width = max(self.width + translation.width, self.minimumWidth)
+        self.height = max(self.height + translation.height, self.minimumHeight)
+    }
+
+    mutating func rotate(to rotation: Double) {
+        self.rotation = rotation
+    }
+
+    /// The point input has taken into account the offset from the `CanvasView`
+    func containsPoint(_ point: CGPoint) -> Bool {
+        let frame = CGRect(origin: CGPoint(x: position.x - (width / 2),
+                                           y: position.y - (height / 2)),
+                           size: CGSize(width: width, height: height)
+                            .rotate(by: CGFloat(rotation)))
+        return frame.contains(point)
+    }
+}
+
 // MARK: Unit test helpers
 extension CanvasElementProperties {
     // Corners are with reference to 0 rotation. Corners are consistent throughout rotation.
@@ -59,14 +84,5 @@ extension CanvasElementProperties {
     var rightMostPoint: CGPoint {
         let points = [topRightCorner, bottomLeftCorner, bottomRightCorner]
         return points.reduce(topLeftCorner, { $0.x > $1.x ? $0 : $1 })
-    }
-
-    /// The point input has taken into account the offset from the `CanvasView`
-    func containsPoint(_ point: CGPoint) -> Bool {
-        let frame = CGRect(origin: CGPoint(x: position.x - (width / 2),
-                                           y: position.y - (height / 2)),
-                           size: CGSize(width: width, height: height)
-                            .rotate(by: CGFloat(rotation)))
-        return frame.contains(point)
     }
 }

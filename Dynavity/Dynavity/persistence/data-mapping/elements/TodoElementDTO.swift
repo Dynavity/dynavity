@@ -26,9 +26,8 @@ struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
     }
 
     func toModel() -> TodoElement {
-        let model = TodoElement(position: canvasProperties.position)
+        let model = TodoElement(position: canvasProperties.position, todos: todos.map({ $0.toModel() }))
         model.canvasProperties = canvasProperties.toModel()
-        model.todos = todos.map({ $0.toModel() })
         return model
     }
 }

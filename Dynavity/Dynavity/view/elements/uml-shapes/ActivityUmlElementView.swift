@@ -44,7 +44,7 @@ struct ActivityUmlElementView: View {
     }
 }
 
-struct RectangleUmlView_Previews: PreviewProvider {
+struct ActivityUmlView_Previews: PreviewProvider {
     static var previews: some View {
         ActivityUmlElementView(umlElement: ActivityUmlElement(position: .zero, shape: .rectangle))
     }

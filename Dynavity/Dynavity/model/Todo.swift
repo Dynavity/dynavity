@@ -1,8 +1,8 @@
 import SwiftUI
 
-class Todo {
-    var label: String
-    var isCompleted: Bool
+class Todo: ObservableObject {
+    @Published var label: String
+    @Published var isCompleted: Bool
 
     init(label: String, isCompleted: Bool) {
         self.label = label
