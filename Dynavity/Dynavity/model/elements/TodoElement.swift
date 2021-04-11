@@ -5,18 +5,28 @@ class TodoElement: ObservableObject, CanvasElementProtocol {
     // MARK: CanvasElementProtocol
     @Published var canvasProperties: CanvasElementProperties
 
-    // MARK: TodosElement-specific attributes
-    var todos: [Todo]
+    // MARK: TodoElement-specific attributes
+    private(set) var todos: [Todo]
     private var todoCancellables: [AnyCancellable]
 
-    init(position: CGPoint) {
+    init(position: CGPoint, todos: [Todo]) {
         self.canvasProperties = CanvasElementProperties(
             position: position,
             minimumWidth: 240.0,
             minimumHeight: 60.0
         )
-        self.todos = []
+        self.todos = todos
         self.todoCancellables = []
+        for todo in todos {
+            let cancellable = todo.objectWillChange.sink { [weak self] _ in
+                self?.objectWillChange.send()
+            }
+            todoCancellables.append(cancellable)
+        }
+    }
+
+    convenience init(position: CGPoint) {
+        self.init(position: position, todos: [])
     }
 
     func removeTodo(at index: Int) {
