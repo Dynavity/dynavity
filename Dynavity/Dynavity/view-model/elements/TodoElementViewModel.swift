@@ -1,7 +1,9 @@
+import Combine
 import SwiftUI
 
 class TodoElementViewModel: ObservableObject {
     @Published var todoElement: TodoElement
+    private var todoElementCancellable: AnyCancellable?
 
     var todos: [Todo] {
         todoElement.todos
@@ -9,13 +11,13 @@ class TodoElementViewModel: ObservableObject {
 
     init(todoElement: TodoElement) {
         self.todoElement = todoElement
+        self.todoElementCancellable = todoElement.objectWillChange.sink { [weak self] _ in
+            self?.objectWillChange.send()
+        }
     }
 
     func removeTodo(_ todo: Todo) {
-        guard let index = todos.firstIndex(of: todo) else {
-            return
-        }
-        todoElement.removeTodo(at: index)
+        todoElement.removeTodo(todo)
     }
 
     func addTodo(label: String) {
