@@ -1,6 +1,5 @@
 import Foundation
 
-// TODO: complete this with uml DTOs
 enum TypeWrappedCanvasElementDTO: Mappable {
     case image(ImageElementDTO)
     case pdf(PDFElementDTO)
@@ -8,8 +7,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
     case text(PlainTextElementDTO)
     case code(CodeElementDTO)
     case markup(MarkupElementDTO)
-//    case umlDiamond(DiamondUmlElementDTO)
-//    case umlRectangle(RectangleUmlElementDTO)
+    case umlDiamond(DiamondUmlElementDTO)
+    case umlRectangle(RectangleUmlElementDTO)
 
     enum ElementType: String {
         case image
@@ -18,8 +17,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         case text
         case code
         case markup
-//        case umlDiamond
-//        case umlRectangle
+        case umlDiamond
+        case umlRectangle
     }
 
     var type: ElementType {
@@ -36,10 +35,10 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return .code
         case .markup:
             return .markup
-//        case .umlDiamond:
-//            return .umlDiamond
-//        case .umlRectangle:
-//            return .umlRectangle
+        case .umlDiamond:
+            return .umlDiamond
+        case .umlRectangle:
+            return .umlRectangle
         }
     }
 
@@ -57,10 +56,10 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return data
         case .markup(let data):
             return data
-//        case .umlDiamond(let data):
-//            return data
-//        case .umlRectangle(let data):
-//            return data
+        case .umlDiamond(let data):
+            return data
+        case .umlRectangle(let data):
+            return data
         }
     }
 
@@ -78,10 +77,10 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return data.toModel()
         case .markup(let data):
             return data.toModel()
-//        case .umlDiamond(let data):
-//            return data
-//        case .umlRectangle(let data):
-//            return data
+        case .umlDiamond(let data):
+            return data.toModel()
+        case .umlRectangle(let data):
+            return data.toModel()
         }
     }
 
@@ -100,10 +99,10 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         // Note: PlainTextElement must be checked after its subclassse
         case let plainTextElement as PlainTextElement:
             self = .text(PlainTextElementDTO(model: plainTextElement))
-//        case let diamondUmlElement as DiamondUmlElement:
-//            self = .umlDiamond(diamondUmlElement)
-//        case let rectangleUmlElement as RectangleUmlElement:
-//            self = .umlRectangle(rectangleUmlElement)
+        case let diamondUmlElement as DiamondUmlElement:
+            self = .umlDiamond(DiamondUmlElementDTO(model: diamondUmlElement))
+        case let rectangleUmlElement as RectangleUmlElement:
+            self = .umlRectangle(RectangleUmlElementDTO(model: rectangleUmlElement))
         default:
             fatalError("Unknown type")
         }
@@ -139,10 +138,10 @@ extension TypeWrappedCanvasElementDTO: Codable {
             self = .code(try decodeData(CodeElementDTO.self))
         case .markup:
             self = .markup(try decodeData(MarkupElementDTO.self))
-//        case .umlDiamond:
-//            self = .umlDiamond(try decodeData(DiamondUmlElement.self))
-//        case .umlRectangle:
-//            self = .umlRectangle(try decodeData(RectangleUmlElement.self))
+        case .umlDiamond:
+            self = .umlDiamond(try decodeData(DiamondUmlElementDTO.self))
+        case .umlRectangle:
+            self = .umlRectangle(try decodeData(RectangleUmlElementDTO.self))
         case .none:
             fatalError("Unknown type")
         }
@@ -166,10 +165,10 @@ extension TypeWrappedCanvasElementDTO: Codable {
             try encodeData(data)
         case .markup(let data):
             try encodeData(data)
-//        case .umlDiamond(let data):
-//            try encodeData(data)
-//        case .umlRectangle(let data):
-//            try encodeData(data)
+        case .umlDiamond(let data):
+            try encodeData(data)
+        case .umlRectangle(let data):
+            try encodeData(data)
         }
         try container.encode(type.rawValue, forKey: .type)
     }
