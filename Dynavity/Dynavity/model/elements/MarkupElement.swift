@@ -3,7 +3,7 @@ import CoreGraphics
 import Foundation
 
 class MarkupElement: PlainTextElement {
-    enum MarkupType: String, Codable {
+    enum MarkupType: String {
         case markdown, latex
     }
 

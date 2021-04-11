@@ -1,4 +1,4 @@
-enum UmlShape: Int, Codable {
+enum UmlShape: String {
     // TODO: Add more UML Shapes
     case rectangle, diamond
 }

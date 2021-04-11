@@ -3,7 +3,7 @@ import SwiftUI
 struct SideMenuView: View {
     @EnvironmentObject var graphMapViewModel: GraphMapViewModel
 
-    @Binding var canvasName: String
+    var canvasName: String
 
     @StateObject private var sideMenuViewModel = SideMenuViewModel()
 
@@ -23,8 +23,8 @@ struct SideMenuView: View {
         Group {
             SideMenuHeaderView(headerText: "Canvas Metadata")
             SideMenuContentView(label: "Canvas Name") {
-                TextField("Enter Canvas Name", text: $canvasName)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Text(canvasName)
+                    .bold()
             }
         }
     }
@@ -119,7 +119,7 @@ struct SideMenuContentView<Content: View>: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView(canvasName: .constant("Cool Name"))
+        SideMenuView(canvasName: "Cool Name")
             .environmentObject(GraphMapViewModel())
     }
 }

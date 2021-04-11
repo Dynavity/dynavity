@@ -26,7 +26,7 @@ class UmlConnector: Identifiable, AnyObservableObject {
     }
 }
 
-/* TODO: Fix this.
+/* TODO: Fix this. (or remove this)
 extension UmlConnector: Codable {
     private enum CodingKeys: String, CodingKey {
         case id, points, fromElement, toElement, fromSide, toSide

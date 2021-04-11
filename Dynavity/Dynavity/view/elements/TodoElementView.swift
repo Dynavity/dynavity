@@ -41,7 +41,7 @@ struct TodoElementView: View {
         ScrollView {
             // Necessary to remove the spacing between child views inherent to ScrollView.
             LazyVStack(spacing: 0.0) {
-                ForEach(viewModel.todos, id: \.id) { todo in
+                ForEach(viewModel.todos, id: \.self) { todo in
                     TodoItemView(todo: todo, onDelete: { viewModel.removeTodo(todo) })
                     Divider()
                 }

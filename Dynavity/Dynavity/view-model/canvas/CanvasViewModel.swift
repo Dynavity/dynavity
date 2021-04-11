@@ -6,6 +6,8 @@ import FirebaseDatabase
 import CodableFirebase
 
 class CanvasViewModel: ObservableObject {
+    private static let autoSaveInterval = 3.0
+
     enum CanvasMode {
         case selection
         case pen
@@ -14,9 +16,23 @@ class CanvasViewModel: ObservableObject {
         case lasso
     }
 
+    private let canvasRepo = CanvasRepository()
+    // We are not interested in the return value of each publisher,
+    // that's why the values are mapped away
+    let autoSavePublisher = Publishers.Merge(
+        // Publishes whenever app loses focus
+        NotificationCenter.default
+            .publisher(for: UIApplication.willResignActiveNotification)
+            .map({ _ in () }),
+        // Publishes at fixed time intervals
+        Timer.publish(every: CanvasViewModel.autoSaveInterval, on: .main, in: .default)
+            .autoconnect()
+            .map({ _ in () })
+    )
+
     // to prevent an infinite loop of didSet when loading changes
     private var enableWriteBack = true
-    @Published var canvas = Canvas() {
+    @Published var canvas: Canvas {
         didSet {
             if enableWriteBack {
                 // Prevent the saving to Firebase operation from freezing the main thread.
@@ -90,7 +106,8 @@ class CanvasViewModel: ObservableObject {
         canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
-    init(canvasSize: CGFloat) {
+    init(canvas: Canvas, canvasSize: CGFloat) {
+        self.canvas = canvas
         self.canvasSize = canvasSize
         self.canvasMode = .pen
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
@@ -99,9 +116,13 @@ class CanvasViewModel: ObservableObject {
         loadFromFirebase()
     }
 
-    convenience init() {
+    convenience init(canvas: Canvas) {
         // Arbitrarily large value for the "infinite" canvas.
-        self.init(canvasSize: 500_000)
+        self.init(canvas: canvas, canvasSize: 500_000)
+    }
+
+    convenience init() {
+        self.init(canvas: Canvas())
     }
 
     var canvasElements: [CanvasElementProtocol] {
@@ -110,6 +131,13 @@ class CanvasViewModel: ObservableObject {
 
     func setCanvasViewport(size: CGSize) {
         canvasViewport = size
+    }
+}
+
+// MARK: Local storage autosaving
+extension CanvasViewModel {
+    func saveCanvas() {
+        self.canvasRepo.save(model: self.canvas)
     }
 }
 

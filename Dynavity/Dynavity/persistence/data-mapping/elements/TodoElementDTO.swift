@@ -3,18 +3,16 @@ import Foundation
 
 struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
     struct TodoDTO: Mappable, Codable {
-        let id: UUID
         let label: String
         let isCompleted: Bool
 
         init(model: Todo) {
-            self.id = model.id
             self.label = model.label
             self.isCompleted = model.isCompleted
         }
 
         func toModel() -> Todo {
-            Todo(id: id, label: label, isCompleted: isCompleted)
+            Todo(label: label, isCompleted: isCompleted)
         }
     }
 
