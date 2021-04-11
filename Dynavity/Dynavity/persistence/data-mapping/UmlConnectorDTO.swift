@@ -69,7 +69,6 @@ extension UmlConnectorDTO: Codable {
 }
 
 extension UmlConnectorDTO {
-    // swiftlint:disable unavailable_function
     func toModel() -> UmlConnector {
         fatalError("Should use overloaded toModel function for UmlConnectorDTO")
     }
