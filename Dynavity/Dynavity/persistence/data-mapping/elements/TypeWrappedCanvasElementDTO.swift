@@ -8,7 +8,7 @@ enum TypeWrappedCanvasElementDTO: Mappable {
     case text(PlainTextElementDTO)
     case code(CodeElementDTO)
     case markup(MarkupElementDTO)
-//    case umlDiamond(DiamondUmlElementDTO)
+    case umlDiamond(DiamondUmlElementDTO)
 //    case umlRectangle(RectangleUmlElementDTO)
 
     enum ElementType: String {
@@ -18,7 +18,7 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         case text
         case code
         case markup
-//        case umlDiamond
+        case umlDiamond
 //        case umlRectangle
     }
 
@@ -36,8 +36,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return .code
         case .markup:
             return .markup
-//        case .umlDiamond:
-//            return .umlDiamond
+        case .umlDiamond:
+            return .umlDiamond
 //        case .umlRectangle:
 //            return .umlRectangle
         }
@@ -57,8 +57,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return data
         case .markup(let data):
             return data
-//        case .umlDiamond(let data):
-//            return data
+        case .umlDiamond(let data):
+            return data
 //        case .umlRectangle(let data):
 //            return data
         }
@@ -78,8 +78,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return data.toModel()
         case .markup(let data):
             return data.toModel()
-//        case .umlDiamond(let data):
-//            return data
+        case .umlDiamond(let data):
+            return data.toModel()
 //        case .umlRectangle(let data):
 //            return data
         }
@@ -100,8 +100,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         // Note: PlainTextElement must be checked after its subclassse
         case let plainTextElement as PlainTextElement:
             self = .text(PlainTextElementDTO(model: plainTextElement))
-//        case let diamondUmlElement as DiamondUmlElement:
-//            self = .umlDiamond(diamondUmlElement)
+        case let diamondUmlElement as DiamondUmlElement:
+            self = .umlDiamond(DiamondUmlElementDTO(model: diamondUmlElement))
 //        case let rectangleUmlElement as RectangleUmlElement:
 //            self = .umlRectangle(rectangleUmlElement)
         default:
@@ -139,8 +139,8 @@ extension TypeWrappedCanvasElementDTO: Codable {
             self = .code(try decodeData(CodeElementDTO.self))
         case .markup:
             self = .markup(try decodeData(MarkupElementDTO.self))
-//        case .umlDiamond:
-//            self = .umlDiamond(try decodeData(DiamondUmlElement.self))
+        case .umlDiamond:
+            self = .umlDiamond(try decodeData(DiamondUmlElementDTO.self))
 //        case .umlRectangle:
 //            self = .umlRectangle(try decodeData(RectangleUmlElement.self))
         case .none:
@@ -166,8 +166,8 @@ extension TypeWrappedCanvasElementDTO: Codable {
             try encodeData(data)
         case .markup(let data):
             try encodeData(data)
-//        case .umlDiamond(let data):
-//            try encodeData(data)
+        case .umlDiamond(let data):
+            try encodeData(data)
 //        case .umlRectangle(let data):
 //            try encodeData(data)
         }
