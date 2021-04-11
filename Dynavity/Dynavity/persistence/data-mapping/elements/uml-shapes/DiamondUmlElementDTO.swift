@@ -1,6 +1,6 @@
 import Foundation
 
-struct DiamondUmlElementDTO: CanvasElementProtocolDTO, Mappable {
+struct DiamondUmlElementDTO: UmlElementProtocolDTO, Mappable {
     // For storing UML connectors
     let id: UUID
 
