@@ -1,4 +1,9 @@
+import Foundation
+
 struct DiamondUmlElementDTO: CanvasElementProtocolDTO, Mappable {
+    // For storing UML connectors
+    let id: UUID
+
     let canvasProperties: CanvasElementPropertiesDTO
 
     let label: String
@@ -6,6 +11,7 @@ struct DiamondUmlElementDTO: CanvasElementProtocolDTO, Mappable {
     let umlShape: String
 
     init(model: DiamondUmlElement) {
+        self.id = UUID()
         self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
         self.label = model.label
         self.umlType = model.umlType.rawValue
