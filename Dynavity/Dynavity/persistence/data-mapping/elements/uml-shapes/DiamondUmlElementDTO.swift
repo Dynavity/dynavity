@@ -9,7 +9,7 @@ struct DiamondUmlElementDTO: CanvasElementProtocolDTO, Mappable {
         self.canvasProperties = CanvasElementPropertiesDTO(model: model.canvasProperties)
         self.label = model.label
         self.umlType = model.umlType.rawValue
-        self.umlShape = model.umlType.rawValue
+        self.umlShape = model.umlShape.rawValue
     }
 
     func toModel() -> DiamondUmlElement {
