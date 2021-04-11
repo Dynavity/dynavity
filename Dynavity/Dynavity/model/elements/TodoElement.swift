@@ -6,7 +6,7 @@ class TodoElement: ObservableObject, CanvasElementProtocol {
     @Published var canvasProperties: CanvasElementProperties
 
     // MARK: TodoElement-specific attributes
-    private(set) var todos: [Todo]
+    @Published private(set) var todos: [Todo]
     private var todoCancellables: [AnyCancellable]
 
     init(position: CGPoint, todos: [Todo]) {
@@ -29,7 +29,10 @@ class TodoElement: ObservableObject, CanvasElementProtocol {
         self.init(position: position, todos: [])
     }
 
-    func removeTodo(at index: Int) {
+    func removeTodo(_ todo: Todo) {
+        guard let index = todos.firstIndex(where: { $0 === todo }) else {
+            return
+        }
         todos.remove(at: index)
         todoCancellables.remove(at: index)
     }
