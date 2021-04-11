@@ -178,7 +178,6 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteCanvas(canvas)
-            toggleEditMode()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.showAlert(alert: alert)
@@ -190,6 +189,7 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteSelectedCanvases()
+            toggleEditMode()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.showAlert(alert: alert)
