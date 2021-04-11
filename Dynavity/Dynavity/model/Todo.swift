@@ -17,7 +17,7 @@ class Todo {
 // MARK: Hashable
 extension Todo: Hashable {
     static func == (lhs: Todo, rhs: Todo) -> Bool {
-        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
+        lhs === rhs
     }
 
     func hash(into hasher: inout Hasher) {

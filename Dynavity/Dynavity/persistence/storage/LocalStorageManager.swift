@@ -15,7 +15,7 @@ struct LocalStorageManager {
         documentsDirectory.appendingPathComponent(name).appendingPathExtension(ext)
     }
 
-    /// Checks if the file in the documents directory
+    /// Checks if the file is in the documents directory
     private func doesFileExist(name: String, ext: String) -> Bool {
         let url = getFileURL(from: name, ext: ext)
         return fileManager.fileExists(atPath: url.path)
