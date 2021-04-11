@@ -1,6 +1,6 @@
 import CoreGraphics
 
-struct UmlConnectorDTO {
+struct UmlConnectorDTO: Mappable {
     var points: [CGPoint]
     var connects: (fromElement: UmlElementId, toElement: UmlElementId)
     var connectingSide: (fromSide: String, toSide: String)
@@ -66,4 +66,11 @@ extension UmlConnectorDTO: Codable {
         try container.encode(connectingSide.toSide, forKey: .toSide)
     }
 
+}
+
+extension UmlConnectorDTO {
+    // swiftlint:disable unavailable_function
+    func toModel() -> UmlConnector {
+        fatalError("Should use overloaded toModel function for UmlConnectorDTO")
+    }
 }
