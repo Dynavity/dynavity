@@ -61,6 +61,10 @@ class CanvasViewModel: ObservableObject {
             if oldValue == .selection && canvasMode != oldValue {
                 selectedCanvasElement = nil
             }
+            // Reset annotation menu on changing mode.
+            if oldValue != canvasMode {
+                shouldShowAnnotationMenu = false
+            }
         }
     }
     @Published var shouldShowAnnotationMenu = false
