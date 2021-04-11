@@ -80,7 +80,8 @@ class CanvasViewModel: ObservableObject {
 
     // Reposition drag gesture
     private var dragStartLocation: CGPoint?
-    private var element: CanvasElementProtocol?
+    // Store a copy of the original canvas element properties for resizing calculations
+    private var elementProperties: CanvasElementProperties?
 
     var canvasOrigin: CGPoint {
         CGPoint(x: canvasSize / 2.0, y: canvasSize / 2.0)
@@ -252,10 +253,9 @@ extension CanvasViewModel {
         element.move(by: rotatedTranslation)
     }
 
-    private func resizeSelectedCanvasElement(by translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
-        // TODO: Look into simplifying this now that we use classes.
-        guard let element = element,
-              let originalElement = self.element else {
+    private func resizeSelectedCanvasElement(to translation: CGSize, anchor: SelectionOverlayView.ResizeControlAnchor) {
+        guard var elementProperties = elementProperties,
+              let originalElementProperties = self.elementProperties else {
             return
         }
 
@@ -271,13 +271,13 @@ extension CanvasViewModel {
                 return translation
             }
         }()
-        element.resize(by: resizeTranslation)
+        elementProperties.resize(by: resizeTranslation)
 
         var clampedTranslation = translation
         // Clamp x-axis if necessary.
-        if element.width == element.minimumWidth {
-            let actualWidth = originalElement.width + resizeTranslation.width
-            let widthDelta = element.minimumWidth - actualWidth
+        if elementProperties.width == elementProperties.minimumWidth {
+            let actualWidth = originalElementProperties.width + resizeTranslation.width
+            let widthDelta = elementProperties.minimumWidth - actualWidth
             if anchor == .topLeftCorner || anchor == .bottomLeftCorner {
                 clampedTranslation.width -= widthDelta
             } else {
@@ -285,9 +285,9 @@ extension CanvasViewModel {
             }
         }
         // Clamp y-axis if necessary.
-        if element.height == element.minimumHeight {
-            let actualHeight = originalElement.height + resizeTranslation.height
-            let heightDelta = element.minimumHeight - actualHeight
+        if elementProperties.height == elementProperties.minimumHeight {
+            let actualHeight = originalElementProperties.height + resizeTranslation.height
+            let heightDelta = elementProperties.minimumHeight - actualHeight
             if anchor == .topLeftCorner || anchor == .topRightCorner {
                 clampedTranslation.height -= heightDelta
             } else {
@@ -295,9 +295,11 @@ extension CanvasViewModel {
             }
         }
 
-        let rotation = element.rotation
+        let rotation = elementProperties.rotation
         let centerTranslation = clampedTranslation.rotate(by: CGFloat(rotation)) / 2.0
-        element.move(by: centerTranslation)
+        elementProperties.move(by: centerTranslation)
+
+        selectedCanvasElement?.canvasProperties = elementProperties
     }
 
     func rotateSelectedCanvasElement(by translation: CGSize) {
@@ -334,21 +336,21 @@ extension CanvasViewModel {
                 return
             }
             dragStartLocation = value.startLocation
-            self.element = element
+            self.elementProperties = element.canvasProperties
         }
 
         guard let dragStartLocation = dragStartLocation,
-              let element = element else {
+              let elementProperties = elementProperties else {
             return
         }
 
         let translation: CGSize = (value.location - dragStartLocation) / scaleFactor
-        let rotatedTranslation = translation.rotate(by: -CGFloat(element.rotation))
-        resizeSelectedCanvasElement(by: rotatedTranslation, anchor: anchor)
+        let rotatedTranslation = translation.rotate(by: -CGFloat(elementProperties.rotation))
+        resizeSelectedCanvasElement(to: rotatedTranslation, anchor: anchor)
     }
 
     func handleDragEnd() {
         dragStartLocation = nil
-        element = nil
+        elementProperties = nil
     }
 }
