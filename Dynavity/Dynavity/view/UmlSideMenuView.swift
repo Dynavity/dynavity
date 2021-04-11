@@ -7,8 +7,10 @@ struct UmlSideMenuView: View {
     private let shapePreviewSize: CGFloat = 80.0
 
     // TODO: Move this to the model, so that view will always be in sync
-    private let umlElements: [UmlElementProtocol] = [DiamondUmlElement(position: CGPoint(x: 250_000, y: 250_000)),
-                                                     RectangleUmlElement(position: CGPoint(x: 250_000, y: 250_000))]
+    private let umlElements: [UmlElementProtocol] = [ActivityUmlElement(position: CGPoint(x: 250_000, y: 250_000),
+                                                                        shape: .diamond),
+                                                     ActivityUmlElement(position: CGPoint(x: 250_000, y: 250_000),
+                                                                        shape: .rectangle)]
 
     let columns = [
         GridItem(.flexible()),

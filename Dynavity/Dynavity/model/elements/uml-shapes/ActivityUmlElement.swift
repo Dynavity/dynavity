@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-class RectangleUmlElement: ObservableObject, CanvasElementProtocol, UmlElementProtocol {
+class ActivityUmlElement: ObservableObject, CanvasElementProtocol, UmlElementProtocol {
     // MARK: CanvasElementProtocol
     @Published var canvasProperties: CanvasElementProperties
 
@@ -10,7 +10,7 @@ class RectangleUmlElement: ObservableObject, CanvasElementProtocol, UmlElementPr
     var umlType: UmlType
     var umlShape: UmlShape
 
-    init(position: CGPoint) {
+    init(position: CGPoint, shape: UmlShape) {
         self.canvasProperties = CanvasElementProperties(
             position: position,
             width: 150.0,
@@ -18,8 +18,8 @@ class RectangleUmlElement: ObservableObject, CanvasElementProtocol, UmlElementPr
             minimumWidth: 60.0,
             minimumHeight: 60.0
         )
-        self.label = "Process"
+        self.label = shape == .rectangle ? "Process" : "Decision"
         self.umlType = .activityDiagram
-        self.umlShape = .rectangle
+        self.umlShape = shape
     }
 }

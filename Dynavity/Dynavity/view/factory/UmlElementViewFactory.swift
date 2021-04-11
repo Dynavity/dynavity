@@ -4,10 +4,8 @@ class UmlElementViewFactory: ViewFactory {
     func createView(element: CanvasElementProtocol) -> some View {
         Group {
             switch element {
-            case let diamondUmlElement as DiamondUmlElement:
-                DiamondUmlView(umlElement: diamondUmlElement)
-            case let rectangleUmlElement as RectangleUmlElement:
-                RectangleUmlView(umlElement: rectangleUmlElement)
+            case let activityUmlElement as ActivityUmlElement:
+                ActivityUmlElementView(umlElement: activityUmlElement)
             default:
                 fatalError("UML view you are trying to create doesn't exist")
             }

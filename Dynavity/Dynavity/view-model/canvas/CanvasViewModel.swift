@@ -217,12 +217,9 @@ extension CanvasViewModel {
     }
 
     func addUmlElement(umlElement: UmlElementProtocol) {
-        // TODO: Apply factory pattern here
-        switch umlElement.umlShape {
-        case .diamond:
-            canvas.addElement(DiamondUmlElement(position: canvasCenter))
-        case .rectangle:
-            canvas.addElement(RectangleUmlElement(position: canvasCenter))
+        switch umlElement.umlType {
+        case .activityDiagram:
+            canvas.addElement(ActivityUmlElement(position: canvasCenter, shape: umlElement.umlShape))
         }
     }
 }

@@ -78,7 +78,7 @@ struct UmlSelectionOverlayView: View {
 struct UmlSelectionOverlayView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = CanvasViewModel()
-        UmlSelectionOverlayView(element: DiamondUmlElement(position: viewModel.canvasOrigin),
+        UmlSelectionOverlayView(element: ActivityUmlElement(position: viewModel.canvasOrigin, shape: .diamond),
                                 viewModel: viewModel)
     }
 }
