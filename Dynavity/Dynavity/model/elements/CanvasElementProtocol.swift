@@ -12,18 +12,15 @@ protocol CanvasElementProtocol: AnyObservableObject {
 // MARK: Default implementations
 extension CanvasElementProtocol {
     func move(by translation: CGSize) {
-        self.canvasProperties.position += translation
+        canvasProperties.move(by: translation)
     }
 
     func resize(by translation: CGSize) {
-        self.canvasProperties.width =
-            max(self.canvasProperties.width + translation.width, self.canvasProperties.minimumWidth)
-        self.canvasProperties.height =
-            max(self.canvasProperties.height + translation.height, self.canvasProperties.minimumHeight)
+        canvasProperties.resize(by: translation)
     }
 
     func rotate(to rotation: Double) {
-        self.canvasProperties.rotation = rotation
+        canvasProperties.rotate(to: rotation)
     }
 }
 
