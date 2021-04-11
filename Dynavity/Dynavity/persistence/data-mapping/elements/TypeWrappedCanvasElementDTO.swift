@@ -7,7 +7,7 @@ enum TypeWrappedCanvasElementDTO: Mappable {
     case text(PlainTextElementDTO)
     case code(CodeElementDTO)
     case markup(MarkupElementDTO)
-    case umlActivity(ActivityUmlElementDTO)
+    case umlElement(TypeWrappedUmlElementDTO)
 
     enum ElementType: String {
         case image
@@ -16,7 +16,7 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         case text
         case code
         case markup
-        case umlActivity
+        case umlElement
     }
 
     var type: ElementType {
@@ -33,8 +33,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return .code
         case .markup:
             return .markup
-        case .umlActivity:
-            return .umlActivity
+        case .umlElement:
+            return .umlElement
         }
     }
 
@@ -52,8 +52,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return data
         case .markup(let data):
             return data
-        case .umlActivity(let data):
-            return data
+        case .umlElement(let data):
+            return data.data
         }
     }
 
@@ -71,7 +71,7 @@ enum TypeWrappedCanvasElementDTO: Mappable {
             return data.toModel()
         case .markup(let data):
             return data.toModel()
-        case .umlActivity(let data):
+        case .umlElement(let data):
             return data.toModel()
         }
     }
@@ -91,8 +91,8 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         // Note: PlainTextElement must be checked after its subclassse
         case let plainTextElement as PlainTextElement:
             self = .text(PlainTextElementDTO(model: plainTextElement))
-        case let activityUmlElement as ActivityUmlElement:
-            self = .umlActivity(ActivityUmlElementDTO(model: activityUmlElement))
+        case let umlElement as UmlElementProtocol:
+            self = .umlElement(TypeWrappedUmlElementDTO(model: umlElement))
         default:
             fatalError("Unknown type")
         }
@@ -128,8 +128,8 @@ extension TypeWrappedCanvasElementDTO: Codable {
             self = .code(try decodeData(CodeElementDTO.self))
         case .markup:
             self = .markup(try decodeData(MarkupElementDTO.self))
-        case .umlActivity:
-            self = .umlActivity(try decodeData(ActivityUmlElementDTO.self))
+        case .umlElement:
+            self = .umlElement(try decodeData(TypeWrappedUmlElementDTO.self))
         case .none:
             fatalError("Unknown type")
         }
@@ -153,7 +153,7 @@ extension TypeWrappedCanvasElementDTO: Codable {
             try encodeData(data)
         case .markup(let data):
             try encodeData(data)
-        case .umlActivity(let data):
+        case .umlElement(let data):
             try encodeData(data)
         }
         try container.encode(type.rawValue, forKey: .type)

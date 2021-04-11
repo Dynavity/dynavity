@@ -7,7 +7,8 @@ class OrthogonalConnectorTests: XCTestCase {
     var bounds: GridRectangle!
     var grid: Grid!
     var sourceUmlElement: UmlElementProtocol = ActivityUmlElement(position: CGPoint(x: 250, y: 250), shape: .diamond)
-    var destinationUmlElement: UmlElementProtocol = ActivityUmlElement(position: CGPoint(x: 1_000, y: 1_000), shape: .diamond)
+    var destinationUmlElement: UmlElementProtocol = ActivityUmlElement(position: CGPoint(x: 1_000, y: 1_000),
+                                                                       shape: .diamond)
 
     override func setUpWithError() throws {
         try super.setUpWithError()
