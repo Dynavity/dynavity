@@ -21,23 +21,23 @@ enum TypeWrappedUmlElementDTO: Mappable {
         }
     }
 
-    var model: UmlElementProtocol {
+    var model: IdentifiedUmlElementWrapper {
         switch self {
         case .umlActivity(let data):
             return data.toModel()
         }
     }
 
-    init(model element: UmlElementProtocol) {
-        switch element {
-        case let activityUmlElement as ActivityUmlElement:
-            self = .umlActivity(ActivityUmlElementDTO(model: activityUmlElement))
+    init(model element: IdentifiedUmlElementWrapper) {
+        switch element.umlElement {
+        case is ActivityUmlElement:
+            self = .umlActivity(ActivityUmlElementDTO(model: element))
         default:
             fatalError("Unknown type")
         }
     }
 
-    func toModel() -> UmlElementProtocol {
+    func toModel() -> IdentifiedUmlElementWrapper {
         self.model
     }
 }

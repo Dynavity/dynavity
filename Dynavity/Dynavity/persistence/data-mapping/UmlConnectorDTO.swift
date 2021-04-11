@@ -1,26 +1,39 @@
 import CoreGraphics
 
-struct UmlConnectorDTO: Mappable {
+struct UmlConnectorDTO {
     var points: [CGPoint]
-    var connects: (fromElement: TypeWrappedUmlElementDTO, toElement: TypeWrappedUmlElementDTO)
+    var connects: (fromElement: UmlElementId, toElement: UmlElementId)
     var connectingSide: (fromSide: String, toSide: String)
+
+    static func generateIdFromReference(umlElement: UmlElementProtocol) -> UmlElementId {
+        UmlElementId(id: ObjectIdentifier(umlElement).hashValue)
+    }
 
     init(model: UmlConnector) {
         self.points = model.points
-        self.connects = (fromElement: TypeWrappedUmlElementDTO(model: model.connects.fromElement),
-                         toElement: TypeWrappedUmlElementDTO(model: model.connects.toElement))
+        let fromId = UmlConnectorDTO.generateIdFromReference(umlElement: model.connects.fromElement)
+        let toId = UmlConnectorDTO.generateIdFromReference(umlElement: model.connects.toElement)
+        self.connects = (fromElement: fromId,
+                         toElement: toId)
         self.connectingSide = (fromSide: model.connectingSide.fromSide.rawValue,
                                toSide: model.connectingSide.toSide.rawValue)
     }
 
-    func toModel() -> UmlConnector {
+    func toModel(umlElements: [IdentifiedUmlElementWrapper]) -> UmlConnector {
         guard let fromConnectingSide = ConnectorConnectingSide(rawValue: connectingSide.fromSide),
               let toConnectingSide = ConnectorConnectingSide(rawValue: connectingSide.toSide) else {
             fatalError("Failed to deserialise connector connecting side")
         }
+        let fromElement = umlElements.first { $0.id == connects.fromElement }
+        let toElement = umlElements.first { $0.id == connects.toElement }
+
+        guard let from = fromElement?.umlElement,
+              let to = toElement?.umlElement else {
+            fatalError("Failed to get connecting uml elements")
+        }
         let model = UmlConnector(points: points,
-                                 connects: (fromElement: connects.fromElement.toModel(),
-                                            toElement: connects.toElement.toModel()),
+                                 connects: (fromElement: from,
+                                            toElement: to),
                                  connectingSide: (fromSide: fromConnectingSide,
                                                   toSide: toConnectingSide))
         return model
@@ -35,8 +48,8 @@ extension UmlConnectorDTO: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.points = try container.decode([CGPoint].self, forKey: .points)
-        let fromElement = try container.decode(TypeWrappedUmlElementDTO.self, forKey: .fromElement)
-        let toElement = try container.decode(TypeWrappedUmlElementDTO.self, forKey: .toElement)
+        let fromElement = try container.decode(UmlElementId.self, forKey: .fromElement)
+        let toElement = try container.decode(UmlElementId.self, forKey: .toElement)
         self.connects = (fromElement: fromElement, toElement: toElement)
         let fromSide = try container.decode(String.self, forKey: .fromSide)
         let toSide = try container.decode(String.self, forKey: .toSide)
