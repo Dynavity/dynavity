@@ -46,13 +46,13 @@ struct LocalStorageManager {
 extension LocalStorageManager: StorageManager {
     private static let canvasFileExt: String = "json"
 
-    func readAllCanvases() throws -> [CanvasDTO] {
+    func readAll() throws -> [CanvasDTO] {
         let canvasURLs = try getAllURLsInDocumentDirectory(with: LocalStorageManager.canvasFileExt)
         return canvasURLs.compactMap({ try? readCanvasFromFile(withURL: $0) })
     }
 
     /// Canvases will be saved in the documents directory with the file name: `\(id).json`
-    func saveCanvas(canvas: CanvasDTO) throws {
+    func save(model canvas: CanvasDTO) throws {
         if let encodedData = try? encoder.encode(canvas) {
             let fileURL = getFileURL(name: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
             do {
@@ -63,7 +63,7 @@ extension LocalStorageManager: StorageManager {
         }
     }
 
-    func deleteCanvas(canvas: CanvasDTO) throws {
+    func delete(model canvas: CanvasDTO) throws {
         let fileURL = getFileURL(name: canvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
         do {
             try fileManager.removeItem(at: fileURL)
