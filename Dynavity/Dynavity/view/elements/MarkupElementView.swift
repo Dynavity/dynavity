@@ -3,7 +3,6 @@ import SwiftUI
 struct MarkupElementView: View {
     @StateObject private var viewModel: MarkupElementViewModel
 
-
     init(markupElement: MarkupElement) {
         self._viewModel = StateObject(wrappedValue:
                                         MarkupElementViewModel(markupElement: markupElement))
