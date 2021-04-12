@@ -164,6 +164,7 @@ extension CanvasSelectionView {
 
             if isNewNameUnique {
                 viewModel.renameCanvas(canvas, updatedName: updatedName)
+                graphMapViewModel.renameNode(oldName: canvas.name, newName: updatedName)
             } else {
                 invalidCanvasNameHandler()
             }

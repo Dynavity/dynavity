@@ -47,6 +47,11 @@ class GraphMapViewModel: ObservableObject {
         backlinkRepo.save(model: backlinkEngine)
     }
 
+    func renameNode(oldName: String, newName: String) {
+        backlinkEngine.renameNode(oldName: oldName, newName: newName)
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
     func deleteNodes(names: [String]) {
         for name in names {
             backlinkEngine.deleteNode(name: name)
@@ -91,6 +96,7 @@ extension GraphMapViewModel {
         processNodeTranslation(translation: value.translation, viewportZoomScale: viewportZoomScale)
         draggedNodeOriginalPosition = nil
         draggedNode = nil
+        backlinkRepo.save(model: backlinkEngine)
     }
 
     private func processNodeTranslation(translation: CGSize, viewportZoomScale: CGFloat) {

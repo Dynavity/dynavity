@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 
 struct BacklinkNode {
-    let name: String
+    var name: String
     var position: CGPoint
 
     init(name: String, position: CGPoint) {

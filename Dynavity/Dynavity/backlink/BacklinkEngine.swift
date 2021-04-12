@@ -46,6 +46,13 @@ struct BacklinkEngine {
         graph.deleteNode(node)
     }
 
+    mutating func renameNode(oldName: String, newName: String) {
+        guard let node = getBacklinkNodeWithName(name: oldName) else {
+            return
+        }
+        graph.renameNode(node, newName: newName)
+    }
+
     mutating func addEdge(edge: BacklinkEdge) {
         graph.addLinkBetween(edge.source, and: edge.destination)
     }

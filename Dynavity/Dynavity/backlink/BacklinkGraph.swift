@@ -7,6 +7,7 @@ protocol BacklinkGraph {
     func getBacklinks(for item: BacklinkNode) -> [BacklinkNode]
     mutating func addNode(_ node: BacklinkNode)
     mutating func deleteNode(_ node: BacklinkNode)
+    mutating func renameNode(_ node: BacklinkNode, newName: String)
     mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode)
     mutating func removeLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode)
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint)
