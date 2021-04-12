@@ -3,7 +3,7 @@ import FirebaseDatabase
 import CodableFirebase
 import Combine
 
-struct CloudStorageManager: StorageManager {
+struct CloudStorageManager {
     let userId = OnlineCanvas.myUserId
     var database: Database
 
@@ -99,7 +99,7 @@ struct ExternalCanvasReference: Codable, Equatable {
     let canvasId: String
 }
 
-// MARK: Helper to syncronize asynchronous code
+// MARK: Helper to synchronize asynchronous code
 class FutureSynchronizer<T> {
     let publisher: Future<T, Never>
     private var value: T?

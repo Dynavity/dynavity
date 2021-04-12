@@ -57,7 +57,7 @@ struct CanvasRepository: Repository {
     }
 
     private func getExistingId(for canvas: CanvasWithAnnotation) -> UUID? {
-        try? storageManager.readAllCanvases()
+        try? storageManager.readAll()
             .first(where: { $0.name == canvas.name })?.id
     }
 }

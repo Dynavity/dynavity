@@ -1,6 +1,6 @@
 // Certain functions are not implemented as there's no use case for them in our application at the moment
 struct BacklinkRepository: Repository {
-    let storageManager: StorageManager = LocalStorageManager()
+    let storageManager = LocalStorageManager()
 
     func queryAll() -> [BacklinkEngine] {
         [try? storageManager.readBacklinkEngine()].compactMap({ $0?.toModel() })
