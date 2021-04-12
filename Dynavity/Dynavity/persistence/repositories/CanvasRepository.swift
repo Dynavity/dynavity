@@ -1,8 +1,6 @@
 import Foundation
 
 struct CanvasRepository: Repository {
-    typealias T = Canvas
-
     let storageManager: StorageManager = LocalStorageManager()
 
     /// Canvases are sorted in ascending order based on their names (case-insensitive)

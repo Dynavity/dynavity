@@ -22,6 +22,19 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         self.addNode(Node(node))
     }
 
+    mutating func deleteNode(_ node: BacklinkNode) {
+        self.removeNode(Node(node))
+    }
+
+    mutating func renameNode(_ node: BacklinkNode, newName: String) {
+        guard let originalNode = getNodeWithName(name: node.name) else {
+            return
+        }
+
+        let updatedBacklinkNode = originalNode.label.renaming(to: newName)
+        self.updateNode(originalNode, to: Node(updatedBacklinkNode))
+    }
+
     mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
         assert(!self.isDirected)
         let edge = createEdgeBetween(firstItem, and: secondItem)
@@ -34,7 +47,7 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
     }
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
-        guard let originalNode = getNodeWithId(id: backlinkNode.id) else {
+        guard let originalNode = getNodeWithName(name: backlinkNode.name) else {
             return
         }
 
@@ -49,7 +62,7 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         return Edge(source: firstNode, destination: secondNode)
     }
 
-    private func getNodeWithId(id: UUID?) -> Node<BacklinkNode>? {
-        self.nodes.first(where: { $0.label.id == id })
+    private func getNodeWithName(name: String) -> Node<BacklinkNode>? {
+        self.nodes.first(where: { $0.label.name == name })
     }
 }
