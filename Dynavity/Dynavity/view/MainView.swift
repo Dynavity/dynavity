@@ -8,12 +8,13 @@ struct MainView: View {
     static let umlMenuButtonHeight: CGFloat = 40.0
     private let umlMenuButtonOffset: CGFloat = -5.0
 
-    init(canvas: Canvas) {
-        self._canvasViewModel = StateObject(wrappedValue: CanvasViewModel(canvas: canvas))
+    init(canvas: Canvas, annotationCanvas: AnnotationCanvas) {
+        self._canvasViewModel = StateObject(wrappedValue: CanvasViewModel(canvas: canvas,
+                                                                          annotationCanvas: annotationCanvas))
     }
 
     init() {
-        self.init(canvas: Canvas())
+        self.init(canvas: Canvas(), annotationCanvas: AnnotationCanvas())
     }
 
     var sideMenu: some View {

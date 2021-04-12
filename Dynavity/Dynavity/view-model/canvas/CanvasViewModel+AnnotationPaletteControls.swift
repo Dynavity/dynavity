@@ -54,3 +54,10 @@ extension CanvasViewModel {
         shouldShowAnnotationMenu = false
     }
 }
+
+// MARK: AnnotationCanvas functions
+extension CanvasViewModel {
+    func getAnnotations() -> PKDrawing {
+        annotationCanvas.drawing
+    }
+}

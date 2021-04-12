@@ -4,7 +4,7 @@ struct CanvasRepository: Repository {
     let storageManager: StorageManager = LocalStorageManager()
 
     /// Canvases are sorted in ascending order based on their names (case-insensitive)
-    func queryAll() -> [Canvas] {
+    func queryAll() -> [CanvasWithAnnotation] {
         let canvasDTOs = (try? storageManager.readAllCanvases()) ?? []
         return canvasDTOs.map({ $0.toModel() })
             .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
@@ -12,7 +12,7 @@ struct CanvasRepository: Repository {
 
     /// Returns true if the canvas was successfully saved. False otherwise.
     @discardableResult
-    func save(model: Canvas) -> Bool {
+    func save(model: CanvasWithAnnotation) -> Bool {
         let id = getExistingId(for: model) ?? UUID()
         let canvasDTO = CanvasDTO(id: id, model: model)
         do {
@@ -24,7 +24,7 @@ struct CanvasRepository: Repository {
     }
 
     @discardableResult
-    func update(oldModel: Canvas, newModel: Canvas) -> Bool {
+    func update(oldModel: CanvasWithAnnotation, newModel: CanvasWithAnnotation) -> Bool {
         let id = getExistingId(for: oldModel) ?? UUID()
         do {
             let newCanvasDTO = CanvasDTO(id: id, model: newModel)
@@ -36,7 +36,7 @@ struct CanvasRepository: Repository {
     }
 
     @discardableResult
-    func delete(model: Canvas) -> Bool {
+    func delete(model: CanvasWithAnnotation) -> Bool {
         let id = getExistingId(for: model) ?? UUID()
         let canvasDTO = CanvasDTO(id: id, model: model)
         do {
@@ -49,13 +49,13 @@ struct CanvasRepository: Repository {
 
     /// Note: this is not an atomic operation
     @discardableResult
-    func deleteMany(models: [Canvas]) -> Bool {
+    func deleteMany(models: [CanvasWithAnnotation]) -> Bool {
         let canvasDTOs = models.map({ delete(model: $0) })
         // Returns true if and only if all the canvases were successfully deleted
         return canvasDTOs.allSatisfy({ $0 })
     }
 
-    private func getExistingId(for canvas: Canvas) -> UUID? {
+    private func getExistingId(for canvas: CanvasWithAnnotation) -> UUID? {
         try? storageManager.readAllCanvases()
             .first(where: { $0.name == canvas.name })?.id
     }
