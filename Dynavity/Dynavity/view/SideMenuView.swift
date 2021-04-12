@@ -2,8 +2,11 @@ import SwiftUI
 
 struct SideMenuView: View {
     @EnvironmentObject var graphViewModel: GraphViewModel
+    @EnvironmentObject var canvasViewModel: CanvasViewModel
 
-    var canvasName: String
+    var canvasName: String {
+        canvasViewModel.canvas.name
+    }
 
     @StateObject private var sideMenuViewModel = SideMenuViewModel()
 
@@ -119,7 +122,8 @@ struct SideMenuContentView<Content: View>: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView(canvasName: "Cool Name")
+        SideMenuView()
+            .environmentObject(CanvasViewModel())
             .environmentObject(GraphViewModel())
     }
 }
