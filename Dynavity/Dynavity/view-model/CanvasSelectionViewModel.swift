@@ -67,7 +67,7 @@ class CanvasSelectionViewModel: ObservableObject {
         return !name.isEmpty && consistsOfOnlyAlphanumeric && isCanvasNameUnique(name: name) && isWithinLengthLimit
     }
 
-    func getCanvasWithName(name: String) -> Canvas? {
+    func getCanvasWithName(name: String) -> CanvasWithAnnotation? {
         canvasRepo.queryAll().first(where: { $0.name == name })
     }
 
