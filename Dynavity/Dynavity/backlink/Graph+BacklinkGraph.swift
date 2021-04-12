@@ -31,7 +31,7 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
             return
         }
 
-        let updatedBacklinkNode = BacklinkNode(name: newName, position: node.position)
+        let updatedBacklinkNode = originalNode.label.renaming(to: newName)
         self.updateNode(originalNode, to: Node(updatedBacklinkNode))
     }
 

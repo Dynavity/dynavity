@@ -10,6 +10,10 @@ struct BacklinkNode {
         self.position = position
     }
 
+    func renaming(to newName: String) -> BacklinkNode {
+        BacklinkNode(name: newName, position: self.position)
+    }
+
     func moving(to updatedPos: CGPoint) -> BacklinkNode {
         BacklinkNode(name: self.name, position: updatedPos)
     }
