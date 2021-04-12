@@ -1,6 +1,7 @@
 import SwiftUI
 
 class CanvasSelectionViewModel: ObservableObject {
+    static let canvasNameLengthLimit = 20
     private let canvasRepo = CanvasRepository()
 
     @Published var selectedCanvases: [Canvas] = []
@@ -56,8 +57,13 @@ class CanvasSelectionViewModel: ObservableObject {
         self.objectWillChange.send()
     }
 
+    // A string is a valid canvas name if and only if it is non-empty, consists of only
+    // alphanumeric characters, is unique, and is less than 20 characters long. Spaces are allowed.
+    // Canvas names are not case-sensitive.
     func isValidCanvasName(name: String) -> Bool {
-        !name.isEmpty && isCanvasNameUnique(name: name)
+        let consistsOfOnlyAlphanumeric = name.range(of: "[^a-zA-Z0-9 ]", options: .regularExpression) == nil
+        let isWithinLengthLimit = name.count < CanvasSelectionViewModel.canvasNameLengthLimit
+        return !name.isEmpty && consistsOfOnlyAlphanumeric && isCanvasNameUnique(name: name) && isWithinLengthLimit
     }
 
     // Case-insensitive checking
