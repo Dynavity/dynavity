@@ -3,7 +3,7 @@ import SwiftUI
 import Foundation
 
 // TODO: rename this to graphviewmodel
-class GraphMapViewModel: ObservableObject {
+class GraphViewModel: ObservableObject {
     private let backlinkRepo = BacklinkRepository()
 
     @Published var backlinkEngine: BacklinkEngine
@@ -72,7 +72,7 @@ class GraphMapViewModel: ObservableObject {
 }
 
 // MARK: Node Dragging Handling
-extension GraphMapViewModel {
+extension GraphViewModel {
     func hitTest(tapPos: CGPoint, viewportSize: CGSize,
                  viewportZoomScale: CGFloat, viewportOriginOffset: CGPoint) {
         for node in self.getNodes() {

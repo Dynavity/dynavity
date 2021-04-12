@@ -7,7 +7,7 @@ struct CanvasSelectionView: View {
     }
 
     @StateObject private var viewModel = CanvasSelectionViewModel()
-    @StateObject var graphMapViewModel = GraphMapViewModel()
+    @StateObject var graphViewModel = GraphViewModel()
     @State private var isEditing = false
     @State private var selectionMode: SelectionMode = .grid
 
@@ -39,7 +39,7 @@ struct CanvasSelectionView: View {
             .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .environmentObject(graphMapViewModel)
+        .environmentObject(graphViewModel)
     }
 
     private var canvasesGrid: some View {
@@ -165,7 +165,7 @@ extension CanvasSelectionView {
 
             if isNewNameUnique {
                 viewModel.renameCanvas(canvas, updatedName: updatedName)
-                graphMapViewModel.renameNode(oldName: canvas.name, newName: updatedName)
+                graphViewModel.renameNode(oldName: canvas.name, newName: updatedName)
             } else {
                 invalidCanvasNameHandler()
             }
@@ -180,7 +180,7 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteCanvas(canvas)
-            graphMapViewModel.deleteNode(name: canvas.name)
+            graphViewModel.deleteNode(name: canvas.name)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.showAlert(alert: alert)
@@ -192,7 +192,7 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteSelectedCanvases()
-            graphMapViewModel.deleteNodes(names: viewModel.selectedCanvases.map({ $0.name }))
+            graphViewModel.deleteNodes(names: viewModel.selectedCanvases.map({ $0.name }))
             toggleEditMode()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -213,7 +213,7 @@ extension CanvasSelectionView {
 
             if isNewNameUnique {
                 viewModel.createCanvas(name: updatedName)
-                graphMapViewModel.addNode(name: updatedName)
+                graphViewModel.addNode(name: updatedName)
             } else {
                 invalidCanvasNameHandler()
             }
