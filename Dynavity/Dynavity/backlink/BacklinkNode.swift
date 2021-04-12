@@ -6,7 +6,8 @@ struct BacklinkNode {
     var position: CGPoint
 
     init(name: String, position: CGPoint) {
-        self.init(name: name, position: position)
+        self.name = name
+        self.position = position
     }
 
     func moving(to updatedPos: CGPoint) -> BacklinkNode {
