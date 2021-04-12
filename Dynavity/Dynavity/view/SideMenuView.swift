@@ -33,12 +33,12 @@ struct SideMenuView: View {
         Group {
             SideMenuHeaderView(headerText: "Backlinks")
             SideMenuContentView(label: "Linked Canvases") {
-                MultiSelectListView(nodes: graphMapViewModel.getLinkedNodes(for: testCanvas),
+                MultiSelectListView(nodes: graphMapViewModel.getLinkedNodes(for: canvasName),
                                     selections: $sideMenuViewModel.selectedLinkedNodes)
             }
             upDownButtons
             SideMenuContentView(label: "Unlinked Canvases") {
-                MultiSelectListView(nodes: graphMapViewModel.getUnlinkedNodes(for: testCanvas),
+                MultiSelectListView(nodes: graphMapViewModel.getUnlinkedNodes(for: canvasName),
                                     selections: $sideMenuViewModel.selectedUnlinkedNodes)
             }
         }
@@ -74,14 +74,14 @@ struct SideMenuView: View {
 extension SideMenuView {
     private func linkSelectedUnlinkedCanvases() {
         for unlinkedNode in sideMenuViewModel.selectedUnlinkedNodes {
-            graphMapViewModel.addLinkBetween(testCanvas, and: unlinkedNode.name)
+            graphMapViewModel.addLinkBetween(canvasName, and: unlinkedNode.name)
         }
         sideMenuViewModel.selectedUnlinkedNodes = []
     }
 
     private func unlinkSelectedLinkedCanvases() {
         for linkedNode in sideMenuViewModel.selectedLinkedNodes {
-            graphMapViewModel.removeLinkBetween(testCanvas, and: linkedNode.name)
+            graphMapViewModel.removeLinkBetween(canvasName, and: linkedNode.name)
         }
         sideMenuViewModel.selectedLinkedNodes = []
     }

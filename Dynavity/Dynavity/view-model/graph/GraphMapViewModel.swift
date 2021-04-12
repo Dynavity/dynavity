@@ -2,9 +2,6 @@ import CoreGraphics
 import SwiftUI
 import Foundation
 
-// TODO: remove this once canvases are fully integrated
-let testCanvas = "COMMON"
-
 class GraphMapViewModel: ObservableObject {
     private let backlinkRepo = BacklinkRepository()
 
@@ -34,7 +31,6 @@ class GraphMapViewModel: ObservableObject {
 
     func getUnlinkedNodes(for name: String) -> [BacklinkNode] {
         let unlinkedNodes = Set(self.getNodes()).subtracting(self.getLinkedNodes(for: name))
-
         return Array(unlinkedNodes)
             // Exclude the input node
             .filter({ $0.name != name })
