@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct GraphView: View {
-    private static let zoomScaleRange: ClosedRange<CGFloat> = 0.2...2.5
+    private static let zoomScaleRange: ClosedRange<CGFloat> = 0.05...2.5
 
     @EnvironmentObject var viewModel: GraphMapViewModel
 
@@ -18,7 +18,7 @@ struct GraphView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Rectangle().fill(Color.UI.background)
+                Rectangle().fill(Color(UIColor.systemBackground))
                 graphView
             }
             .drawingGroup(opaque: true, colorMode: .extendedLinear)
