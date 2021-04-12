@@ -50,7 +50,8 @@ struct CanvasSelectionView: View {
                             viewModel.toggleSelectedCanvas(canvas)
                         }
                 } else {
-                    NavigationLink(destination: MainView(canvas: canvas)
+                    NavigationLink(destination: MainView(canvas: canvas,
+                                                         annotationCanvas: getCorrespondingAnnotation(canvas))
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
                         CanvasThumbnailView(canvasName: canvas.name,
@@ -223,5 +224,28 @@ extension CanvasSelectionView {
                                            preferredStyle: .alert)
         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.showAlert(alert: errorAlert)
+    }
+
+    private func unableToLoadAnnotationsHandler() {
+        let errorAlert = UIAlertController(title: "Unable to load annotations!",
+                                           message: "You will start off with a fresh canvas",
+                                           preferredStyle: .alert)
+        errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        self.showAlert(alert: errorAlert)
+    }
+}
+
+// MARK: Functions for AnnotationCanvas
+extension CanvasSelectionView {
+    func getCorrespondingAnnotation(_ canvas: Canvas) -> AnnotationCanvas {
+        let annotationCanvases = viewModel.getAnnotationCanvases()
+        guard let annotationCanvas = annotationCanvases
+                .first(where: { $0.canvasName == canvas.name }) else {
+            if !annotationCanvases.isEmpty {
+                unableToLoadAnnotationsHandler()
+            }
+            return AnnotationCanvas()
+        }
+        return annotationCanvas.annotationCanvas
     }
 }

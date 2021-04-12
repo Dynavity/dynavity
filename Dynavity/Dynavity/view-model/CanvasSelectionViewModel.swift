@@ -2,6 +2,7 @@ import SwiftUI
 
 class CanvasSelectionViewModel: ObservableObject {
     private let canvasRepo = CanvasRepository()
+    private let annotationCanvasRepo = AnnotationCanvasRepository()
 
     @Published var selectedCanvases: [Canvas] = []
     @Published var searchQuery: String = ""
@@ -67,5 +68,9 @@ class CanvasSelectionViewModel: ObservableObject {
 
     func isCanvasSelected(_ canvas: Canvas) -> Bool {
         selectedCanvases.contains(canvas)
+    }
+
+    func getAnnotationCanvases() -> [IdentifiedAnnotationCanvas] {
+        annotationCanvasRepo.queryAll()
     }
 }

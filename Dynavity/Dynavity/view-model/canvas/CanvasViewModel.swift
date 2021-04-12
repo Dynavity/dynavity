@@ -17,6 +17,8 @@ class CanvasViewModel: ObservableObject {
     }
 
     private let canvasRepo = CanvasRepository()
+    private let annotationCanvasRepo = AnnotationCanvasRepository()
+
     // We are not interested in the return value of each publisher,
     // that's why the values are mapped away
     let autoSavePublisher = Publishers.Merge(
@@ -43,7 +45,7 @@ class CanvasViewModel: ObservableObject {
         }
     }
     private var anyCancellable: AnyCancellable?
-    @Published var annotationCanvas = AnnotationCanvas()
+    @Published var annotationCanvas: AnnotationCanvas
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
     @Published var canvasTopLeftOffset: CGPoint = .zero
@@ -111,8 +113,9 @@ class CanvasViewModel: ObservableObject {
         canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
-    init(canvas: Canvas, canvasSize: CGFloat) {
+    init(canvas: Canvas, annotationCanvas: AnnotationCanvas, canvasSize: CGFloat) {
         self.canvas = canvas
+        self.annotationCanvas = annotationCanvas
         self.canvasSize = canvasSize
         self.canvasMode = .pen
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
@@ -121,13 +124,13 @@ class CanvasViewModel: ObservableObject {
         loadFromFirebase()
     }
 
-    convenience init(canvas: Canvas) {
+    convenience init(canvas: Canvas, annotationCanvas: AnnotationCanvas) {
         // Arbitrarily large value for the "infinite" canvas.
-        self.init(canvas: canvas, canvasSize: 500_000)
+        self.init(canvas: canvas, annotationCanvas: annotationCanvas, canvasSize: 500_000)
     }
 
     convenience init() {
-        self.init(canvas: Canvas())
+        self.init(canvas: Canvas(), annotationCanvas: AnnotationCanvas())
     }
 
     var canvasElements: [CanvasElementProtocol] {
@@ -143,6 +146,9 @@ class CanvasViewModel: ObservableObject {
 extension CanvasViewModel {
     func saveCanvas() {
         self.canvasRepo.save(model: self.canvas)
+        let identifiedAnnotationCanvas = IdentifiedAnnotationCanvas(canvasName: self.canvas.name,
+                                                                    annotationCanvas: self.annotationCanvas)
+        self.annotationCanvasRepo.save(model: identifiedAnnotationCanvas)
     }
 }
 
