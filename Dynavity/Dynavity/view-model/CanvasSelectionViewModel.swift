@@ -46,7 +46,7 @@ class CanvasSelectionViewModel: ObservableObject {
     func createCanvas(name: String) {
         let canvas = Canvas()
         canvas.name = name
-        let canvasWithAnnotation = CanvasWithAnnotation(canvas: canvas, annotationCanvas: Data())
+        let canvasWithAnnotation = CanvasWithAnnotation(canvas: canvas, annotationCanvas: AnnotationCanvas())
         canvasRepo.save(model: canvasWithAnnotation)
         self.objectWillChange.send()
     }

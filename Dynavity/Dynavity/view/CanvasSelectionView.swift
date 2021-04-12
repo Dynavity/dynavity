@@ -51,10 +51,8 @@ struct CanvasSelectionView: View {
                             viewModel.toggleSelectedCanvas(canvasWithAnnotation)
                         }
                 } else {
-                    let drawingFromData = try? PKDrawing(data: canvasWithAnnotation.annotationCanvas)
-                    let annotationCanvas = AnnotationCanvas(drawing: drawingFromData ?? PKDrawing())
                     NavigationLink(destination: MainView(canvas: canvasWithAnnotation.canvas,
-                                                         annotationCanvas: annotationCanvas)
+                                                         annotationCanvas: canvasWithAnnotation.annotationCanvas)
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
                         CanvasThumbnailView(canvasName: canvasWithAnnotation.canvas.name,
@@ -230,14 +228,6 @@ extension CanvasSelectionView {
             + "Canvas names are not case-sensitive."
         let errorAlert = UIAlertController(title: "Invalid canvas name!",
                                            message: invalidMessage,
-                                           preferredStyle: .alert)
-        errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        self.showAlert(alert: errorAlert)
-    }
-
-    private func unableToLoadAnnotationsHandler() {
-        let errorAlert = UIAlertController(title: "Unable to load annotations!",
-                                           message: "You will start off with a fresh canvas",
                                            preferredStyle: .alert)
         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.showAlert(alert: errorAlert)

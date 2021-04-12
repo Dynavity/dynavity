@@ -1,4 +1,5 @@
 import Foundation
+import PencilKit
 
 struct CanvasDTO: Mappable {
     var id: UUID
@@ -26,7 +27,7 @@ struct CanvasDTO: Mappable {
                 return TypeWrappedUmlElementDTO(model: identifiedElement)
             })
         self.umlConnectors = model.canvas.umlConnectors.map({ UmlConnectorDTO(model: $0) })
-        self.annotationCanvas = model.annotationCanvas
+        self.annotationCanvas = model.annotationCanvas.drawing.dataRepresentation()
     }
 
     init(model: CanvasWithAnnotation) {
@@ -51,7 +52,9 @@ struct CanvasDTO: Mappable {
             let connectorModel = connector.toModel(umlElements: identifiedUmlElements)
             model.addUmlConnector(connectorModel)
         }
-        return CanvasWithAnnotation(canvas: model, annotationCanvas: annotationCanvas)
+        let drawing = try? PKDrawing(data: annotationCanvas)
+        let annotations = AnnotationCanvas(drawing: drawing ?? PKDrawing())
+        return CanvasWithAnnotation(canvas: model, annotationCanvas: annotations)
     }
 }
 

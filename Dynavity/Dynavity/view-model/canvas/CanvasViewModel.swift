@@ -144,9 +144,8 @@ class CanvasViewModel: ObservableObject {
 // MARK: Local storage autosaving
 extension CanvasViewModel {
     func saveCanvas() {
-        let annotationData = self.annotationCanvas.drawing.dataRepresentation()
         let canvasWithAnnotation = CanvasWithAnnotation(canvas: self.canvas,
-                                                        annotationCanvas: annotationData)
+                                                        annotationCanvas: self.annotationCanvas)
         self.canvasRepo.save(model: canvasWithAnnotation)
     }
 }

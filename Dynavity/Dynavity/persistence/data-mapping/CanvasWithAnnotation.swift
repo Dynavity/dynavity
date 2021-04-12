@@ -5,11 +5,10 @@ import Foundation
  */
 class CanvasWithAnnotation {
     let canvas: Canvas
-    // Remove dependency of storage with PencilKit
-    let annotationCanvas: Data
+    let annotationCanvas: AnnotationCanvas
     var name: String
 
-    init(canvas: Canvas, annotationCanvas: Data) {
+    init(canvas: Canvas, annotationCanvas: AnnotationCanvas) {
         self.canvas = canvas
         self.name = canvas.name
         self.annotationCanvas = annotationCanvas
