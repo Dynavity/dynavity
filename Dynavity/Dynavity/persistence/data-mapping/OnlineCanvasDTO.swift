@@ -18,3 +18,5 @@ struct OnlineCanvasDTO: Mappable {
         OnlineCanvas(ownerId: ownerId, canvas: canvas.toModel().canvas)
     }
 }
+
+extension OnlineCanvasDTO: Codable {}

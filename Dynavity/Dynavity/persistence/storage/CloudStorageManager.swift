@@ -4,6 +4,8 @@ import CodableFirebase
 import Combine
 
 struct CloudStorageManager {
+    let encoder = FirebaseEncoder()
+    let decoder = FirebaseDecoder()
     let userId = OnlineCanvas.myUserId
     var database: Database
 
@@ -22,7 +24,7 @@ struct CloudStorageManager {
                 }
                 // keys are unimportant here since we want all canvases anyway
                 let dto = value.values.compactMap {
-                    try? FirebaseDecoder().decode(CanvasDTO.self, from: $0)
+                    try? decoder.decode(CanvasDTO.self, from: $0)
                 }
                 let canvases = dto.map { OnlineCanvasDTO(ownerId: userId, canvas: $0) }
                 callback(.success(canvases))
@@ -34,7 +36,7 @@ struct CloudStorageManager {
         let collabFuture = Future<[OnlineCanvasDTO], Never> { callback in
             collab.getData { _, snapshot in
                 guard let value = snapshot.value,
-                      let loaded = try? FirebaseDecoder().decode([ExternalCanvasReference].self, from: value) else {
+                      let loaded = try? decoder.decode([ExternalCanvasReference].self, from: value) else {
                     // if something is wrong, 'success' with empty value
                     return callback(.success([]))
                 }
@@ -43,7 +45,7 @@ struct CloudStorageManager {
                         let db = database.reference(withPath: "\(ref.userId)/self/\(ref.canvasId)")
                         db.getData { _, snapshot in
                             guard let value = snapshot.value,
-                                  let loaded = try? FirebaseDecoder().decode(CanvasDTO.self, from: value) else {
+                                  let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
                                 return
                             }
                             let canvas = OnlineCanvasDTO(ownerId: ref.userId, canvas: loaded)
@@ -60,15 +62,18 @@ struct CloudStorageManager {
     }
 
     func save(model canvas: OnlineCanvasDTO) throws {
+        guard let data = try? encoder.encode(canvas) else {
+            return
+        }
         if userId == canvas.ownerId {
             // save own canvas
             let db = database.reference(withPath: "\(userId)/self/\(canvas.canvas.id)")
-            db.setValue(canvas)
+            db.setValue(data)
         } else {
             // save other canvas
             let ref = ExternalCanvasReference(userId: canvas.ownerId, canvasId: canvas.canvas.id.uuidString)
             let db = database.reference(withPath: "\(ref.userId)/self/\(ref.canvasId)")
-            db.setValue(canvas)
+            db.setValue(data)
         }
     }
 
@@ -84,10 +89,11 @@ struct CloudStorageManager {
             // get the whole array, filter, write back
             db.getData { _, snapshot in
                 guard let value = snapshot.value,
-                      let loaded = try? FirebaseDecoder().decode([ExternalCanvasReference].self, from: value) else {
+                      let loaded = try? decoder.decode([ExternalCanvasReference].self, from: value),
+                      let data = try? encoder.encode(loaded.filter { $0 != ref })else {
                     return
                 }
-                db.setValue(loaded.filter { $0 != ref })
+                db.setValue(data)
             }
         }
     }
@@ -103,6 +109,7 @@ struct ExternalCanvasReference: Codable, Equatable {
 class FutureSynchronizer<T> {
     let publisher: Future<T, Never>
     private var value: T?
+    private var cancel: AnyCancellable!
 
     init(publisher: Future<T, Never>) {
         self.publisher = publisher
@@ -113,11 +120,12 @@ class FutureSynchronizer<T> {
             return value
         }
         let block = DispatchSemaphore(value: 0)
-        _ = publisher.sink { value in
+        cancel = publisher.sink { value in
             self.value = value
             block.signal()
         }
         block.wait()
+        cancel = nil // no longer needed
         return value
     }
 }
@@ -125,6 +133,7 @@ class FutureSynchronizer<T> {
 class MultiFutureSynchronizer<T> {
     let publishers: [Future<T, Never>]
     private var values: [T] = []
+    private var cancels: [AnyCancellable] = []
 
     init(publishers: [Future<T, Never>]) {
         self.publishers = publishers
@@ -133,14 +142,16 @@ class MultiFutureSynchronizer<T> {
     func blockForValue() -> [T] {
         let block = DispatchSemaphore(value: 0)
         for publisher in publishers {
-            _ = publisher.sink { value in
+            let cancel = publisher.sink { value in
                 self.values.append(value)
                 block.signal()
             }
+            cancels.append(cancel)
         }
         for _ in publishers {
             block.wait()
         }
+        cancels.removeAll() // no longer needed
         return values
     }
 }
