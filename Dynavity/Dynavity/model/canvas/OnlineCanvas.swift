@@ -16,7 +16,7 @@ class OnlineCanvas: Canvas {
         self.init(id: UUID(), ownerId: OnlineCanvas.myUserId, canvas: canvas)
     }
 
-    /// Used to import another user's `OnlineCanvas`,
+    /// Used to import another user's `OnlineCanvas`.
     init(id: UUID, ownerId: String, canvas: Canvas) {
         self.id = id
         self.ownerId = ownerId
