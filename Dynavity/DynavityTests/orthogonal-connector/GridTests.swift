@@ -104,8 +104,10 @@ class GridTests: XCTestCase {
     }
 
     func testGenerateGridPoints() {
-        let sourceUmlElement: UmlElementProtocol = RectangleUmlElement(position: CGPoint(x: 250, y: 250))
-        let destinationUmlElement: UmlElementProtocol = RectangleUmlElement(position: CGPoint(x: 1_000, y: 1_000))
+        let sourceUmlElement: UmlElementProtocol = ActivityUmlElement(position: CGPoint(x: 250, y: 250),
+                                                                      shape: .rectangle)
+        let destinationUmlElement: UmlElementProtocol = ActivityUmlElement(position: CGPoint(x: 1_000, y: 1_000),
+                                                                           shape: .rectangle)
         let points = orthogonalConnectorGrid
             .generateGridPoints(fromElement: sourceUmlElement, toElement: destinationUmlElement)
         XCTAssertEqual(points.count, 131)
