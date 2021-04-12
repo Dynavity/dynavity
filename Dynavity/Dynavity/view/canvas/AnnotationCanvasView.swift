@@ -69,7 +69,10 @@ extension AnnotationCanvasView: UIViewRepresentable {
         annotationCanvasView.bouncesZoom = false
         annotationCanvasView.contentOffset = viewModel.canvasOrigin
         annotationCanvasView.scrollsToTop = false
-        annotationCanvasView.drawing = viewModel.getAnnotations()
+        // Only load drawings to upper layer of AnnotationCanvasView in CanvasView
+        if !isDrawingDisabled {
+            annotationCanvasView.drawing = viewModel.getAnnotations()
+        }
         return annotationCanvasView
     }
 

@@ -6,7 +6,7 @@ import FirebaseDatabase
 import CodableFirebase
 
 class CanvasViewModel: ObservableObject {
-    private static let autoSaveInterval = 3.0
+    private static let autoSaveInterval = 10.0
 
     enum CanvasMode {
         case selection
