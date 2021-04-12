@@ -22,6 +22,10 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         self.addNode(Node(node))
     }
 
+    mutating func deleteNode(_ node: BacklinkNode) {
+        self.removeNode(Node(node))
+    }
+
     mutating func addLinkBetween(_ firstItem: BacklinkNode, and secondItem: BacklinkNode) {
         assert(!self.isDirected)
         let edge = createEdgeBetween(firstItem, and: secondItem)

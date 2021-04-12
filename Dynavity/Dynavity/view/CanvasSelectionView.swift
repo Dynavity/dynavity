@@ -7,6 +7,7 @@ struct CanvasSelectionView: View {
     }
 
     @StateObject private var viewModel = CanvasSelectionViewModel()
+    @EnvironmentObject var graphMapViewModel: GraphMapViewModel
     @State private var isEditing = false
     @State private var selectionMode: SelectionMode = .grid
 
@@ -119,7 +120,6 @@ struct CanvasSelectionView: View {
                     }
                 }
                 SearchBarView(text: $viewModel.searchQuery)
-                // TODO: Implement saving the newly created canvas to state & db
                 selectionModeToggleButton
 
                 Button(action: {
@@ -178,6 +178,7 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteCanvas(canvas)
+            graphMapViewModel.deleteNode(name: canvas.name)
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.showAlert(alert: alert)
@@ -209,6 +210,7 @@ extension CanvasSelectionView {
 
             if isNewNameUnique {
                 viewModel.createCanvas(name: updatedName)
+                graphMapViewModel.addNode(name: updatedName)
             } else {
                 invalidCanvasNameHandler()
             }

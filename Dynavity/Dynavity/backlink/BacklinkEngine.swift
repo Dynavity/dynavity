@@ -35,6 +35,13 @@ struct BacklinkEngine {
         graph.addNode(node)
     }
 
+    mutating func deleteNode(name: String) {
+        guard let node = getBacklinkNodeWithName(name: name) else {
+            return
+        }
+        graph.deleteNode(node)
+    }
+
     mutating func addLinkBetween(_ firstItemName: String, and secondItemName: String) {
         guard let firstNode = getBacklinkNodeWithName(name: firstItemName),
               let secondNode = getBacklinkNodeWithName(name: secondItemName) else {

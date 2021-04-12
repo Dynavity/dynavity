@@ -41,6 +41,16 @@ class GraphMapViewModel: ObservableObject {
             .sorted(by: { $0.name < $1.name })
     }
 
+    func addNode(name: String) {
+        backlinkEngine.addNode(name: name)
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
+    func deleteNode(name: String) {
+        backlinkEngine.deleteNode(name: name)
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
     func addLinkBetween(_ firstItemName: String, and secondItemName: String) {
         backlinkEngine.addLinkBetween(firstItemName, and: secondItemName)
         backlinkRepo.save(model: backlinkEngine)
