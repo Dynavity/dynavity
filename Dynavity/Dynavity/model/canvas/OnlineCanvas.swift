@@ -6,6 +6,9 @@ class OnlineCanvas: Canvas {
             ?? "NO_USER_ID"
 
     let ownerId: String
+    var shareableId: String {
+        "\(ownerId)/\(name)"
+    }
 
     /// Used to publish a user's `CanvasWithAnnotation` as an `OnlineCanvas`.
     override convenience init(canvas: Canvas) {

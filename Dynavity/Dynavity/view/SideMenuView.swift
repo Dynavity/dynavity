@@ -29,6 +29,15 @@ struct SideMenuView: View {
                 Text(canvasName)
                     .bold()
             }
+            if let onlineCanvas = canvasViewModel.canvas as? OnlineCanvas {
+                SideMenuContentView(label: "Shareable ID") {
+                    Text(onlineCanvas.shareableId)
+                }
+            } else {
+                Button("Publish") {
+                    sideMenuViewModel.publishCanvas(canvasViewModel: canvasViewModel)
+                }
+            }
         }
     }
 
