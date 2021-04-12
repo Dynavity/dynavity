@@ -160,7 +160,8 @@ extension CanvasSelectionView {
             textField.text = "\(canvas.name)"
         }
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
-            guard let updatedName = alert.textFields?.first?.text else {
+            guard let updatedName = alert.textFields?
+                    .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }
 
@@ -205,7 +206,8 @@ extension CanvasSelectionView {
             textField.placeholder = "Enter canvas name here"
         }
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
-            guard let updatedName = alert.textFields?.first?.text else {
+            guard let updatedName = alert.textFields?
+                    .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }
 
@@ -222,8 +224,12 @@ extension CanvasSelectionView {
     }
 
     private func invalidCanvasNameHandler() {
+        let invalidMessage = "Canvas name must be a unique, non-empty string, "
+            + "consisting of less than \(CanvasSelectionViewModel.canvasNameLengthLimit) "
+            + "alphanumeric characters or spaces. "
+            + "Canvas names are not case-sensitive."
         let errorAlert = UIAlertController(title: "Invalid canvas name!",
-                                           message: "Canvas names must be unique and non-empty.",
+                                           message: invalidMessage,
                                            preferredStyle: .alert)
         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.showAlert(alert: errorAlert)
