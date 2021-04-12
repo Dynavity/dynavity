@@ -49,7 +49,6 @@ struct GraphView: View {
                     // navigate to the canvas corresponding to the long pressed node
                     if viewModel.longPressedNode == node,
                        let canvas = canvasSelectionViewModel.getCanvasWithName(name: node.name) {
-                        // TODO: pass in the relevant canvas into MainView
                         NavigationLink(destination: MainView(canvas: canvas)
                                         .navigationBarHidden(true)
                                         .navigationBarBackButtonHidden(true),
