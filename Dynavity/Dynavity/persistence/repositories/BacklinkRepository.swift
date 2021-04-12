@@ -1,4 +1,3 @@
-// swiftlint:disable unavailable_function
 // Certain functions are not implemented as there's no use case for them in our application at the moment
 struct BacklinkRepository: Repository {
     let storageManager: StorageManager = LocalStorageManager()
@@ -7,6 +6,7 @@ struct BacklinkRepository: Repository {
         [try? storageManager.readBacklinkEngine()].compactMap({ $0?.toModel() })
     }
 
+    @discardableResult
     func save(model: BacklinkEngine) -> Bool {
         let dto = BacklinkEngineDTO(model: model)
         do {

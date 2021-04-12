@@ -43,10 +43,12 @@ class GraphMapViewModel: ObservableObject {
 
     func addLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
         backlinkEngine.addLinkBetween(firstItemId, and: secondItemId)
+        backlinkRepo.save(model: backlinkEngine)
     }
 
     func removeLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
         backlinkEngine.removeLinkBetween(firstItemId, and: secondItemId)
+        backlinkRepo.save(model: backlinkEngine)
     }
 }
 
