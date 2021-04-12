@@ -41,7 +41,7 @@ struct GraphView: View {
 
     var nodesView: some View {
         ZStack {
-            ForEach(viewModel.getNodes(), id: \.id) { node in
+            ForEach(viewModel.getNodes(), id: \.self) { node in
                 Group {
                     // Solution referenced from https://stackoverflow.com/a/65401199
                     // If the current node has been long pressed, it means that we want to automatically

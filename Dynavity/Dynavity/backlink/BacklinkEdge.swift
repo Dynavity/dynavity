@@ -15,14 +15,14 @@ extension BacklinkEdge: Hashable {
         return sameSourceAndDest || sameButOpposite
     }
 
-    /// Arbitrarliy hash the node that has a "smaller" UUID first.
+    /// Arbitrarliy hash the node that has a "smaller" name first.
     /// This is so that we conform to Hashable's requirement:
     /// Two instances that are equal must feed the same values to Hasher in hash(into:), in the same order.
     func hash(into hasher: inout Hasher) {
-        let sourceStringUUID = source.id.uuidString
-        let destinationStringUUID = destination.id.uuidString
+        let sourceName = source.name
+        let destinationName = destination.name
 
-        if sourceStringUUID <= destinationStringUUID {
+        if sourceName <= destinationName {
             hasher.combine(source)
             hasher.combine(destination)
         } else {

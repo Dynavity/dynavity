@@ -12,11 +12,11 @@ struct BacklinkEngineDTO: Mappable {
 
         for nodeDTO in backlinkNodes {
             let node = nodeDTO.toModel()
-            engine.addNode(id: node.id, name: node.name)
+            engine.addNode(name: node.name)
         }
         for edgeDTO in backlinkEdges {
             let edge = edgeDTO.toModel()
-            engine.addLinkBetween(edge.source.id, and: edge.destination.id)
+            engine.addLinkBetween(edge.source.name, and: edge.destination.name)
         }
 
         return engine

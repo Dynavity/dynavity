@@ -34,7 +34,7 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
     }
 
     mutating func moveBacklinkNode(_ backlinkNode: BacklinkNode, to updatedPos: CGPoint) {
-        guard let originalNode = getNodeWithId(id: backlinkNode.id) else {
+        guard let originalNode = getNodeWithName(name: backlinkNode.name) else {
             return
         }
 
@@ -49,7 +49,7 @@ extension Graph: BacklinkGraph where T == BacklinkNode {
         return Edge(source: firstNode, destination: secondNode)
     }
 
-    private func getNodeWithId(id: UUID?) -> Node<BacklinkNode>? {
-        self.nodes.first(where: { $0.label.id == id })
+    private func getNodeWithName(name: String) -> Node<BacklinkNode>? {
+        self.nodes.first(where: { $0.label.name == name })
     }
 }

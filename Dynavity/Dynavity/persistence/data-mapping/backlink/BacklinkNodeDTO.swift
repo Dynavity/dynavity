@@ -2,18 +2,16 @@ import CoreGraphics
 import Foundation
 
 struct BacklinkNodeDTO: Mappable {
-    let id: UUID
     let name: String
     let position: CGPoint
 
     init(model: BacklinkNode) {
-        self.id = model.id
         self.name = model.name
         self.position = model.position
     }
 
     func toModel() -> BacklinkNode {
-        BacklinkNode(id: id, name: name, position: position)
+        BacklinkNode(name: name, position: position)
     }
 }
 
