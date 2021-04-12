@@ -17,7 +17,6 @@ class CanvasViewModel: ObservableObject {
     }
 
     private let canvasRepo = CanvasRepository()
-    private let annotationCanvasRepo = AnnotationCanvasRepository()
 
     // We are not interested in the return value of each publisher,
     // that's why the values are mapped away
@@ -145,10 +144,10 @@ class CanvasViewModel: ObservableObject {
 // MARK: Local storage autosaving
 extension CanvasViewModel {
     func saveCanvas() {
-        self.canvasRepo.save(model: self.canvas)
-        let identifiedAnnotationCanvas = IdentifiedAnnotationCanvas(canvasName: self.canvas.name,
-                                                                    annotationCanvas: self.annotationCanvas)
-        self.annotationCanvasRepo.save(model: identifiedAnnotationCanvas)
+        let annotationData = self.annotationCanvas.drawing.dataRepresentation()
+        let canvasWithAnnotation = CanvasWithAnnotation(canvas: self.canvas,
+                                                        annotationCanvas: annotationData)
+        self.canvasRepo.save(model: canvasWithAnnotation)
     }
 }
 

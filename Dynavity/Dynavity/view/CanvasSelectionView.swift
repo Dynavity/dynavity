@@ -1,4 +1,5 @@
 import SwiftUI
+import PencilKit
 
 struct CanvasSelectionView: View {
     private enum SelectionMode {
@@ -42,24 +43,26 @@ struct CanvasSelectionView: View {
 
     private var canvasesGrid: some View {
         LazyVGrid(columns: columns, spacing: 200) {
-            ForEach(viewModel.getFilteredCanvases(), id: \.self) { canvas in
+            ForEach(viewModel.getFilteredCanvases(), id: \.self) { canvasWithAnnotation in
                 if isEditing {
-                    CanvasThumbnailView(canvasName: canvas.name,
-                                        isSelected: viewModel.isCanvasSelected(canvas))
+                    CanvasThumbnailView(canvasName: canvasWithAnnotation.canvas.name,
+                                        isSelected: viewModel.isCanvasSelected(canvasWithAnnotation))
                         .onTapGesture {
-                            viewModel.toggleSelectedCanvas(canvas)
+                            viewModel.toggleSelectedCanvas(canvasWithAnnotation)
                         }
                 } else {
-                    NavigationLink(destination: MainView(canvas: canvas,
-                                                         annotationCanvas: getCorrespondingAnnotation(canvas))
+                    let drawingFromData = try? PKDrawing(data: canvasWithAnnotation.annotationCanvas)
+                    let annotationCanvas = AnnotationCanvas(drawing: drawingFromData ?? PKDrawing())
+                    NavigationLink(destination: MainView(canvas: canvasWithAnnotation.canvas,
+                                                         annotationCanvas: annotationCanvas)
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
-                        CanvasThumbnailView(canvasName: canvas.name,
-                                            isSelected: viewModel.isCanvasSelected(canvas))
+                        CanvasThumbnailView(canvasName: canvasWithAnnotation.canvas.name,
+                                            isSelected: viewModel.isCanvasSelected(canvasWithAnnotation))
 
                     }
                     .contextMenu {
-                        getContextMenuFor(canvas: canvas)
+                        getContextMenuFor(canvas: canvasWithAnnotation)
                     }
                 }
             }
@@ -67,7 +70,7 @@ struct CanvasSelectionView: View {
         .padding(.horizontal)
     }
 
-    private func getContextMenuFor(canvas: Canvas) -> some View {
+    private func getContextMenuFor(canvas: CanvasWithAnnotation) -> some View {
         Group {
             Button {
                 onRenameButtonTap(canvas: canvas)
@@ -151,7 +154,7 @@ extension CanvasSelectionView {
 
 // MAKR: Alert handlers
 extension CanvasSelectionView {
-    private func onRenameButtonTap(canvas: Canvas) {
+    private func onRenameButtonTap(canvas: CanvasWithAnnotation) {
         let alert = UIAlertController(title: "Rename canvas", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = "\(canvas.name)"
@@ -173,7 +176,7 @@ extension CanvasSelectionView {
         self.showAlert(alert: alert)
     }
 
-    private func onDeleteButtonTap(canvas: Canvas) {
+    private func onDeleteButtonTap(canvas: CanvasWithAnnotation) {
         let alert = UIAlertController(title: "Delete canvas",
                                       message: "This canvas will be deleted. This action cannot be undone.",
                                       preferredStyle: .alert)
@@ -232,20 +235,5 @@ extension CanvasSelectionView {
                                            preferredStyle: .alert)
         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.showAlert(alert: errorAlert)
-    }
-}
-
-// MARK: Functions for AnnotationCanvas
-extension CanvasSelectionView {
-    func getCorrespondingAnnotation(_ canvas: Canvas) -> AnnotationCanvas {
-        let annotationCanvases = viewModel.getAnnotationCanvases()
-        guard let annotationCanvas = annotationCanvases
-                .first(where: { $0.canvasName == canvas.name }) else {
-            if !annotationCanvases.isEmpty {
-                unableToLoadAnnotationsHandler()
-            }
-            return AnnotationCanvas()
-        }
-        return annotationCanvas.annotationCanvas
     }
 }

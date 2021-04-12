@@ -6,15 +6,16 @@ struct CanvasDTO: Mappable {
     // Stored separately as umlCanvasElements require ID
     let umlCanvasElements: [TypeWrappedUmlElementDTO]
     let umlConnectors: [UmlConnectorDTO]
+    let annotationCanvas: Data
     let name: String
 
-    init(id: UUID, model: Canvas) {
+    init(id: UUID, model: CanvasWithAnnotation) {
         self.id = id
         self.name = model.name
-        self.canvasElements = model.canvasElements
+        self.canvasElements = model.canvas.canvasElements
             .filter({ !($0 is UmlElementProtocol) })
             .map({ TypeWrappedCanvasElementDTO(model: $0) })
-        self.umlCanvasElements = model.canvasElements
+        self.umlCanvasElements = model.canvas.canvasElements
             .filter({ $0 is UmlElementProtocol })
             .compactMap({
                 guard let umlElement = $0 as? UmlElementProtocol else {
@@ -24,14 +25,15 @@ struct CanvasDTO: Mappable {
                 let identifiedElement = IdentifiedUmlElementWrapper(id: id, umlElement: umlElement)
                 return TypeWrappedUmlElementDTO(model: identifiedElement)
             })
-        self.umlConnectors = model.umlConnectors.map({ UmlConnectorDTO(model: $0) })
+        self.umlConnectors = model.canvas.umlConnectors.map({ UmlConnectorDTO(model: $0) })
+        self.annotationCanvas = model.annotationCanvas
     }
 
-    init(model: Canvas) {
+    init(model: CanvasWithAnnotation) {
         self.init(id: UUID(), model: model)
     }
 
-    func toModel() -> Canvas {
+    func toModel() -> CanvasWithAnnotation {
         let model = Canvas()
         model.name = name
         for ele in canvasElements {
@@ -49,7 +51,7 @@ struct CanvasDTO: Mappable {
             let connectorModel = connector.toModel(umlElements: identifiedUmlElements)
             model.addUmlConnector(connectorModel)
         }
-        return model
+        return CanvasWithAnnotation(canvas: model, annotationCanvas: annotationCanvas)
     }
 }
 

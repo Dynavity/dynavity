@@ -87,47 +87,6 @@ extension LocalStorageManager: StorageManager {
     }
 }
 
-// MARK: Storage for annotations
-extension LocalStorageManager {
-    func readAllAnnotationCanvases() throws -> [AnnotationCanvasDTO] {
-        let annotationCanvasURLs = try getAllURLsInDocumentDirectory(with: LocalStorageManager.canvasFileExt)
-        return annotationCanvasURLs.compactMap({ try? readAnnotationCanvasFromFile(withURL: $0) })
-    }
-
-    func saveAnnotationCanvas(annotationCanvas: AnnotationCanvasDTO) throws {
-        if let encodedData = try? encoder.encode(annotationCanvas) {
-            let fileURL = getFileURL(from: annotationCanvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
-            do {
-                try encodedData.write(to: fileURL, options: .atomic)
-            } catch {
-                throw IOError.writeError("Failed to save canvas: \(error.localizedDescription)")
-            }
-        }
-    }
-
-    func deleteAnnotationCanvas(annotationCanvas: AnnotationCanvasDTO) throws {
-        let fileURL = getFileURL(from: annotationCanvas.id.uuidString, ext: LocalStorageManager.canvasFileExt)
-        do {
-            try fileManager.removeItem(at: fileURL)
-        } catch {
-            throw IOError.writeError("Failed to delete canvas: \(error.localizedDescription)")
-        }
-    }
-
-    private func readAnnotationCanvasFromFile(withURL url: URL) throws -> AnnotationCanvasDTO? {
-        guard let data = readFile(withURL: url) else {
-            return nil
-        }
-
-        do {
-            let annotationCanvas = try decoder.decode(AnnotationCanvasDTO.self, from: data)
-            return annotationCanvas
-        } catch {
-            throw IOError.readError("Attempted to read and decode a corrupted data file: \(url.path)")
-        }
-    }
-}
-
 private enum IOError: Error {
     case readError(String)
     case writeError(String)
