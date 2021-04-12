@@ -51,6 +51,13 @@ class GraphMapViewModel: ObservableObject {
         backlinkRepo.save(model: backlinkEngine)
     }
 
+    func deleteNodes(names: [String]) {
+        for name in names {
+            backlinkEngine.deleteNode(name: name)
+        }
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
     func addLinkBetween(_ firstItemName: String, and secondItemName: String) {
         backlinkEngine.addLinkBetween(firstItemName, and: secondItemName)
         backlinkRepo.save(model: backlinkEngine)

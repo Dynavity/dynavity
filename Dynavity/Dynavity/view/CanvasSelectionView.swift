@@ -190,6 +190,7 @@ extension CanvasSelectionView {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
             viewModel.deleteSelectedCanvases()
+            graphMapViewModel.deleteNodes(names: viewModel.selectedCanvases.map({ $0.name }))
             toggleEditMode()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
