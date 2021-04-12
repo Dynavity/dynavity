@@ -4,6 +4,7 @@ struct GraphView: View {
     private static let zoomScaleRange: ClosedRange<CGFloat> = 0.05...2.5
 
     @EnvironmentObject var viewModel: GraphMapViewModel
+    @ObservedObject var canvasSelectionViewModel: CanvasSelectionViewModel
 
     // For viewport dragging gesture
     @State var originOffset: CGPoint = .zero
@@ -46,9 +47,10 @@ struct GraphView: View {
                     // Solution referenced from https://stackoverflow.com/a/65401199
                     // If the current node has been long pressed, it means that we want to automatically
                     // navigate to the canvas corresponding to the long pressed node
-                    if viewModel.longPressedNode == node {
+                    if viewModel.longPressedNode == node,
+                       let canvas = canvasSelectionViewModel.getCanvasWithName(name: node.name) {
                         // TODO: pass in the relevant canvas into MainView
-                        NavigationLink(destination: MainView()
+                        NavigationLink(destination: MainView(canvas: canvas)
                                         .navigationBarHidden(true)
                                         .navigationBarBackButtonHidden(true),
                                        isActive: .constant(true)) {
@@ -131,7 +133,7 @@ extension GraphView {
 
 struct GraphView_Previews: PreviewProvider {
     static var previews: some View {
-        GraphView(searchQuery: .constant("Hello"))
+        GraphView(canvasSelectionViewModel: CanvasSelectionViewModel(), searchQuery: .constant("Hello"))
             .environmentObject(GraphMapViewModel())
     }
 }

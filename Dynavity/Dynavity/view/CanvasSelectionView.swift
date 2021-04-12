@@ -7,7 +7,7 @@ struct CanvasSelectionView: View {
     }
 
     @StateObject private var viewModel = CanvasSelectionViewModel()
-    @EnvironmentObject var graphMapViewModel: GraphMapViewModel
+    @StateObject var graphMapViewModel = GraphMapViewModel()
     @State private var isEditing = false
     @State private var selectionMode: SelectionMode = .grid
 
@@ -33,12 +33,13 @@ struct CanvasSelectionView: View {
                         canvasesGrid
                     }
                 case .graph:
-                    GraphView(searchQuery: $viewModel.searchQuery)
+                    GraphView(canvasSelectionViewModel: viewModel, searchQuery: $viewModel.searchQuery)
                 }
             }
             .navigationBarHidden(true)
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .environmentObject(graphMapViewModel)
     }
 
     private var canvasesGrid: some View {

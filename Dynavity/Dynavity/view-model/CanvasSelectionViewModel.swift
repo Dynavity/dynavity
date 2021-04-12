@@ -60,6 +60,10 @@ class CanvasSelectionViewModel: ObservableObject {
         !name.isEmpty && isCanvasNameUnique(name: name)
     }
 
+    func getCanvasWithName(name: String) -> Canvas? {
+        canvasRepo.queryAll().first(where: { $0.name == name })
+    }
+
     // Case-insensitive checking
     private func isCanvasNameUnique(name: String) -> Bool {
         !canvasRepo.queryAll().map({ $0.name.lowercased() }).contains(name.lowercased())

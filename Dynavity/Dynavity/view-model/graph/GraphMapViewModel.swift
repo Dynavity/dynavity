@@ -2,6 +2,7 @@ import CoreGraphics
 import SwiftUI
 import Foundation
 
+// TODO: rename this to graphviewmodel
 class GraphMapViewModel: ObservableObject {
     private let backlinkRepo = BacklinkRepository()
 
