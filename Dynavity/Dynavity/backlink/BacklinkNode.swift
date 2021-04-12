@@ -1,35 +1,31 @@
 import CoreGraphics
 import Foundation
 
-struct BacklinkNode: Identifiable {
-    let id: UUID
-    let name: String
+struct BacklinkNode {
+    var name: String
     var position: CGPoint
 
-    init(id: UUID, name: String, position: CGPoint) {
-        self.id = id
+    init(name: String, position: CGPoint) {
         self.name = name
         self.position = position
     }
 
-    init(name: String, position: CGPoint) {
-        self.init(id: UUID(), name: name, position: position)
+    func renaming(to newName: String) -> BacklinkNode {
+        BacklinkNode(name: newName, position: self.position)
     }
 
     func moving(to updatedPos: CGPoint) -> BacklinkNode {
-        BacklinkNode(id: self.id, name: self.name, position: updatedPos)
+        BacklinkNode(name: self.name, position: updatedPos)
     }
 }
 
 extension BacklinkNode: Hashable {
-    // Equality based solely on id
+    // Equality based solely on name
     static func == (lhs: BacklinkNode, rhs: BacklinkNode) -> Bool {
-        lhs.id == rhs.id
+        lhs.name == rhs.name
     }
 
-    // TODO: check if there's a better way of doing this since this can cause issues with
-    // adjacency list implementation of graph
     func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
+        hasher.combine(self.name)
     }
 }

@@ -2,11 +2,10 @@ import CoreGraphics
 import SwiftUI
 import Foundation
 
-// TODO: remove this once canvases are fully integrated
-let testId = UUID()
+class GraphViewModel: ObservableObject {
+    private let backlinkRepo = BacklinkRepository()
 
-class GraphMapViewModel: ObservableObject {
-    @Published var backlinkEngine = BacklinkEngine()
+    @Published var backlinkEngine: BacklinkEngine
 
     private var draggedNodeOriginalPosition: CGPoint?
     @Published var draggedNode: BacklinkNode?
@@ -14,7 +13,8 @@ class GraphMapViewModel: ObservableObject {
     @Published var longPressedNode: BacklinkNode?
 
     init() {
-        initialiseBacklinkEngine()
+        let backlinkEngine = backlinkRepo.queryAll().first ?? BacklinkEngine()
+        self.backlinkEngine = backlinkEngine
     }
 
     func getNodes() -> [BacklinkNode] {
@@ -25,45 +25,53 @@ class GraphMapViewModel: ObservableObject {
         backlinkEngine.edges
     }
 
-    // TODO: replace the implementation of this function: load from file and rebuild the links
-    private func initialiseBacklinkEngine() {
-        backlinkEngine.addNode(id: testId, name: "TEST")
-
-        let ids: [UUID] = (0..<20).map({ _ in UUID() })
-        for id in ids {
-            backlinkEngine.addNode(id: id, name: id.uuidString)
-        }
-
-        for i in 0..<ids.endIndex - 1 {
-            backlinkEngine.addLinkBetween(testId, and: ids[i])
-            backlinkEngine.addLinkBetween(ids[i], and: ids[i + 1])
-        }
+    func getLinkedNodes(for name: String) -> [BacklinkNode] {
+        backlinkEngine.getBacklinks(for: name).sorted(by: { $0.name < $1.name })
     }
 
-    func getLinkedNodes(for id: UUID) -> [BacklinkNode] {
-        backlinkEngine.getBacklinks(for: id).sorted(by: { $0.name < $1.name })
-    }
-
-    func getUnlinkedNodes(for id: UUID) -> [BacklinkNode] {
-        let unlinkedNodes = Set(self.getNodes()).subtracting(self.getLinkedNodes(for: id))
-
+    func getUnlinkedNodes(for name: String) -> [BacklinkNode] {
+        let unlinkedNodes = Set(self.getNodes()).subtracting(self.getLinkedNodes(for: name))
         return Array(unlinkedNodes)
             // Exclude the input node
-            .filter({ $0.id != id })
+            .filter({ $0.name != name })
             .sorted(by: { $0.name < $1.name })
     }
 
-    func addLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
-        backlinkEngine.addLinkBetween(firstItemId, and: secondItemId)
+    func addNode(name: String) {
+        backlinkEngine.addNode(name: name)
+        backlinkRepo.save(model: backlinkEngine)
     }
 
-    func removeLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
-        backlinkEngine.removeLinkBetween(firstItemId, and: secondItemId)
+    func deleteNode(name: String) {
+        backlinkEngine.deleteNode(name: name)
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
+    func renameNode(oldName: String, newName: String) {
+        backlinkEngine.renameNode(oldName: oldName, newName: newName)
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
+    func deleteNodes(names: [String]) {
+        for name in names {
+            backlinkEngine.deleteNode(name: name)
+        }
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
+    func addLinkBetween(_ firstItemName: String, and secondItemName: String) {
+        backlinkEngine.addLinkBetween(firstItemName, and: secondItemName)
+        backlinkRepo.save(model: backlinkEngine)
+    }
+
+    func removeLinkBetween(_ firstItemName: String, and secondItemName: String) {
+        backlinkEngine.removeLinkBetween(firstItemName, and: secondItemName)
+        backlinkRepo.save(model: backlinkEngine)
     }
 }
 
 // MARK: Node Dragging Handling
-extension GraphMapViewModel {
+extension GraphViewModel {
     func hitTest(tapPos: CGPoint, viewportSize: CGSize,
                  viewportZoomScale: CGFloat, viewportOriginOffset: CGPoint) {
         for node in self.getNodes() {
@@ -88,6 +96,7 @@ extension GraphMapViewModel {
         processNodeTranslation(translation: value.translation, viewportZoomScale: viewportZoomScale)
         draggedNodeOriginalPosition = nil
         draggedNode = nil
+        backlinkRepo.save(model: backlinkEngine)
     }
 
     private func processNodeTranslation(translation: CGSize, viewportZoomScale: CGFloat) {

@@ -5,7 +5,9 @@ import Foundation
 /// - Creation of backlinks between items
 /// - Retrieval of all backlinks for a particular item
 ///
-/// Items need not be homogeneous. The only requirement is that the items are wrapped in a `BacklinkNode`.
+/// Items need not be homogeneous.
+/// The only requirement is that the items are wrapped in a `BacklinkNode`
+/// and that the nodes are uniquely identified by their names.
 struct BacklinkEngine {
     private var graph: BacklinkGraph = Graph<BacklinkNode>(isDirected: false)
 
@@ -25,32 +27,53 @@ struct BacklinkEngine {
         return output
     }
 
-    mutating func addNode(id: UUID, name: String) {
-        // TODO: figure out a way to position new nodes
-        let randomPoint = CGPoint(x: Int.random(in: -300...300),
-                                  y: Int.random(in: -300...300))
-        let node = BacklinkNode(id: id, name: name, position: randomPoint)
+    mutating func addNode(name: String) {
+        let randomPoint = CGPoint(x: Int.random(in: -500...500),
+                                  y: Int.random(in: -500...500))
+        let node = BacklinkNode(name: name, position: randomPoint)
         graph.addNode(node)
     }
 
-    mutating func addLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
-        guard let firstNode = getBacklinkNodeWithId(id: firstItemId),
-              let secondNode = getBacklinkNodeWithId(id: secondItemId) else {
+    mutating func addNode(node: BacklinkNode) {
+        graph.addNode(node)
+    }
+
+    mutating func deleteNode(name: String) {
+        guard let node = getBacklinkNodeWithName(name: name) else {
+            return
+        }
+        graph.deleteNode(node)
+    }
+
+    mutating func renameNode(oldName: String, newName: String) {
+        guard let node = getBacklinkNodeWithName(name: oldName) else {
+            return
+        }
+        graph.renameNode(node, newName: newName)
+    }
+
+    mutating func addEdge(edge: BacklinkEdge) {
+        graph.addLinkBetween(edge.source, and: edge.destination)
+    }
+
+    mutating func addLinkBetween(_ firstItemName: String, and secondItemName: String) {
+        guard let firstNode = getBacklinkNodeWithName(name: firstItemName),
+              let secondNode = getBacklinkNodeWithName(name: secondItemName) else {
             return
         }
         graph.addLinkBetween(firstNode, and: secondNode)
     }
 
-    mutating func removeLinkBetween(_ firstItemId: UUID, and secondItemId: UUID) {
-        guard let firstNode = getBacklinkNodeWithId(id: firstItemId),
-              let secondNode = getBacklinkNodeWithId(id: secondItemId) else {
+    mutating func removeLinkBetween(_ firstItemName: String, and secondItemName: String) {
+        guard let firstNode = getBacklinkNodeWithName(name: firstItemName),
+              let secondNode = getBacklinkNodeWithName(name: secondItemName) else {
             return
         }
         graph.removeLinkBetween(firstNode, and: secondNode)
     }
 
-    func getBacklinks(for id: UUID) -> [BacklinkNode] {
-        guard let node = getBacklinkNodeWithId(id: id) else {
+    func getBacklinks(for name: String) -> [BacklinkNode] {
+        guard let node = getBacklinkNodeWithName(name: name) else {
             return []
         }
         return graph.getBacklinks(for: node)
@@ -60,7 +83,7 @@ struct BacklinkEngine {
         graph.moveBacklinkNode(backlinkNode, to: updatedPos)
     }
 
-    private func getBacklinkNodeWithId(id: UUID?) -> BacklinkNode? {
-        self.nodes.first(where: { $0.id == id })
+    private func getBacklinkNodeWithName(name: String) -> BacklinkNode? {
+        self.nodes.first(where: { $0.name == name })
     }
 }
