@@ -1,21 +1,19 @@
 import Foundation
 
 struct OnlineCanvasDTO: Mappable {
+    let id: UUID
     let ownerId: String
     let canvas: CanvasDTO
 
-    init(ownerId: String, canvas: CanvasDTO) {
-        self.ownerId = ownerId
-        self.canvas = canvas
-    }
-
     init(model: OnlineCanvas) {
+        self.id = model.id
         self.ownerId = model.ownerId
-        self.canvas = CanvasDTO(model: CanvasWithAnnotation(canvas: model, annotationCanvas: AnnotationCanvas()))
+        self.canvas = CanvasDTO(id: model.id,
+                                model: CanvasWithAnnotation(canvas: model, annotationCanvas: AnnotationCanvas()))
     }
 
     func toModel() -> OnlineCanvas {
-        OnlineCanvas(ownerId: ownerId, canvas: canvas.toModel().canvas)
+        OnlineCanvas(id: id, ownerId: ownerId, canvas: canvas.toModel().canvas)
     }
 }
 

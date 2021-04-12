@@ -22,11 +22,15 @@ struct CloudStorageManager {
                     // if something is wrong, 'success' with empty value
                     return callback(.success([]))
                 }
-                // keys are unimportant here since we want all canvases anyway
-                let dto = value.values.compactMap {
-                    try? decoder.decode(CanvasDTO.self, from: $0)
+                let canvases = value.keys.compactMap { key -> OnlineCanvasDTO? in
+                    guard let canvasValue = snapshot.childSnapshot(forPath: key).value else {
+                        return nil
+                    }
+                    print(canvasValue)
+                    // TODO: why doesn't this decode work?
+                    return try? decoder.decode(OnlineCanvasDTO.self, from: canvasValue)
                 }
-                let canvases = dto.map { OnlineCanvasDTO(ownerId: userId, canvas: $0) }
+                print(canvases)
                 callback(.success(canvases))
             }
         }
@@ -45,11 +49,10 @@ struct CloudStorageManager {
                         let db = database.reference(withPath: "\(ref.userId)/self/\(ref.canvasId)")
                         db.getData { _, snapshot in
                             guard let value = snapshot.value,
-                                  let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
+                                  let loaded = try? decoder.decode(OnlineCanvasDTO.self, from: value) else {
                                 return
                             }
-                            let canvas = OnlineCanvasDTO(ownerId: ref.userId, canvas: loaded)
-                            callback(.success(canvas))
+                            callback(.success(loaded))
                         }
                     }
                 }
@@ -99,7 +102,7 @@ struct CloudStorageManager {
     }
 }
 
-// MARK: Structs to help with decoding
+// MARK: Struct to help with decoding
 struct ExternalCanvasReference: Codable, Equatable {
     let userId: String
     let canvasId: String
@@ -116,9 +119,6 @@ class FutureSynchronizer<T> {
     }
 
     func blockForValue() -> T? {
-        guard value == nil else {
-            return value
-        }
         let block = DispatchSemaphore(value: 0)
         cancel = publisher.sink { value in
             self.value = value
