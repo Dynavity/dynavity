@@ -152,6 +152,16 @@ extension CanvasViewModel {
 
 // MARK: Firebase synchronization
 extension CanvasViewModel {
+    func publishCanvas() {
+        guard !(canvas is OnlineCanvas) else {
+            // if already published, ignore
+            return
+        }
+        canvasRepo.delete(model: CanvasWithAnnotation(canvas: canvas, annotationCanvas: AnnotationCanvas()))
+        canvas = OnlineCanvas(canvas: canvas)
+        canvasRepo.save(model: CanvasWithAnnotation(canvas: canvas, annotationCanvas: AnnotationCanvas()))
+    }
+    
     private var db: DatabaseReference {
         Database.database().reference(withPath: canvas.name)
     }
