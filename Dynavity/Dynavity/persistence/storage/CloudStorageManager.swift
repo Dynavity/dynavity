@@ -6,12 +6,8 @@ import Combine
 struct CloudStorageManager: OnlineStorageManager {
     let encoder = FirebaseEncoder()
     let decoder = FirebaseDecoder()
-    let userId = OnlineCanvas.myUserId
-    var database: Database
-
-    init() {
-        database = Database.database()
-    }
+    let userId = OnlineCanvasDTO.myUserId
+    var database = Database.database()
 
     func readAll() throws -> [OnlineCanvasDTO] {
         // own cloud canvases

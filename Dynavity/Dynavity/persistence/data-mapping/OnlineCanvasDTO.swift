@@ -1,6 +1,8 @@
 import Foundation
 
 struct OnlineCanvasDTO: Mappable {
+    static let myUserId = OnlineCanvas.myUserId
+
     let ownerId: String
     let canvas: CanvasDTO
 
