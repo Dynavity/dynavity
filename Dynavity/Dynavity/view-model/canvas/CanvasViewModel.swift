@@ -116,7 +116,7 @@ class CanvasViewModel: ObservableObject {
         self.canvas = canvas
         self.annotationCanvas = annotationCanvas
         self.canvasSize = canvasSize
-        self.canvasMode = .pen
+        self.canvasMode = .selection
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
