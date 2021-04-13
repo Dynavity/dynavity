@@ -10,9 +10,7 @@ struct CanvasRepository: Repository {
         let localCanvasDTOs = (try? localStorageManager.readAll()) ?? []
         let localCanvases = localCanvasDTOs.map { $0.toModel() }
         let cloudCanvasDTOs = (try? cloudStorageManager.readAll()) ?? []
-        let cloudCanvases = cloudCanvasDTOs.map {
-            Canvas(canvas: $0.toModel())
-        }
+        let cloudCanvases = cloudCanvasDTOs.map { $0.toModel() }
         return (localCanvases + cloudCanvases)
             .sorted(by: { $0.name.lowercased() < $1.name.lowercased() })
     }
