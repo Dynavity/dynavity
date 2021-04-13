@@ -3,7 +3,7 @@ import FirebaseDatabase
 import CodableFirebase
 import Combine
 
-struct CloudStorageManager {
+struct CloudStorageManager: OnlineStorageManager {
     let encoder = FirebaseEncoder()
     let decoder = FirebaseDecoder()
     let userId = OnlineCanvas.myUserId
