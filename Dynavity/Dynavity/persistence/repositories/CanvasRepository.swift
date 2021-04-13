@@ -49,22 +49,32 @@ struct CanvasRepository: Repository {
 
     @discardableResult
     func update(oldModel: CanvasWithAnnotation, newModel: CanvasWithAnnotation) -> Bool {
-        let id = getExistingId(for: oldModel) ?? UUID()
+        delete(model: oldModel) && save(model: newModel)
+    }
+
+    @discardableResult
+    func delete(model: CanvasWithAnnotation) -> Bool {
+        if let onlineCanvas = model.canvas as? OnlineCanvas {
+            return deleteCloud(model: onlineCanvas)
+        } else {
+            return deleteLocal(model: model)
+        }
+    }
+
+    func deleteLocal(model: CanvasWithAnnotation) -> Bool {
+        let id = getExistingId(for: model) ?? UUID()
+        let canvasDTO = CanvasDTO(id: id, model: model)
         do {
-            let newCanvasDTO = CanvasDTO(id: id, model: newModel)
-            try localStorageManager.save(model: newCanvasDTO)
+            try localStorageManager.delete(model: canvasDTO)
             return true
         } catch {
             return false
         }
     }
 
-    @discardableResult
-    func delete(model: CanvasWithAnnotation) -> Bool {
-        let id = getExistingId(for: model) ?? UUID()
-        let canvasDTO = CanvasDTO(id: id, model: model)
+    func deleteCloud(model: OnlineCanvas) -> Bool {
         do {
-            try localStorageManager.delete(model: canvasDTO)
+            try cloudStorageManager.delete(model: OnlineCanvasDTO(model: model))
             return true
         } catch {
             return false
