@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 
 class MarkupElementViewModel: ObservableObject {
-    private static let debounceDelay = 1.5
+    private static let debounceDelay = 0.5
 
     @Published var markupElement: MarkupElement
     @Published var rawHtml: String = ""
