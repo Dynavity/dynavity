@@ -98,7 +98,7 @@ extension LocalStorageManager {
 
     func saveBacklinkEngine(backlinkEngine: BacklinkEngineDTO) throws {
         if let encodedData = try? encoder.encode(backlinkEngine) {
-            let url = getFileURL(name: LocalStorageManager.backlinkFileExt,
+            let url = getFileURL(name: LocalStorageManager.backlinkFileName,
                                  ext: LocalStorageManager.backlinkFileExt)
             do {
                 try encodedData.write(to: url, options: .atomic)
