@@ -35,7 +35,7 @@ struct SideMenuView: View {
                 }
             } else {
                 Button("Publish") {
-                    sideMenuViewModel.publishCanvas(canvasViewModel: canvasViewModel)
+                    canvasViewModel.publishCanvas()
                 }
             }
         }
