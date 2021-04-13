@@ -58,6 +58,6 @@ extension CanvasViewModel {
 // MARK: AnnotationCanvas functions
 extension CanvasViewModel {
     func getAnnotations() -> PKDrawing {
-        annotationCanvas.drawing
+        canvas.annotationCanvas.drawing
     }
 }

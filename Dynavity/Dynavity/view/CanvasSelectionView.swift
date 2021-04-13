@@ -45,24 +45,23 @@ struct CanvasSelectionView: View {
 
     private var canvasesGrid: some View {
         LazyVGrid(columns: columns, spacing: 200) {
-            ForEach(viewModel.getFilteredCanvases(), id: \.self) { canvasWithAnnotation in
+            ForEach(viewModel.getFilteredCanvases(), id: \.self) { canvas in
                 if isEditing {
-                    CanvasThumbnailView(canvasName: canvasWithAnnotation.canvas.name,
-                                        isSelected: viewModel.isCanvasSelected(canvasWithAnnotation))
+                    CanvasThumbnailView(canvasName: canvas.name,
+                                        isSelected: viewModel.isCanvasSelected(canvas))
                         .onTapGesture {
-                            viewModel.toggleSelectedCanvas(canvasWithAnnotation)
+                            viewModel.toggleSelectedCanvas(canvas)
                         }
                 } else {
-                    NavigationLink(destination: MainView(canvas: canvasWithAnnotation.canvas,
-                                                         annotationCanvas: canvasWithAnnotation.annotationCanvas)
+                    NavigationLink(destination: MainView(canvas: canvas)
                                     .navigationBarHidden(true)
                                     .navigationBarBackButtonHidden(true)) {
-                        CanvasThumbnailView(canvasName: canvasWithAnnotation.canvas.name,
-                                            isSelected: viewModel.isCanvasSelected(canvasWithAnnotation))
+                        CanvasThumbnailView(canvasName: canvas.name,
+                                            isSelected: viewModel.isCanvasSelected(canvas))
 
                     }
                     .contextMenu {
-                        getContextMenuFor(canvas: canvasWithAnnotation)
+                        getContextMenuFor(canvas: canvas)
                     }
                 }
             }
@@ -70,7 +69,7 @@ struct CanvasSelectionView: View {
         .padding(.horizontal)
     }
 
-    private func getContextMenuFor(canvas: CanvasWithAnnotation) -> some View {
+    private func getContextMenuFor(canvas: Canvas) -> some View {
         Group {
             Button {
                 onRenameButtonTap(canvas: canvas)
@@ -153,7 +152,7 @@ extension CanvasSelectionView {
 
 // MAKR: Alert handlers
 extension CanvasSelectionView {
-    private func onRenameButtonTap(canvas: CanvasWithAnnotation) {
+    private func onRenameButtonTap(canvas: Canvas) {
         let alert = UIAlertController(title: "Rename canvas", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.text = "\(canvas.name)"
@@ -177,7 +176,7 @@ extension CanvasSelectionView {
         self.showAlert(alert: alert)
     }
 
-    private func onDeleteButtonTap(canvas: CanvasWithAnnotation) {
+    private func onDeleteButtonTap(canvas: Canvas) {
         let alert = UIAlertController(title: "Delete canvas",
                                       message: "This canvas will be deleted. This action cannot be undone.",
                                       preferredStyle: .alert)

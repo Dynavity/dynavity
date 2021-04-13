@@ -33,7 +33,6 @@ class CanvasViewModel: ObservableObject {
 
     @Published var canvas: Canvas
     private var anyCancellable: AnyCancellable?
-    @Published var annotationCanvas: AnnotationCanvas
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
     @Published var canvasTopLeftOffset: CGPoint = .zero
@@ -101,9 +100,8 @@ class CanvasViewModel: ObservableObject {
         canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
-    init(canvas: Canvas, annotationCanvas: AnnotationCanvas, canvasSize: CGFloat) {
+    init(canvas: Canvas, canvasSize: CGFloat) {
         self.canvas = canvas
-        self.annotationCanvas = annotationCanvas
         self.canvasSize = canvasSize
         self.canvasMode = .pen
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
@@ -111,13 +109,13 @@ class CanvasViewModel: ObservableObject {
         }
     }
 
-    convenience init(canvas: Canvas, annotationCanvas: AnnotationCanvas) {
+    convenience init(canvas: Canvas) {
         // Arbitrarily large value for the "infinite" canvas.
-        self.init(canvas: canvas, annotationCanvas: annotationCanvas, canvasSize: 500_000)
+        self.init(canvas: canvas, canvasSize: 500_000)
     }
 
     convenience init() {
-        self.init(canvas: Canvas(), annotationCanvas: AnnotationCanvas())
+        self.init(canvas: Canvas())
     }
 
     var canvasElements: [CanvasElementProtocol] {
@@ -132,9 +130,7 @@ class CanvasViewModel: ObservableObject {
 // MARK: Local storage autosaving
 extension CanvasViewModel {
     func saveCanvas() {
-        let canvasWithAnnotation = CanvasWithAnnotation(canvas: self.canvas,
-                                                        annotationCanvas: self.annotationCanvas)
-        self.canvasRepo.save(model: canvasWithAnnotation)
+        self.canvasRepo.save(model: canvas)
     }
 }
 
@@ -145,9 +141,9 @@ extension CanvasViewModel {
             // if already published, ignore
             return
         }
-        canvasRepo.delete(model: CanvasWithAnnotation(canvas: canvas, annotationCanvas: AnnotationCanvas()))
+        canvasRepo.delete(model: canvas)
         canvas = OnlineCanvas(canvas: canvas)
-        canvasRepo.save(model: CanvasWithAnnotation(canvas: canvas, annotationCanvas: AnnotationCanvas()))
+        canvasRepo.save(model: canvas)
     }
 }
 
@@ -183,7 +179,7 @@ extension CanvasViewModel {
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {
-        annotationCanvas.drawing = drawing
+        canvas.annotationCanvas.drawing = drawing
     }
 
     func addUmlElement(umlElement: UmlElementProtocol) {
