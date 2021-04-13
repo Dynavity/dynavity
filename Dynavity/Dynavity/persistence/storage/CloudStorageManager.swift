@@ -26,8 +26,6 @@ struct CloudStorageManager {
                     guard let canvasValue = snapshot.childSnapshot(forPath: key).value else {
                         return nil
                     }
-                    print(canvasValue)
-                    // TODO: why doesn't this decode work?
                     return try? decoder.decode(OnlineCanvasDTO.self, from: canvasValue)
                 }
                 print(canvases)

@@ -58,4 +58,20 @@ struct CanvasDTO: Mappable {
     }
 }
 
-extension CanvasDTO: Codable {}
+extension CanvasDTO: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case id, canvasElements, umlCanvasElements, umlConnectors, annotationCanvas, name
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try values.decode(UUID.self, forKey: .id)
+        self.canvasElements = try values.decodeIfPresent([TypeWrappedCanvasElementDTO].self, forKey: .canvasElements)
+            ?? []
+        self.umlCanvasElements = try values.decodeIfPresent([TypeWrappedUmlElementDTO].self, forKey: .umlCanvasElements)
+            ?? []
+        self.umlConnectors = try values.decodeIfPresent([UmlConnectorDTO].self, forKey: .umlConnectors) ?? []
+        self.annotationCanvas = try values.decode(Data.self, forKey: .annotationCanvas)
+        self.name = try values.decode(String.self, forKey: .name)
+    }
+}
