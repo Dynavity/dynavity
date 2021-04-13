@@ -17,6 +17,7 @@ struct CanvasView: View {
                 AnnotationCanvasView(viewModel: viewModel)
                     .disabled(viewModel.canvasMode == .selection)
             }
+            .ignoresSafeArea(.keyboard)
             .onAppear {
                 viewModel.setCanvasViewport(size: geometry.size)
             }
