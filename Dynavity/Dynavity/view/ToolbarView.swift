@@ -129,11 +129,12 @@ struct ToolbarView: View {
         }) {
             Image(systemName: "hand.tap")
                 .resizable()
+                .renderingMode(.template)
+                .foregroundColor(viewModel.canvasMode == .selection
+                                    ? .black
+                                    : .blue)
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.canvasMode == .selection
-                        ? Color.UI.grey
-                        : nil)
     }
 
     private var penSelectionButton: some View {
@@ -142,11 +143,12 @@ struct ToolbarView: View {
         }) {
             Image(systemName: "pencil")
                 .resizable()
+                .renderingMode(.template)
+                .foregroundColor(viewModel.canvasMode == .pen
+                                    ? .black
+                                    : .blue)
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.canvasMode == .pen
-                        ? Color.UI.grey
-                        : nil)
         .overlay(viewModel.shouldShowAnnotationMenu &&
                     viewModel.canvasMode == .pen
                     ? annotationMenu
@@ -159,9 +161,12 @@ struct ToolbarView: View {
         }) {
             Image(systemName: "highlighter")
                 .resizable()
+                .renderingMode(.template)
+                .foregroundColor(viewModel.canvasMode == .marker
+                                    ? .black
+                                    : .blue)
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.canvasMode == .marker ? Color.UI.grey : nil)
         .overlay(viewModel.shouldShowAnnotationMenu &&
                     viewModel.canvasMode == .marker
                     ? annotationMenu
@@ -174,9 +179,12 @@ struct ToolbarView: View {
         }) {
             Image(systemName: "rectangle.portrait")
                 .resizable()
+                .renderingMode(.template)
+                .foregroundColor(viewModel.canvasMode == .eraser
+                                    ? .black
+                                    : .blue)
                 .frame(width: toolButtonSize / 1.5, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.canvasMode == .eraser ? Color.UI.grey : nil)
     }
 
     private var lassoSelectionButton: some View {
@@ -185,9 +193,12 @@ struct ToolbarView: View {
         }) {
             Image(systemName: "lasso")
                 .resizable()
+                .renderingMode(.template)
+                .foregroundColor(viewModel.canvasMode == .lasso
+                                    ? .black
+                                    : .blue)
                 .frame(width: toolButtonSize, height: toolButtonSize, alignment: .center)
         }
-        .background(viewModel.canvasMode == .lasso ? Color.UI.grey : nil)
     }
 
     private var homeButton: some View {
