@@ -9,6 +9,7 @@ struct CanvasView: View {
                 AnnotationCanvasView(viewModel: viewModel, isDrawingDisabled: true)
                     .onTapGesture {
                         viewModel.unselectCanvasElement()
+                        self.closeKeyboard()
                     }
                 CanvasElementMapView(viewModel: viewModel)
                     .scaleEffect(viewModel.scaleFactor)
