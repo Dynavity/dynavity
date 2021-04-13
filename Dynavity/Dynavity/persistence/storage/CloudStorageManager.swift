@@ -28,7 +28,6 @@ struct CloudStorageManager {
                     }
                     return try? decoder.decode(OnlineCanvasDTO.self, from: canvasValue)
                 }
-                print(canvases)
                 callback(.success(canvases))
             }
         }
