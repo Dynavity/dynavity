@@ -91,7 +91,7 @@ extension LocalStorageManager {
     private static let backlinkFileExt: String = "graph"
 
     func readBacklinkEngine() throws -> BacklinkEngineDTO? {
-        let url = getFileURL(name: LocalStorageManager.backlinkFileExt,
+        let url = getFileURL(name: LocalStorageManager.backlinkFileName,
                              ext: LocalStorageManager.backlinkFileExt)
         return try? readBacklinkEngineFromFile(withURL: url)
     }
