@@ -10,6 +10,11 @@ struct OnlineCanvasDTO: Mappable {
                                 model: CanvasWithAnnotation(canvas: model, annotationCanvas: AnnotationCanvas()))
     }
 
+    init(ownerId: String, canvas: CanvasDTO) {
+        self.ownerId = ownerId
+        self.canvas = canvas
+    }
+
     func toModel() -> OnlineCanvas {
         OnlineCanvas(id: canvas.id, ownerId: ownerId, canvas: canvas.toModel().canvas)
     }

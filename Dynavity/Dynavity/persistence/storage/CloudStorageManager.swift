@@ -23,10 +23,11 @@ struct CloudStorageManager {
                     return callback(.success([]))
                 }
                 let canvases = value.keys.compactMap { key -> OnlineCanvasDTO? in
-                    guard let canvasValue = snapshot.childSnapshot(forPath: key).value else {
+                    guard let canvasValue = snapshot.childSnapshot(forPath: key).value,
+                          let loaded = try? decoder.decode(CanvasDTO.self, from: canvasValue) else {
                         return nil
                     }
-                    return try? decoder.decode(OnlineCanvasDTO.self, from: canvasValue)
+                    return OnlineCanvasDTO(ownerId: userId, canvas: loaded)
                 }
                 callback(.success(canvases))
             }
@@ -46,10 +47,11 @@ struct CloudStorageManager {
                         let db = database.reference(withPath: "\(ref.userId)/self/\(ref.canvasId)")
                         db.getData { _, snapshot in
                             guard let value = snapshot.value,
-                                  let loaded = try? decoder.decode(OnlineCanvasDTO.self, from: value) else {
+                                  let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
                                 return
                             }
-                            callback(.success(loaded))
+                            let canvas = OnlineCanvasDTO(ownerId: ref.userId, canvas: loaded)
+                            callback(.success(canvas))
                         }
                     }
                 }
@@ -62,7 +64,7 @@ struct CloudStorageManager {
     }
 
     func save(model canvas: OnlineCanvasDTO) throws {
-        guard let data = try? encoder.encode(canvas) else {
+        guard let data = try? encoder.encode(canvas.canvas) else {
             return
         }
         if userId == canvas.ownerId {
