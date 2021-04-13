@@ -101,56 +101,8 @@ struct CloudStorageManager: OnlineStorageManager {
     }
 }
 
-// MARK: Struct to help with decoding
+// struct to help with decoding
 struct ExternalCanvasReference: Codable, Equatable {
     let ownerId: String
     let canvasName: String
-}
-
-// MARK: Helper to synchronize asynchronous code
-class FutureSynchronizer<T> {
-    let publisher: Future<T, Never>
-    private var value: T?
-    private var cancel: AnyCancellable!
-
-    init(publisher: Future<T, Never>) {
-        self.publisher = publisher
-    }
-
-    func blockForValue() -> T? {
-        let block = DispatchSemaphore(value: 0)
-        cancel = publisher.sink { value in
-            self.value = value
-            block.signal()
-        }
-        block.wait()
-        cancel = nil // no longer needed
-        return value
-    }
-}
-
-class MultiFutureSynchronizer<T> {
-    let publishers: [Future<T, Never>]
-    private var values: [T] = []
-    private var cancels: [AnyCancellable] = []
-
-    init(publishers: [Future<T, Never>]) {
-        self.publishers = publishers
-    }
-
-    func blockForValue() -> [T] {
-        let block = DispatchSemaphore(value: 0)
-        for publisher in publishers {
-            let cancel = publisher.sink { value in
-                self.values.append(value)
-                block.signal()
-            }
-            cancels.append(cancel)
-        }
-        for _ in publishers {
-            block.wait()
-        }
-        cancels.removeAll() // no longer needed
-        return values
-    }
 }
