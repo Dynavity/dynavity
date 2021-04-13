@@ -44,13 +44,13 @@ struct CloudStorageManager: OnlineStorageManager {
                 }
                 let futures = loaded.map { ref in
                     Future<OnlineCanvasDTO, Never> { callback in
-                        let db = database.reference(withPath: "\(ref.userId)/self/\(ref.canvasId)")
+                        let db = database.reference(withPath: "\(ref.ownerId)/self/\(ref.canvasName)")
                         db.getData { _, snapshot in
                             guard let value = snapshot.value,
                                   let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
                                 return
                             }
-                            let canvas = OnlineCanvasDTO(ownerId: ref.userId, canvas: loaded)
+                            let canvas = OnlineCanvasDTO(ownerId: ref.ownerId, canvas: loaded)
                             callback(.success(canvas))
                         }
                     }
@@ -69,12 +69,12 @@ struct CloudStorageManager: OnlineStorageManager {
         }
         if userId == canvas.ownerId {
             // save own canvas
-            let db = database.reference(withPath: "\(userId)/self/\(canvas.canvas.id)")
+            let db = database.reference(withPath: "\(userId)/self/\(canvas.canvas.name)")
             db.setValue(data)
         } else {
             // save other canvas
-            let ref = ExternalCanvasReference(userId: canvas.ownerId, canvasId: canvas.canvas.id.uuidString)
-            let db = database.reference(withPath: "\(ref.userId)/self/\(ref.canvasId)")
+            let ref = ExternalCanvasReference(ownerId: canvas.ownerId, canvasName: canvas.canvas.name)
+            let db = database.reference(withPath: "\(ref.ownerId)/self/\(ref.canvasName)")
             db.setValue(data)
         }
     }
@@ -82,11 +82,11 @@ struct CloudStorageManager: OnlineStorageManager {
     func delete(model canvas: OnlineCanvasDTO) throws {
         if userId == canvas.ownerId {
             // delete own canvas
-            let db = database.reference(withPath: "\(userId)/self/\(canvas.canvas.id)")
+            let db = database.reference(withPath: "\(userId)/self/\(canvas.canvas.name)")
             db.removeValue()
         } else {
             // delete link to other canvas
-            let ref = ExternalCanvasReference(userId: canvas.ownerId, canvasId: canvas.canvas.id.uuidString)
+            let ref = ExternalCanvasReference(ownerId: canvas.ownerId, canvasName: canvas.canvas.name)
             let db = database.reference(withPath: "\(userId)/collab")
             // get the whole array, filter, write back
             db.getData { _, snapshot in
@@ -103,8 +103,8 @@ struct CloudStorageManager: OnlineStorageManager {
 
 // MARK: Struct to help with decoding
 struct ExternalCanvasReference: Codable, Equatable {
-    let userId: String
-    let canvasId: String
+    let ownerId: String
+    let canvasName: String
 }
 
 // MARK: Helper to synchronize asynchronous code
