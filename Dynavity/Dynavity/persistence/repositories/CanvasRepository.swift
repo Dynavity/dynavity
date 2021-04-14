@@ -93,6 +93,12 @@ struct CanvasRepository: Repository {
     }
 
     func importCanvas(ownerId: String, canvasName: String) -> Bool {
-        false
+        do {
+            let canvas = try cloudStorageManager.importCanvas(ownerId: ownerId, canvasName: canvasName)
+            return canvas != nil
+        } catch {
+            return false
+        }
+
     }
 }
