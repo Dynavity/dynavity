@@ -19,7 +19,10 @@ struct CanvasView: View {
             }
             .ignoresSafeArea(.keyboard)
             .onAppear {
-                viewModel.setCanvasViewport(size: geometry.size)
+                // Slight delay for the ZStack to resize itself, else the GeometryReader will not be accurate.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    viewModel.setCanvasViewport(size: geometry.size)
+                }
             }
             .onReceive(viewModel.autoSavePublisher, perform: { _ in
                 viewModel.saveCanvas()
