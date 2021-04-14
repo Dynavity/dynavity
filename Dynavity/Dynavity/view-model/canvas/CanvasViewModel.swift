@@ -103,7 +103,7 @@ class CanvasViewModel: ObservableObject {
     init(canvas: Canvas, canvasSize: CGFloat) {
         self.canvas = canvas
         self.canvasSize = canvasSize
-        self.canvasMode = .pen
+        self.canvasMode = .selection
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }

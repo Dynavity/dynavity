@@ -45,6 +45,7 @@ struct MainView: View {
     var umlMenuButton: some View {
         Button(action: {
             canvasViewModel.showUmlMenu()
+            self.closeKeyboard()
         }) {
             Image(systemName: "arrow.right.square").resizable()
         }
@@ -70,6 +71,7 @@ struct MainView: View {
                 sideMenu
                 umlMenu
             }
+            .ignoresSafeArea(.keyboard)
             .navigationBarHidden(true)
         }.navigationViewStyle(StackNavigationViewStyle())
     }

@@ -91,14 +91,14 @@ extension LocalStorageManager {
     private static let backlinkFileExt: String = "graph"
 
     func readBacklinkEngine() throws -> BacklinkEngineDTO? {
-        let url = getFileURL(name: LocalStorageManager.backlinkFileExt,
+        let url = getFileURL(name: LocalStorageManager.backlinkFileName,
                              ext: LocalStorageManager.backlinkFileExt)
         return try? readBacklinkEngineFromFile(withURL: url)
     }
 
     func saveBacklinkEngine(backlinkEngine: BacklinkEngineDTO) throws {
         if let encodedData = try? encoder.encode(backlinkEngine) {
-            let url = getFileURL(name: LocalStorageManager.backlinkFileExt,
+            let url = getFileURL(name: LocalStorageManager.backlinkFileName,
                                  ext: LocalStorageManager.backlinkFileExt)
             do {
                 try encodedData.write(to: url, options: .atomic)
