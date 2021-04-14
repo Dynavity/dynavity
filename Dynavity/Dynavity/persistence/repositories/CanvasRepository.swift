@@ -59,7 +59,7 @@ struct CanvasRepository: Repository {
         }
     }
 
-    func deleteLocal(model: Canvas) -> Bool {
+    private func deleteLocal(model: Canvas) -> Bool {
         let id = getExistingId(for: model) ?? UUID()
         let canvasDTO = CanvasDTO(id: id, model: model)
         do {
@@ -70,7 +70,7 @@ struct CanvasRepository: Repository {
         }
     }
 
-    func deleteCloud(model: OnlineCanvas) -> Bool {
+    private func deleteCloud(model: OnlineCanvas) -> Bool {
         do {
             try cloudStorageManager.delete(model: OnlineCanvasDTO(model: model))
             return true
