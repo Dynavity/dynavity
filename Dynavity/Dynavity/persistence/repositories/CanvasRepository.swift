@@ -99,6 +99,5 @@ struct CanvasRepository: Repository {
         } catch {
             return false
         }
-
     }
 }

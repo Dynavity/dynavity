@@ -235,7 +235,7 @@ extension CanvasSelectionView {
         alert.addTextField { textField in
             textField.placeholder = "Enter shareable ID here"
         }
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Import", style: .default, handler: { _ in
             guard let shareID = alert.textFields?
                     .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
