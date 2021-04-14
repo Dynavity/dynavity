@@ -95,6 +95,43 @@ struct CloudStorageManager: OnlineStorageManager {
             }
         }
     }
+
+    func importCanvas(ownerId: String, canvasName: String) throws -> OnlineCanvasDTO? {
+        // check if canvas exists, and retrieve it if it does
+        let db = database.reference(withPath: "\(ownerId)/self/\(canvasName)")
+        let checkFuture = Future<OnlineCanvasDTO?, Never> { callback in
+            db.getData { _, snapshot in
+                guard let value = snapshot.value,
+                      let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
+                    return callback(.success(nil))
+                }
+                let canvas = OnlineCanvasDTO(ownerId: ownerId, canvas: loaded)
+                callback(.success(canvas))
+            }
+        }
+        guard let canvas = FutureSynchronizer(publisher: checkFuture).blockForValue() else {
+            return nil
+        }
+
+        // success, add to current collab list
+        let collab = database.reference(withPath: "\(userId)/collab")
+        let collabFuture = Future<Void, Never> { callback in
+            collab.getData { _, snapshot in
+                guard let value = snapshot.value,
+                      var loaded = try? decoder.decode([ExternalCanvasReference].self, from: value) else {
+                    // if something is wrong, 'success' with empty value
+                    return callback(.success(Void()))
+                }
+                loaded.append(ExternalCanvasReference(ownerId: ownerId, canvasName: canvasName))
+                collab.setValue(loaded)
+                callback(.success(Void()))
+            }
+        }
+        FutureSynchronizer(publisher: collabFuture).blockForValue()
+
+        // return imported canvas
+        return canvas
+    }
 }
 
 // struct to help with decoding

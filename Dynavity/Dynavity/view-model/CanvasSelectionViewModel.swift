@@ -57,6 +57,10 @@ class CanvasSelectionViewModel: ObservableObject {
         self.objectWillChange.send()
     }
 
+    func importCanvas(name: String, owner: String) -> Bool {
+        canvasRepo.importCanvas(ownerId: owner, canvasName: name)
+    }
+
     // A string is a valid canvas name if and only if it is non-empty, consists of only
     // alphanumeric characters, is unique, and is less than 20 characters long. Spaces are allowed.
     // Canvas names are not case-sensitive.

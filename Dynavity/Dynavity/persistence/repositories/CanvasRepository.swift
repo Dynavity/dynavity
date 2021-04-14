@@ -91,4 +91,8 @@ struct CanvasRepository: Repository {
         try? localStorageManager.readAll()
             .first(where: { $0.name == canvas.name })?.id
     }
+
+    func importCanvas(ownerId: String, canvasName: String) -> Bool {
+        false
+    }
 }
