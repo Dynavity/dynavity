@@ -8,19 +8,19 @@ struct MainView: View {
     static let umlMenuButtonHeight: CGFloat = 40.0
     private let umlMenuButtonOffset: CGFloat = -5.0
 
-    init(canvas: Canvas, annotationCanvas: AnnotationCanvas) {
-        self._canvasViewModel = StateObject(wrappedValue: CanvasViewModel(canvas: canvas,
-                                                                          annotationCanvas: annotationCanvas))
+    init(canvas: Canvas) {
+        self._canvasViewModel = StateObject(wrappedValue: CanvasViewModel(canvas: canvas))
     }
 
     init() {
-        self.init(canvas: Canvas(), annotationCanvas: AnnotationCanvas())
+        self.init(canvas: Canvas())
     }
 
     var sideMenu: some View {
         GeometryReader { geometry in
             if self.shouldShowMenu {
-                SideMenuView(canvasName: canvasViewModel.canvas.name)
+                SideMenuView()
+                    .environmentObject(canvasViewModel)
                     .frame(width: geometry.size.width / 3)
                     .offset(CGSize(width: geometry.size.width * (2 / 3), height: 0))
                     .transition(.move(edge: .trailing))

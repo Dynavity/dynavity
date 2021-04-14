@@ -31,3 +31,15 @@ struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
         return model
     }
 }
+
+extension TodoElementDTO: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case canvasProperties, todos
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.canvasProperties = try values.decode(CanvasElementPropertiesDTO.self, forKey: .canvasProperties)
+        self.todos = try values.decodeIfPresent([TodoDTO].self, forKey: .todos) ?? []
+    }
+}

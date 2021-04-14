@@ -2,8 +2,11 @@ import SwiftUI
 
 struct SideMenuView: View {
     @EnvironmentObject var graphViewModel: GraphViewModel
+    @EnvironmentObject var canvasViewModel: CanvasViewModel
 
-    var canvasName: String
+    var canvasName: String {
+        canvasViewModel.canvas.name
+    }
 
     @StateObject private var sideMenuViewModel = SideMenuViewModel()
 
@@ -25,6 +28,15 @@ struct SideMenuView: View {
             SideMenuContentView(label: "Canvas Name") {
                 Text(canvasName)
                     .bold()
+            }
+            if let onlineCanvas = canvasViewModel.canvas as? OnlineCanvas {
+                SideMenuContentView(label: "Shareable ID") {
+                    Text(onlineCanvas.shareableId)
+                }
+            } else {
+                Button("Publish") {
+                    canvasViewModel.publishCanvas()
+                }
             }
         }
     }
@@ -119,7 +131,8 @@ struct SideMenuContentView<Content: View>: View {
 
 struct SideMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        SideMenuView(canvasName: "Cool Name")
+        SideMenuView()
+            .environmentObject(CanvasViewModel())
             .environmentObject(GraphViewModel())
     }
 }

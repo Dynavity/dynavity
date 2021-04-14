@@ -1,8 +1,16 @@
 protocol StorageManager {
-    func readAllCanvases() throws -> [CanvasDTO]
-    func saveCanvas(canvas: CanvasDTO) throws
-    func deleteCanvas(canvas: CanvasDTO) throws
+    associatedtype ModelDTO
 
+    func readAll() throws -> [ModelDTO]
+    func save(model: ModelDTO) throws
+    func delete(model: ModelDTO) throws
+}
+
+protocol OfflineStorageManager: StorageManager where ModelDTO == CanvasDTO {
     func readBacklinkEngine() throws -> BacklinkEngineDTO?
     func saveBacklinkEngine(backlinkEngine: BacklinkEngineDTO) throws
+}
+
+protocol OnlineStorageManager: StorageManager where ModelDTO == OnlineCanvasDTO {
+
 }

@@ -48,9 +48,8 @@ struct GraphView: View {
                     // If the current node has been long pressed, it means that we want to automatically
                     // navigate to the canvas corresponding to the long pressed node
                     if viewModel.longPressedNode == node,
-                       let canvasWithAnnotation = canvasSelectionViewModel.getCanvasWithName(name: node.name) {
-                        NavigationLink(destination: MainView(canvas: canvasWithAnnotation.canvas,
-                                                             annotationCanvas: canvasWithAnnotation.annotationCanvas)
+                       let canvas = canvasSelectionViewModel.getCanvasWithName(name: node.name) {
+                        NavigationLink(destination: MainView(canvas: canvas)
                                         .navigationBarHidden(true)
                                         .navigationBarBackButtonHidden(true),
                                        isActive: .constant(true)) {

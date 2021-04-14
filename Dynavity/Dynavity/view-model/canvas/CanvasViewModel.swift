@@ -31,20 +31,8 @@ class CanvasViewModel: ObservableObject {
             .map({ _ in () })
     )
 
-    // to prevent an infinite loop of didSet when loading changes
-    private var enableWriteBack = true
-    @Published var canvas: Canvas {
-        didSet {
-            if enableWriteBack {
-                // Prevent the saving to Firebase operation from freezing the main thread.
-                DispatchQueue.global(qos: .userInteractive).async {
-                    self.saveToFirebase()
-                }
-            }
-        }
-    }
+    @Published var canvas: Canvas
     private var anyCancellable: AnyCancellable?
-    @Published var annotationCanvas: AnnotationCanvas
     @Published var annotationPalette = AnnotationPalette()
     @Published var canvasSize: CGFloat
     @Published var canvasTopLeftOffset: CGPoint = .zero
@@ -112,24 +100,22 @@ class CanvasViewModel: ObservableObject {
         canvasOrigin - viewportOffset / scaleFactor + scaledOriginOffset
     }
 
-    init(canvas: Canvas, annotationCanvas: AnnotationCanvas, canvasSize: CGFloat) {
+    init(canvas: Canvas, canvasSize: CGFloat) {
         self.canvas = canvas
-        self.annotationCanvas = annotationCanvas
         self.canvasSize = canvasSize
         self.canvasMode = .selection
         self.anyCancellable = canvas.objectWillChange.sink { [weak self] _ in
             self?.objectWillChange.send()
         }
-        loadFromFirebase()
     }
 
-    convenience init(canvas: Canvas, annotationCanvas: AnnotationCanvas) {
+    convenience init(canvas: Canvas) {
         // Arbitrarily large value for the "infinite" canvas.
-        self.init(canvas: canvas, annotationCanvas: annotationCanvas, canvasSize: 500_000)
+        self.init(canvas: canvas, canvasSize: 500_000)
     }
 
     convenience init() {
-        self.init(canvas: Canvas(), annotationCanvas: AnnotationCanvas())
+        self.init(canvas: Canvas())
     }
 
     var canvasElements: [CanvasElementProtocol] {
@@ -144,49 +130,20 @@ class CanvasViewModel: ObservableObject {
 // MARK: Local storage autosaving
 extension CanvasViewModel {
     func saveCanvas() {
-        let canvasWithAnnotation = CanvasWithAnnotation(canvas: self.canvas,
-                                                        annotationCanvas: self.annotationCanvas)
-        self.canvasRepo.save(model: canvasWithAnnotation)
+        self.canvasRepo.save(model: canvas)
     }
 }
 
 // MARK: Firebase synchronization
 extension CanvasViewModel {
-    private var db: DatabaseReference {
-        Database.database().reference(withPath: canvas.name)
-    }
-
-    private func loadFromFirebase() {
-        db.getData { _, snapshot in
-            self.loadSnapshot(snapshot)
+    func publishCanvas() {
+        guard !(canvas is OnlineCanvas) else {
+            // if already published, ignore
+            return
         }
-        db.observe(.value, with: loadSnapshot)
-    }
-
-    private func loadSnapshot(_ snapshot: DataSnapshot) {
-        /* TODO: Fix this.
-        if let data = snapshot.value,
-           let loadedCanvas = try? FirebaseDecoder().decode(Canvas.self, from: data) {
-            // replace the local snapshot
-            DispatchQueue.main.async {
-                self.enableWriteBack = false
-                // Do not update the currently selected canvas element.
-                // TODO: Fix this for classes.
-                // if let selectedCanvasElement = self.selectedCanvasElement {
-                //     loadedCanvas.replaceElement(selectedCanvasElement)
-                // }
-                self.canvas = loadedCanvas
-                self.enableWriteBack = true
-            }
-        }
-        */
-    }
-
-    private func saveToFirebase() {
-        /* TODO: Fix this.
-        let data = try? FirebaseEncoder().encode(canvas)
-        db.setValue(data)
-        */
+        canvasRepo.delete(model: canvas)
+        canvas = OnlineCanvas(canvas: canvas)
+        canvasRepo.save(model: canvas)
     }
 }
 
@@ -222,7 +179,7 @@ extension CanvasViewModel {
     }
 
     func storeAnnotation(_ drawing: PKDrawing) {
-        annotationCanvas.drawing = drawing
+        canvas.annotationCanvas.drawing = drawing
     }
 
     func addUmlElement(umlElement: UmlElementProtocol) {
