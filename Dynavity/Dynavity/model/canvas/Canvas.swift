@@ -5,7 +5,10 @@ import CoreGraphics
 class Canvas: ObservableObject {
     @Published private(set) var canvasElements: [CanvasElementProtocol] = []
     @Published private(set) var umlConnectors: [UmlConnector] = []
+    var annotationCanvas = AnnotationCanvas()
+
     var name: String = "common"
+
     private var canvasElementCancellables: [AnyCancellable] = []
     private var umlConnectorCancellables: [AnyCancellable] = []
 
@@ -14,6 +17,7 @@ class Canvas: ObservableObject {
     init(canvas: Canvas) {
         self.canvasElements = canvas.canvasElements
         self.umlConnectors = canvas.umlConnectors
+        self.annotationCanvas = canvas.annotationCanvas
         self.name = canvas.name
         self.canvasElementCancellables = canvas.canvasElementCancellables
         self.umlConnectorCancellables = canvas.umlConnectorCancellables
@@ -55,38 +59,6 @@ extension Canvas {
         umlConnectorCancellables.remove(at: index)
     }
 }
-
-/* TODO: Fix this. (or remove this)
-extension Canvas: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case canvasElements, umlConnectors, name
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        func getOrDefault<T: Decodable>(type: T.Type, key: CodingKeys, orElse: T) -> T {
-            (try? container.decode(type, forKey: key)) ?? orElse
-        }
-        let wrappedElements = getOrDefault(type: [TypeWrappedCanvasElement].self,
-                                           key: .canvasElements,
-                                           orElse: [])
-        self.canvasElements = wrappedElements.map { $0.data }
-        self.umlConnectors = getOrDefault(type: [UmlConnector].self,
-                                          key: .umlConnectors,
-                                          orElse: [])
-        self.name = try container.decode(String.self, forKey: .name)
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        let wrappedElements = canvasElements
-            .map(TypeWrappedCanvasElement.init)
-        try container.encode(wrappedElements, forKey: .canvasElements)
-        try container.encode(self.umlConnectors, forKey: .umlConnectors)
-        try container.encode(self.name, forKey: .name)
-    }
-}
-*/
 
 extension Canvas: Hashable {
     static func == (lhs: Canvas, rhs: Canvas) -> Bool {

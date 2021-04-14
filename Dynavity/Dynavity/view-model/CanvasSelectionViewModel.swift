@@ -4,14 +4,14 @@ class CanvasSelectionViewModel: ObservableObject {
     static let canvasNameLengthLimit = 20
     private let canvasRepo = CanvasRepository()
 
-    @Published var selectedCanvases: [CanvasWithAnnotation] = []
+    @Published var selectedCanvases: [Canvas] = []
     @Published var searchQuery: String = ""
 
-    func getCanvases() -> [CanvasWithAnnotation] {
+    func getCanvases() -> [Canvas] {
         canvasRepo.queryAll()
     }
 
-    func getFilteredCanvases() -> [CanvasWithAnnotation] {
+    func getFilteredCanvases() -> [Canvas] {
         getCanvases().filter {
             if searchQuery.isEmpty {
                 return true
@@ -20,7 +20,7 @@ class CanvasSelectionViewModel: ObservableObject {
         }
     }
 
-    func toggleSelectedCanvas(_ canvas: CanvasWithAnnotation) {
+    func toggleSelectedCanvas(_ canvas: Canvas) {
         let wasCanvasSelected = isCanvasSelected(canvas)
         if wasCanvasSelected {
             selectedCanvases = selectedCanvases.filter({ $0 !== canvas })
@@ -38,7 +38,7 @@ class CanvasSelectionViewModel: ObservableObject {
         self.objectWillChange.send()
     }
 
-    func deleteCanvas(_ canvas: CanvasWithAnnotation) {
+    func deleteCanvas(_ canvas: Canvas) {
         canvasRepo.delete(model: canvas)
         self.objectWillChange.send()
     }
@@ -46,13 +46,12 @@ class CanvasSelectionViewModel: ObservableObject {
     func createCanvas(name: String) {
         let canvas = Canvas()
         canvas.name = name
-        let canvasWithAnnotation = CanvasWithAnnotation(canvas: canvas, annotationCanvas: AnnotationCanvas())
-        canvasRepo.save(model: canvasWithAnnotation)
+        canvasRepo.save(model: canvas)
         self.objectWillChange.send()
     }
 
-    func renameCanvas(_ canvas: CanvasWithAnnotation, updatedName: String) {
-        let newCanvas = CanvasWithAnnotation(canvas: canvas.canvas, annotationCanvas: canvas.annotationCanvas)
+    func renameCanvas(_ canvas: Canvas, updatedName: String) {
+        let newCanvas = Canvas(canvas: canvas)
         newCanvas.name = updatedName
         canvasRepo.update(oldModel: canvas, newModel: newCanvas)
         self.objectWillChange.send()
@@ -67,7 +66,7 @@ class CanvasSelectionViewModel: ObservableObject {
         return !name.isEmpty && consistsOfOnlyAlphanumeric && isCanvasNameUnique(name: name) && isWithinLengthLimit
     }
 
-    func getCanvasWithName(name: String) -> CanvasWithAnnotation? {
+    func getCanvasWithName(name: String) -> Canvas? {
         canvasRepo.queryAll().first(where: { $0.name == name })
     }
 
@@ -76,7 +75,7 @@ class CanvasSelectionViewModel: ObservableObject {
         !canvasRepo.queryAll().map({ $0.name.lowercased() }).contains(name.lowercased())
     }
 
-    func isCanvasSelected(_ canvas: CanvasWithAnnotation) -> Bool {
+    func isCanvasSelected(_ canvas: Canvas) -> Bool {
         selectedCanvases.contains(canvas)
     }
 }
