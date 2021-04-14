@@ -58,7 +58,9 @@ class CanvasSelectionViewModel: ObservableObject {
     }
 
     func importCanvas(name: String, owner: String) -> Bool {
-        canvasRepo.importCanvas(ownerId: owner, canvasName: name)
+        let result = canvasRepo.importCanvas(ownerId: owner, canvasName: name)
+        self.objectWillChange.send()
+        return result
     }
 
     // A string is a valid canvas name if and only if it is non-empty, consists of only
