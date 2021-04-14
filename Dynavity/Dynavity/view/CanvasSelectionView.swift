@@ -129,6 +129,11 @@ struct CanvasSelectionView: View {
                 }) {
                     Image(systemName: "doc.fill.badge.plus")
                 }
+                Button(action: {
+                    onImportCanvasButtonTap()
+                }) {
+                    Image(systemName: "person.fill.badge.plus")
+                }
             }
         }
     }
@@ -225,13 +230,62 @@ extension CanvasSelectionView {
         self.showAlert(alert: alert)
     }
 
+    private func onImportCanvasButtonTap() {
+        let alert = UIAlertController(title: "Import shared canvas", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "Enter shareable ID here"
+        }
+        alert.addAction(UIAlertAction(title: "Import", style: .default, handler: { _ in
+            guard let shareID = alert.textFields?
+                    .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                return
+            }
+
+            let parts = shareID.split(separator: OnlineCanvas.delimiter)
+            guard parts.count == 2 else {
+                invalidShareHandler()
+                return
+            }
+
+            let ownerID = String(parts[0])
+            let canvasName = String(parts[1])
+            // name still has to be unique within this device
+            let isNewNameUnique = viewModel.isValidCanvasName(name: canvasName)
+
+            if isNewNameUnique {
+                if !viewModel.importCanvas(name: canvasName, owner: ownerID) {
+                    sharedCanvasDoesNotExistHandler()
+                }
+                // shared canvas does not appear in graph view model
+            } else {
+                invalidCanvasNameHandler()
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.showAlert(alert: alert)
+    }
+
     private func invalidCanvasNameHandler() {
         let invalidMessage = "Canvas name must be a unique, non-empty string, "
             + "consisting of less than \(CanvasSelectionViewModel.canvasNameLengthLimit) "
             + "alphanumeric characters or spaces. "
             + "Canvas names are not case-sensitive."
-        let errorAlert = UIAlertController(title: "Invalid canvas name!",
-                                           message: invalidMessage,
+        showErrorAlert(title: "Invalid canvas name!", message: invalidMessage)
+    }
+
+    private func invalidShareHandler() {
+        let invalidMessage = "Shareable ID should contain exactly one '\(OnlineCanvas.delimiter)' character."
+        showErrorAlert(title: "Invalid shareable ID!", message: invalidMessage)
+    }
+
+    private func sharedCanvasDoesNotExistHandler() {
+        let invalidMessage = "Shared canvas does not exist."
+        showErrorAlert(title: "Invalid shareable ID!", message: invalidMessage)
+    }
+
+    private func showErrorAlert(title: String, message: String) {
+        let errorAlert = UIAlertController(title: title,
+                                           message: message,
                                            preferredStyle: .alert)
         errorAlert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.showAlert(alert: errorAlert)

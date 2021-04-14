@@ -131,6 +131,7 @@ class CanvasViewModel: ObservableObject {
 extension CanvasViewModel {
     func saveCanvas() {
         self.canvasRepo.save(model: canvas)
+        self.objectWillChange.send()
     }
 }
 
@@ -144,6 +145,7 @@ extension CanvasViewModel {
         canvasRepo.delete(model: canvas)
         canvas = OnlineCanvas(canvas: canvas)
         canvasRepo.save(model: canvas)
+        self.objectWillChange.send()
     }
 }
 

@@ -59,7 +59,7 @@ struct CanvasRepository: Repository {
         }
     }
 
-    func deleteLocal(model: Canvas) -> Bool {
+    private func deleteLocal(model: Canvas) -> Bool {
         let id = getExistingId(for: model) ?? UUID()
         let canvasDTO = CanvasDTO(id: id, model: model)
         do {
@@ -70,7 +70,7 @@ struct CanvasRepository: Repository {
         }
     }
 
-    func deleteCloud(model: OnlineCanvas) -> Bool {
+    private func deleteCloud(model: OnlineCanvas) -> Bool {
         do {
             try cloudStorageManager.delete(model: OnlineCanvasDTO(model: model))
             return true
@@ -90,5 +90,14 @@ struct CanvasRepository: Repository {
     private func getExistingId(for canvas: Canvas) -> UUID? {
         try? localStorageManager.readAll()
             .first(where: { $0.name == canvas.name })?.id
+    }
+
+    func importCanvas(ownerId: String, canvasName: String) -> Bool {
+        do {
+            let canvas = try cloudStorageManager.importCanvas(ownerId: ownerId, canvasName: canvasName)
+            return canvas != nil
+        } catch {
+            return false
+        }
     }
 }

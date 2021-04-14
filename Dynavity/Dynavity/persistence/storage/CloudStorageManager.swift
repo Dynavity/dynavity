@@ -28,35 +28,38 @@ struct CloudStorageManager: OnlineStorageManager {
                 callback(.success(canvases))
             }
         }
-        let ownCanvases = FutureSynchronizer(publisher: ownFuture).blockForValue()
+        let ownCanvases = FutureSynchronizer(publisher: ownFuture).blockForValue() ?? []
         // other cloud canvases (from collab)
         let collab = database.reference(withPath: "\(userId)/collab")
-        let collabFuture = Future<[OnlineCanvasDTO], Never> { callback in
+        let collabListFuture = Future<[ExternalCanvasReference], Never> { callback in
             collab.getData { _, snapshot in
                 guard let value = snapshot.value,
                       let loaded = try? decoder.decode([ExternalCanvasReference].self, from: value) else {
                     // if something is wrong, 'success' with empty value
                     return callback(.success([]))
                 }
-                let futures = loaded.map { ref in
-                    Future<OnlineCanvasDTO, Never> { callback in
-                        let db = database.reference(withPath: "\(ref.ownerId)/self/\(ref.canvasName)")
-                        db.getData { _, snapshot in
-                            guard let value = snapshot.value,
-                                  let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
-                                return
-                            }
-                            let canvas = OnlineCanvasDTO(ownerId: ref.ownerId, canvas: loaded)
-                            callback(.success(canvas))
-                        }
-                    }
-                }
-                let canvases = MultiFutureSynchronizer(publishers: futures).blockForValue()
-                callback(.success(canvases))
+                callback(.success(loaded))
             }
         }
-        let collabCanvases = FutureSynchronizer(publisher: collabFuture).blockForValue()
-        return (ownCanvases ?? []) + (collabCanvases ?? [])
+        guard let collabList = FutureSynchronizer(publisher: collabListFuture).blockForValue() else {
+            return ownCanvases
+        }
+        let collabFuture = collabList.map { ref in
+            Future<OnlineCanvasDTO?, Never> { callback in
+                let db = database.reference(withPath: "\(ref.ownerId)/self/\(ref.canvasName)")
+                db.getData { _, snapshot in
+                    guard let value = snapshot.value,
+                          let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
+                        return callback(.success(nil))
+                    }
+                    let canvas = OnlineCanvasDTO(ownerId: ref.ownerId, canvas: loaded)
+                    callback(.success(canvas))
+                }
+            }
+        }
+        let collabCanvases = MultiFutureSynchronizer(publishers: collabFuture).blockForValue()
+            .compactMap { $0 }
+        return ownCanvases + collabCanvases
     }
 
     func save(model canvas: OnlineCanvasDTO) throws {
@@ -94,6 +97,43 @@ struct CloudStorageManager: OnlineStorageManager {
                 db.setValue(data)
             }
         }
+    }
+
+    func importCanvas(ownerId: String, canvasName: String) throws -> OnlineCanvasDTO? {
+        // check if canvas exists, and retrieve it if it does
+        let db = database.reference(withPath: "\(ownerId)/self/\(canvasName)")
+        let checkFuture = Future<OnlineCanvasDTO?, Never> { callback in
+            db.getData { _, snapshot in
+                guard let value = snapshot.value,
+                      let loaded = try? decoder.decode(CanvasDTO.self, from: value) else {
+                    return callback(.success(nil))
+                }
+                let canvas = OnlineCanvasDTO(ownerId: ownerId, canvas: loaded)
+                callback(.success(canvas))
+            }
+        }
+        guard let canvas = FutureSynchronizer(publisher: checkFuture).blockForValue() else {
+            return nil
+        }
+        // success, add to current collab list
+        let collab = database.reference(withPath: "\(userId)/collab")
+        let collabFuture = Future<Void, Never> { callback in
+            collab.getData { _, snapshot in
+                let ref = ExternalCanvasReference(ownerId: ownerId, canvasName: canvasName)
+                guard let value = snapshot.value,
+                      var loaded = try? decoder.decode([ExternalCanvasReference].self, from: value) else {
+                    collab.setValue(try? encoder.encode([ref]))
+                    return callback(.success(Void()))
+                }
+                loaded.append(ref)
+                collab.setValue(try? encoder.encode(loaded))
+                callback(.success(Void()))
+            }
+        }
+        FutureSynchronizer(publisher: collabFuture).blockForValue()
+
+        // return imported canvas
+        return canvas
     }
 }
 
