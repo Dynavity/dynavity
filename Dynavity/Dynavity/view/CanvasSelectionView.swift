@@ -209,6 +209,30 @@ extension CanvasSelectionView {
     private func onNewCanvasButtonTap() {
         let alert = UIAlertController(title: "New canvas", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
+            textField.placeholder = "Enter canvas name here"
+        }
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+            guard let updatedName = alert.textFields?
+                    .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+                return
+            }
+
+            let isNewNameUnique = viewModel.isValidCanvasName(name: updatedName)
+
+            if isNewNameUnique {
+                viewModel.createCanvas(name: updatedName)
+                graphViewModel.addNode(name: updatedName)
+            } else {
+                invalidCanvasNameHandler()
+            }
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.showAlert(alert: alert)
+    }
+
+    private func onImportCanvasButtonTap() {
+        let alert = UIAlertController(title: "Import shared canvas", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
             textField.placeholder = "Enter shareable ID here"
         }
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
@@ -229,35 +253,10 @@ extension CanvasSelectionView {
             let isNewNameUnique = viewModel.isValidCanvasName(name: canvasName)
 
             if isNewNameUnique {
-                guard viewModel.importCanvas(name: canvasName, owner: ownerID) else {
+                if !viewModel.importCanvas(name: canvasName, owner: ownerID) {
                     sharedCanvasDoesNotExistHandler()
-                    return
                 }
                 // shared canvas does not appear in graph view model
-            } else {
-                invalidCanvasNameHandler()
-            }
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.showAlert(alert: alert)
-    }
-
-    private func onImportCanvasButtonTap() {
-        let alert = UIAlertController(title: "Import shared canvas", message: nil, preferredStyle: .alert)
-        alert.addTextField { textField in
-            textField.placeholder = "Enter canvas name here"
-        }
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
-            guard let updatedName = alert.textFields?
-                    .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
-                return
-            }
-
-            let isNewNameUnique = viewModel.isValidCanvasName(name: updatedName)
-
-            if isNewNameUnique {
-                viewModel.createCanvas(name: updatedName)
-                graphViewModel.addNode(name: updatedName)
             } else {
                 invalidCanvasNameHandler()
             }
