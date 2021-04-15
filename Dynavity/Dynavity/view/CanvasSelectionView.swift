@@ -162,19 +162,18 @@ extension CanvasSelectionView {
         alert.addTextField { textField in
             textField.text = "\(canvas.name)"
         }
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Rename", style: .default, handler: { _ in
             guard let updatedName = alert.textFields?
                     .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }
 
-            let isNewNameUnique = viewModel.isValidCanvasName(name: updatedName)
-
-            if isNewNameUnique {
+            do {
+                try viewModel.isValidCanvasName(name: updatedName)
                 viewModel.renameCanvas(canvas, updatedName: updatedName)
                 graphViewModel.renameNode(oldName: canvas.name, newName: updatedName)
-            } else {
-                invalidCanvasNameHandler()
+            } catch {
+                invalidCanvasNameHandler(message: error.localizedDescription)
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -212,18 +211,17 @@ extension CanvasSelectionView {
             textField.placeholder = "Enter canvas name here"
         }
         alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
-            guard let updatedName = alert.textFields?
+            guard let canvasName = alert.textFields?
                     .first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
                 return
             }
 
-            let isNewNameUnique = viewModel.isValidCanvasName(name: updatedName)
-
-            if isNewNameUnique {
-                viewModel.createCanvas(name: updatedName)
-                graphViewModel.addNode(name: updatedName)
-            } else {
-                invalidCanvasNameHandler()
+            do {
+                try viewModel.isValidCanvasName(name: canvasName)
+                viewModel.createCanvas(name: canvasName)
+                graphViewModel.addNode(name: canvasName)
+            } catch {
+                invalidCanvasNameHandler(message: error.localizedDescription)
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -249,28 +247,24 @@ extension CanvasSelectionView {
 
             let ownerID = String(parts[0])
             let canvasName = String(parts[1])
-            // name still has to be unique within this device
-            let isNewNameUnique = viewModel.isValidCanvasName(name: canvasName)
 
-            if isNewNameUnique {
+            do {
+                // name still has to be unique within this device
+                try viewModel.isValidCanvasName(name: canvasName)
                 if !viewModel.importCanvas(name: canvasName, owner: ownerID) {
                     sharedCanvasDoesNotExistHandler()
                 }
                 // shared canvas does not appear in graph view model
-            } else {
-                invalidCanvasNameHandler()
+            } catch {
+                invalidCanvasNameHandler(message: error.localizedDescription)
             }
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.showAlert(alert: alert)
     }
 
-    private func invalidCanvasNameHandler() {
-        let invalidMessage = "Canvas name must be a unique, non-empty string, "
-            + "consisting of less than \(CanvasSelectionViewModel.canvasNameLengthLimit) "
-            + "alphanumeric characters or spaces. "
-            + "Canvas names are not case-sensitive."
-        showErrorAlert(title: "Invalid canvas name!", message: invalidMessage)
+    private func invalidCanvasNameHandler(message: String) {
+        showErrorAlert(title: "Invalid canvas name!", message: message)
     }
 
     private func invalidShareHandler() {
