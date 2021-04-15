@@ -66,10 +66,22 @@ class CanvasSelectionViewModel: ObservableObject {
     // A string is a valid canvas name if and only if it is non-empty, consists of only
     // alphanumeric characters, is unique, and is less than 20 characters long. Spaces are allowed.
     // Canvas names are not case-sensitive.
-    func isValidCanvasName(name: String) -> Bool {
-        let consistsOfOnlyAlphanumeric = name.range(of: "[^a-zA-Z0-9 ]", options: .regularExpression) == nil
-        let isWithinLengthLimit = name.count < CanvasSelectionViewModel.canvasNameLengthLimit
-        return !name.isEmpty && consistsOfOnlyAlphanumeric && isCanvasNameUnique(name: name) && isWithinLengthLimit
+    func isValidCanvasName(name: String) throws {
+        guard name.range(of: "[^a-zA-Z0-9 ]", options: .regularExpression) == nil else {
+            throw CanvasNameError.invalidCharacterInCanvasName
+        }
+
+        guard name.count < CanvasSelectionViewModel.canvasNameLengthLimit else {
+            throw CanvasNameError.exceedLengthLimit
+        }
+
+        guard !name.isEmpty else {
+            throw CanvasNameError.emptyName
+        }
+
+        guard isCanvasNameUnique(name: name) else {
+            throw CanvasNameError.nonUniqueName
+        }
     }
 
     func getCanvasWithName(name: String) -> Canvas? {
@@ -83,5 +95,28 @@ class CanvasSelectionViewModel: ObservableObject {
 
     func isCanvasSelected(_ canvas: Canvas) -> Bool {
         selectedCanvases.contains(canvas)
+    }
+}
+
+enum CanvasNameError: LocalizedError {
+    case exceedLengthLimit
+    case emptyName
+    case invalidCharacterInCanvasName
+    case nonUniqueName
+
+    var errorDescription: String? {
+        switch self {
+        case .exceedLengthLimit:
+            return """
+                Canvas names must consist of less than \
+                \(CanvasSelectionViewModel.canvasNameLengthLimit) characters.
+                """
+        case .emptyName:
+            return "Canvas names must be non-empty."
+        case .invalidCharacterInCanvasName:
+            return "Canvas names should only consist of alphanumeric characters or spaces."
+        case .nonUniqueName:
+            return "Canvas names must be unique (canvas names are not case-sensitive)."
+        }
     }
 }
