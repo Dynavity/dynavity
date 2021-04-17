@@ -144,8 +144,10 @@ extension CanvasViewModel {
             return
         }
         canvasRepo.delete(model: canvas)
-        canvas = OnlineCanvas(canvas: canvas)
-        canvasRepo.save(model: canvas)
+        let onlineCanvas = OnlineCanvas(canvas: canvas)
+        canvasRepo.addCloudChangeListeners(model: onlineCanvas)
+        canvasRepo.save(model: onlineCanvas)
+        canvas = onlineCanvas
         self.objectWillChange.send()
     }
 }
