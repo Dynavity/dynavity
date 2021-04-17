@@ -117,9 +117,7 @@ class Coordinator: NSObject {
 
 extension Coordinator: PKCanvasViewDelegate {
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-        if !canvasView.drawing.bounds.isEmpty {
-            onChange()
-        }
+        onChange()
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
