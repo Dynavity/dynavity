@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ActivityUmlElementView: View {
     @StateObject private var viewModel: UmlElementViewModel
+    private let backgroundOpacity: Double = 0.001
 
     init(umlElement: UmlElementProtocol) {
         self._viewModel = StateObject(wrappedValue: UmlElementViewModel(umlElement: umlElement))
