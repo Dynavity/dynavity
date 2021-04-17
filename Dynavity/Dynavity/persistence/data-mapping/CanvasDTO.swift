@@ -60,7 +60,8 @@ extension CanvasDTO: Codable {
         self.id = try values.decode(UUID.self, forKey: .id)
         self.canvasElements = try values.decodeIfPresent([TypeWrappedCanvasElementDTO].self, forKey: .canvasElements)
             ?? []
-        self.umlDiagram = try values.decodeIfPresent(UmlDiagramDTO.self, forKey: .umlDiagram) ?? UmlDiagramDTO(elements: [], connectors: [])
+        self.umlDiagram = try values.decodeIfPresent(UmlDiagramDTO.self, forKey: .umlDiagram)
+            ?? UmlDiagramDTO(elements: [], connectors: [])
         self.annotationCanvas = try values.decode(Data.self, forKey: .annotationCanvas)
         self.name = try values.decode(String.self, forKey: .name)
     }
