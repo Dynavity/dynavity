@@ -20,6 +20,5 @@ struct OnlineCanvasDTO: Mappable {
         let model = OnlineCanvas(ownerId: ownerId, canvas: canvas.toModel())
         CanvasRepository().addCloudChangeListeners(model: model)
         return model
-        // make listeners
     }
 }
