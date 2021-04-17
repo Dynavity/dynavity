@@ -41,7 +41,7 @@ struct ActivityUmlElementView: View {
             }
             TextField("", text: $viewModel.umlElement.label)
                 .multilineTextAlignment(.center)
-        }.background(Color.white)
+        }.background(Color.white.opacity(backgroundOpacity))
     }
 }
 
