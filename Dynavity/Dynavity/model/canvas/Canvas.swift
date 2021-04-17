@@ -16,12 +16,8 @@ class Canvas: ObservableObject {
 
     init(canvas: Canvas) {
         // The arrays of cancellables cannot be directly copied as they are weak references.
-        for element in canvas.canvasElements {
-            addElement(element)
-        }
-        for connector in canvas.umlConnectors {
-            addUmlConnector(connector)
-        }
+        canvas.canvasElements.forEach(addElement)
+        canvas.umlConnectors.forEach(addUmlConnector)
 
         self.annotationCanvas = canvas.annotationCanvas
         self.name = canvas.name
