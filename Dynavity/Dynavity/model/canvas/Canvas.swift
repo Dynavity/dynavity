@@ -9,6 +9,10 @@ class Canvas: ObservableObject {
 
     var name: String = "common"
 
+    var umlElements: [UmlElementProtocol] {
+        canvasElements.compactMap { $0 as? UmlElementProtocol }
+    }
+
     private var canvasElementCancellables: [AnyCancellable] = []
     private var umlConnectorCancellables: [AnyCancellable] = []
 
@@ -51,15 +55,19 @@ class Canvas: ObservableObject {
     }
 
     func replace(annotation: AnnotationCanvas) {
-        annotationCanvas = annotation
+        self.annotationCanvas = annotation
     }
 
     func replace(umlElements: [UmlElementProtocol]) {
-        print(umlElements)
-        self.canvasElements
-            .filter { $0 is UmlElementProtocol }
-            .forEach(removeElement)
+        let oldConnectors = umlConnectors
+        self.umlElements.forEach(removeElement)
         umlElements.forEach(addElement)
+        replace(umlConnectors: oldConnectors)
+    }
+
+    func replace(umlConnectors: [UmlConnector]) {
+        self.umlConnectors.forEach(removeUmlConnector)
+        umlConnectors.forEach(addUmlConnector)
     }
 }
 
@@ -80,7 +88,7 @@ extension Canvas {
         umlConnectors.remove(at: index)
         umlConnectorCancellables.remove(at: index)
     }
-    
+
     private func removeAttachedConnectors(_ element: UmlElementProtocol?) {
         guard let umlElement = element else {
             return

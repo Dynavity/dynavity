@@ -166,8 +166,8 @@ struct CloudStorageManager: OnlineStorageManager {
 //                  let loaded = try? decoder.decode([UmlConnectorDTO].self, from: value) else {
 //                return
 //            }
-//            model.umlConnectors.forEach(model.removeUmlConnector)
-//            loaded.map { $0.toModel() }.forEach(model.addUmlConnector)
+//            // TODO: does not work as we have lost our ID information
+//            model.replace(umlConnectors: loaded.map { $0.toModel() })
 //        }
     }
 }
