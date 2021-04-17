@@ -5,7 +5,7 @@ import CoreGraphics
 class Canvas: ObservableObject {
     @Published private(set) var canvasElements: [CanvasElementProtocol] = []
     @Published private(set) var umlConnectors: [UmlConnector] = []
-    var annotationCanvas = AnnotationCanvas()
+    @Published var annotationCanvas = AnnotationCanvas()
 
     var name: String = "common"
 

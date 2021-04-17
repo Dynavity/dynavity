@@ -88,6 +88,12 @@ extension AnnotationCanvasView: UIViewRepresentable {
             return
         }
 
+        // Update the drawing if it changed.
+        let updatedDrawing = viewModel.getAnnotations()
+        if annotationCanvasView.drawing != updatedDrawing {
+            annotationCanvasView.drawing = updatedDrawing
+        }
+
         // Update annotation tool
         annotationCanvasView.tool = viewModel.getCurrentTool()
     }
