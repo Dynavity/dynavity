@@ -43,20 +43,6 @@ class Canvas: ObservableObject {
         canvasElementCancellables.remove(at: index)
     }
 
-    private func removeAttachedConnectors(_ element: UmlElementProtocol?) {
-        guard let umlElement = element else {
-            return
-        }
-
-        for connector in umlConnectors {
-            if connector.connects.fromElement !== umlElement
-                    && connector.connects.toElement !== umlElement {
-                continue
-            }
-            removeUmlConnector(connector)
-        }
-    }
-
     func replace(canvasElements: [CanvasElementProtocol]) {
         self.canvasElements
             .filter { !($0 is UmlElementProtocol) }
@@ -93,6 +79,20 @@ extension Canvas {
         }
         umlConnectors.remove(at: index)
         umlConnectorCancellables.remove(at: index)
+    }
+    
+    private func removeAttachedConnectors(_ element: UmlElementProtocol?) {
+        guard let umlElement = element else {
+            return
+        }
+
+        for connector in umlConnectors {
+            if connector.connects.fromElement !== umlElement
+                    && connector.connects.toElement !== umlElement {
+                continue
+            }
+            removeUmlConnector(connector)
+        }
     }
 }
 
