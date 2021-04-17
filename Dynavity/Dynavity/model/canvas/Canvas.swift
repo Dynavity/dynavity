@@ -15,12 +15,12 @@ class Canvas: ObservableObject {
     init() {}
 
     init(canvas: Canvas) {
-        self.canvasElements = canvas.canvasElements
-        self.umlConnectors = canvas.umlConnectors
+        // The arrays of cancellables cannot be directly copied as they are weak references.
+        canvas.canvasElements.forEach(addElement)
+        canvas.umlConnectors.forEach(addUmlConnector)
+
         self.annotationCanvas = canvas.annotationCanvas
         self.name = canvas.name
-        self.canvasElementCancellables = canvas.canvasElementCancellables
-        self.umlConnectorCancellables = canvas.umlConnectorCancellables
     }
 
     func addElement(_ element: CanvasElementProtocol) {
@@ -36,8 +36,25 @@ class Canvas: ObservableObject {
             return
         }
 
+        if element is UmlElementProtocol {
+            removeAttachedConnectors(element as? UmlElementProtocol)
+        }
         canvasElements.remove(at: index)
         canvasElementCancellables.remove(at: index)
+    }
+
+    private func removeAttachedConnectors(_ element: UmlElementProtocol?) {
+        guard let umlElement = element else {
+            return
+        }
+
+        for connector in umlConnectors {
+            if connector.connects.fromElement !== umlElement
+                    && connector.connects.toElement !== umlElement {
+                continue
+            }
+            removeUmlConnector(connector)
+        }
     }
 }
 

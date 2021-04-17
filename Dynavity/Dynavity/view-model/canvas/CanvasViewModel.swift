@@ -7,6 +7,8 @@ import CodableFirebase
 
 class CanvasViewModel: ObservableObject {
     private static let autoSaveInterval = 10.0
+    // Arbitrarily large value for the "infinite" canvas.
+    private static let canvasSize: CGFloat = 500_000
 
     enum CanvasMode {
         case selection
@@ -110,8 +112,7 @@ class CanvasViewModel: ObservableObject {
     }
 
     convenience init(canvas: Canvas) {
-        // Arbitrarily large value for the "infinite" canvas.
-        self.init(canvas: canvas, canvasSize: 500_000)
+        self.init(canvas: canvas, canvasSize: CanvasViewModel.canvasSize)
     }
 
     convenience init() {
