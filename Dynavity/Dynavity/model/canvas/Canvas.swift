@@ -56,6 +56,25 @@ class Canvas: ObservableObject {
             removeUmlConnector(connector)
         }
     }
+
+    func replace(canvasElements: [CanvasElementProtocol]) {
+        self.canvasElements
+            .filter { !($0 is UmlElementProtocol) }
+            .forEach(removeElement)
+        canvasElements.forEach(addElement)
+    }
+
+    func replace(annotation: AnnotationCanvas) {
+        annotationCanvas = annotation
+    }
+
+    func replace(umlElements: [UmlElementProtocol]) {
+        print(umlElements)
+        self.canvasElements
+            .filter { $0 is UmlElementProtocol }
+            .forEach(removeElement)
+        umlElements.forEach(addElement)
+    }
 }
 
 // MARK: UML Connectors

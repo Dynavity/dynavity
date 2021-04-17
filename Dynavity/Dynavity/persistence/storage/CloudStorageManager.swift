@@ -2,6 +2,7 @@ import Foundation
 import FirebaseDatabase
 import CodableFirebase
 import Combine
+import PencilKit
 
 struct CloudStorageManager: OnlineStorageManager {
     let encoder = FirebaseEncoder()
@@ -138,19 +139,36 @@ struct CloudStorageManager: OnlineStorageManager {
 
     func addChangeListeners(model: OnlineCanvas) {
         let db = database.reference(withPath: "\(model.ownerId)/self/\(model.name)")
-        let elements = db.child("canvasElements")
-        elements.observe(.value) { snapshot in
+        db.child("canvasElements").observe(.value) { snapshot in
             guard let value = snapshot.value,
                   let loaded = try? decoder.decode([TypeWrappedCanvasElementDTO].self, from: value) else {
                 return
             }
-            model.canvasElements.forEach(model.removeElement)
-            loaded.map { $0.toModel() }.forEach(model.addElement)
+            model.replace(canvasElements: loaded.map { $0.toModel() })
         }
-        let annotation = db.child("annotationCanvas")
-        annotation.observe(.value) { snapshot in
-            print(snapshot.value!)
+        db.child("annotationCanvas").observe(.value) { snapshot in
+            guard let value = snapshot.value,
+                  let loaded = try? decoder.decode(Data.self, from: value) else {
+                return
+            }
+            let drawing = (try? PKDrawing(data: loaded)) ?? PKDrawing()
+            model.replace(annotation: AnnotationCanvas(drawing: drawing))
         }
+        db.child("umlCanvasElements").observe(.value) { snapshot in
+            guard let value = snapshot.value,
+                  let loaded = try? decoder.decode([TypeWrappedUmlElementDTO].self, from: value) else {
+                return
+            }
+            model.replace(umlElements: loaded.map { $0.toModel().umlElement })
+        }
+//        db.child("umlConnectors").observe(.value) { snapshot in
+//            guard let value = snapshot.value,
+//                  let loaded = try? decoder.decode([UmlConnectorDTO].self, from: value) else {
+//                return
+//            }
+//            model.umlConnectors.forEach(model.removeUmlConnector)
+//            loaded.map { $0.toModel() }.forEach(model.addUmlConnector)
+//        }
     }
 }
 
