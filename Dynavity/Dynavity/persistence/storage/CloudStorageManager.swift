@@ -135,6 +135,22 @@ struct CloudStorageManager: OnlineStorageManager {
         // return imported canvas
         return canvas
     }
+
+    func addChangeListeners(model: OnlineCanvas) {
+        let db = database.reference(withPath: "\(model.ownerId)/self/\(model.name)")
+        let elements = db.child("canvasElements")
+        elements.observe(.value) { snapshot in
+            guard let value = snapshot.value,
+                  let loaded = try? decoder.decode([TypeWrappedCanvasElementDTO].self, from: value) else {
+                return
+            }
+            model.canvasElements = loaded.map { $0.toModel() }
+        }
+        let annotation = db.child("annotationCanvas")
+        annotation.observe(.value) { snapshot in
+            print(snapshot.value!)
+        }
+    }
 }
 
 // struct to help with decoding
