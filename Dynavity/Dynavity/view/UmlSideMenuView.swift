@@ -6,10 +6,8 @@ struct UmlSideMenuView: View {
     private let umlCloseButtonOffset: CGFloat = -12.0
     private let shapePreviewSize: CGFloat = 80.0
 
-    private let umlElements: [UmlElementProtocol] = [ActivityUmlElement(position: CGPoint(x: 250_000, y: 250_000),
-                                                                        shape: .diamond),
-                                                     ActivityUmlElement(position: CGPoint(x: 250_000, y: 250_000),
-                                                                        shape: .rectangle)]
+    private let umlElements: [UmlElementProtocol] = [ActivityUmlElement(position: .zero, shape: .diamond),
+                                                     ActivityUmlElement(position: .zero, shape: .rectangle)]
 
     let columns = [
         GridItem(.flexible()),
