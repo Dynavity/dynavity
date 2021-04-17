@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-struct TodoElementDTO: CanvasElementProtocolDTO, Mappable {
+struct TodoElementDTO: CanvasElementDTOProtocol, Mappable {
     struct TodoDTO: Mappable, Codable {
         let label: String
         let isCompleted: Bool

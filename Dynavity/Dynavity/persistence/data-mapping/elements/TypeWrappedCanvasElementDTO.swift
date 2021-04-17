@@ -34,7 +34,7 @@ enum TypeWrappedCanvasElementDTO: Mappable {
         }
     }
 
-    var data: CanvasElementProtocolDTO {
+    var data: CanvasElementDTOProtocol {
         switch self {
         case .image(let data):
             return data

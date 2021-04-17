@@ -1,6 +1,6 @@
 import CoreGraphics
 
-struct ImageElementDTO: CanvasElementProtocolDTO, Mappable {
+struct ImageElementDTO: CanvasElementDTOProtocol, Mappable {
     let canvasProperties: CanvasElementPropertiesDTO
 
     let imageDTO: UIImageDTO

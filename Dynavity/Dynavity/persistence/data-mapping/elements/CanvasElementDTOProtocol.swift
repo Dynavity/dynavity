@@ -1,5 +1,5 @@
 import CoreGraphics
 
-protocol CanvasElementProtocolDTO: Codable {
+protocol CanvasElementDTOProtocol: Codable {
     var canvasProperties: CanvasElementPropertiesDTO { get }
 }

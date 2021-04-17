@@ -1,6 +1,6 @@
 import CoreGraphics
 
-struct PlainTextElementDTO: CanvasElementProtocolDTO, Mappable {
+struct PlainTextElementDTO: CanvasElementDTOProtocol, Mappable {
     let canvasProperties: CanvasElementPropertiesDTO
 
     let text: String

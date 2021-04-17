@@ -1,6 +1,6 @@
 import CoreGraphics
 
-struct PDFElementDTO: CanvasElementProtocolDTO, Mappable {
+struct PDFElementDTO: CanvasElementDTOProtocol, Mappable {
     let canvasProperties: CanvasElementPropertiesDTO
 
     let pdfDocumentDTO: PDFDocumentDTO
