@@ -9,6 +9,7 @@ struct SideMenuView: View {
     }
 
     @StateObject private var sideMenuViewModel = SideMenuViewModel()
+    @State private var shouldShowShareMenu = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -31,7 +32,14 @@ struct SideMenuView: View {
             }
             if let onlineCanvas = canvasViewModel.canvas as? OnlineCanvas {
                 SideMenuContentView(label: "Shareable ID") {
-                    Text(onlineCanvas.shareableId)
+                    Button(action: {
+                        shouldShowShareMenu = true
+                    }) {
+                        Text(onlineCanvas.shareableId)
+                    }
+                    .sheet(isPresented: $shouldShowShareMenu) {
+                        ShareMenuView(itemsToShare: [onlineCanvas.shareableId])
+                    }
                 }
             } else {
                 Button("Publish") {
