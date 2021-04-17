@@ -9,6 +9,5 @@ class PKCanvasWrapperView: PKCanvasView {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // This maintains the inherited functionality of PKCanvasView to do the drawing
         super.touchesBegan(touches, with: event)
-        // TODO: Possibly add CanvasElement on user's touch location
     }
 }
