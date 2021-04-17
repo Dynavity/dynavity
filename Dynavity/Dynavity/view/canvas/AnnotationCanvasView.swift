@@ -88,6 +88,12 @@ extension AnnotationCanvasView: UIViewRepresentable {
             return
         }
 
+        // Update the drawing if it changed.
+        let updatedDrawing = viewModel.getAnnotations()
+        if annotationCanvasView.drawing != updatedDrawing {
+            annotationCanvasView.drawing = updatedDrawing
+        }
+
         // Update annotation tool
         annotationCanvasView.tool = viewModel.getCurrentTool()
     }
@@ -111,9 +117,7 @@ class Coordinator: NSObject {
 
 extension Coordinator: PKCanvasViewDelegate {
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-        if !canvasView.drawing.bounds.isEmpty {
-            onChange()
-        }
+        onChange()
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
