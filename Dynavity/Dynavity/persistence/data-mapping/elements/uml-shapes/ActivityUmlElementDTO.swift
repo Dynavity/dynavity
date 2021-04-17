@@ -1,6 +1,6 @@
 import CoreGraphics
 
-struct ActivityUmlElementDTO: UmlElementProtocolDTO {
+struct ActivityUmlElementDTO: Mappable, UmlElementProtocolDTO {
     let canvasProperties: CanvasElementPropertiesDTO
 
     var label: String
