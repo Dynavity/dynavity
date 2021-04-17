@@ -33,7 +33,6 @@ schemes:
       config: Debug
       targets:
       - DynavityTests
-      - DynavityUITests
 settings:
   configs:
     Debug:
@@ -110,25 +109,3 @@ targets:
     - name: DynavityTests
       path: DynavityTests
     type: bundle.unit-test
-  DynavityUITests:
-    dependencies:
-    - target: Dynavity
-    platform: iOS
-    settings:
-      configs:
-        Debug:
-          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
-          CODE_SIGN_STYLE: Automatic
-          INFOPLIST_FILE: DynavityUITests/Info.plist
-          SWIFT_VERSION: 5.0
-          TEST_TARGET_NAME: Dynavity
-        Release:
-          ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
-          CODE_SIGN_STYLE: Automatic
-          INFOPLIST_FILE: DynavityUITests/Info.plist
-          SWIFT_VERSION: 5.0
-          TEST_TARGET_NAME: Dynavity
-    sources:
-    - name: DynavityUITests
-      path: DynavityUITests
-    type: bundle.ui-testing

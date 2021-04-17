@@ -5,7 +5,6 @@ struct CanvasThumbnailView: View {
     var isSelected: Bool
     var body: some View {
         VStack {
-            // TODO: replace this with canvas thumbnail
             Image(systemName: "doc")
                 .resizable()
                 .aspectRatio(contentMode: .fill)

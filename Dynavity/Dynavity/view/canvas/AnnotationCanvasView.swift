@@ -3,7 +3,7 @@ import PencilKit
 
 struct AnnotationCanvasView: View {
     @ObservedObject var viewModel: CanvasViewModel
-    @State private var annotationCanvasView = PKCanvasWrapperView()
+    @State private var annotationCanvasView = PKCanvasView()
     private let isDrawingDisabled: Bool
 
     private var shouldUpdateViewport: Bool {
