@@ -144,7 +144,8 @@ struct CloudStorageManager: OnlineStorageManager {
                   let loaded = try? decoder.decode([TypeWrappedCanvasElementDTO].self, from: value) else {
                 return
             }
-            model.canvasElements = loaded.map { $0.toModel() }
+            model.canvasElements.forEach(model.removeElement)
+            loaded.map { $0.toModel() }.forEach(model.addElement)
         }
         let annotation = db.child("annotationCanvas")
         annotation.observe(.value) { snapshot in
