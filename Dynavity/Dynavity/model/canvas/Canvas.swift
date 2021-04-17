@@ -58,15 +58,10 @@ class Canvas: ObservableObject {
         self.annotationCanvas = annotation
     }
 
-    func replace(umlElements: [UmlElementProtocol]) {
-        let oldConnectors = umlConnectors
+    func replace(umlElements: [UmlElementProtocol], umlConnectors: [UmlConnector]) {
+        self.umlConnectors.forEach(removeUmlConnector)
         self.umlElements.forEach(removeElement)
         umlElements.forEach(addElement)
-        replace(umlConnectors: oldConnectors)
-    }
-
-    func replace(umlConnectors: [UmlConnector]) {
-        self.umlConnectors.forEach(removeUmlConnector)
         umlConnectors.forEach(addUmlConnector)
     }
 }

@@ -154,21 +154,14 @@ struct CloudStorageManager: OnlineStorageManager {
             let drawing = (try? PKDrawing(data: loaded)) ?? PKDrawing()
             model.replace(annotation: AnnotationCanvas(drawing: drawing))
         }
-        db.child("umlCanvasElements").observe(.value) { snapshot in
+        db.child("umlDiagram").observe(.value) { snapshot in
             guard let value = snapshot.value,
-                  let loaded = try? decoder.decode([TypeWrappedUmlElementDTO].self, from: value) else {
+                  let loaded = try? decoder.decode(UmlDiagramDTO.self, from: value) else {
                 return
             }
-            model.replace(umlElements: loaded.map { $0.toModel().umlElement })
+            let diagram = loaded.toModel()
+            model.replace(umlElements: diagram.elements, umlConnectors: diagram.connectors)
         }
-//        db.child("umlConnectors").observe(.value) { snapshot in
-//            guard let value = snapshot.value,
-//                  let loaded = try? decoder.decode([UmlConnectorDTO].self, from: value) else {
-//                return
-//            }
-//            // TODO: does not work as we have lost our ID information
-//            model.replace(umlConnectors: loaded.map { $0.toModel() })
-//        }
     }
 }
 
