@@ -4,7 +4,7 @@ import CodableFirebase
 import Combine
 import PencilKit
 
-struct CloudStorageManager: OnlineStorageManager {
+struct CloudStorageManager: OnlineStorageManagerProtocol {
     let encoder = FirebaseEncoder()
     let decoder = FirebaseDecoder()
     let userId = OnlineCanvasDTO.myUserId

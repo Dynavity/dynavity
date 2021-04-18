@@ -1,6 +1,6 @@
 import Foundation
 
-struct LocalStorageManager: OfflineStorageManager {
+struct LocalStorageManager: OfflineStorageManagerProtocol {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
     private let fileManager = FileManager.default
@@ -43,7 +43,7 @@ struct LocalStorageManager: OfflineStorageManager {
 }
 
 // MARK: Canvas
-extension LocalStorageManager: StorageManager {
+extension LocalStorageManager: StorageManagerProtocol {
     private static let canvasFileExt: String = "json"
 
     func readAll() throws -> [CanvasDTO] {
