@@ -13,4 +13,5 @@ protocol OfflineStorageManager: StorageManager where ModelDTO == CanvasDTO {
 
 protocol OnlineStorageManager: StorageManager where ModelDTO == OnlineCanvasDTO {
     func importCanvas(ownerId: String, canvasName: String) throws -> OnlineCanvasDTO?
+    func addChangeListeners(model: OnlineCanvas)
 }

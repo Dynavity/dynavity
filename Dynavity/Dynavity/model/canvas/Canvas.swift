@@ -5,9 +5,13 @@ import CoreGraphics
 class Canvas: ObservableObject {
     @Published private(set) var canvasElements: [CanvasElementProtocol] = []
     @Published private(set) var umlConnectors: [UmlConnector] = []
-    var annotationCanvas = AnnotationCanvas()
+    @Published var annotationCanvas = AnnotationCanvas()
 
     var name: String = "common"
+
+    var umlElements: [UmlElementProtocol] {
+        canvasElements.compactMap { $0 as? UmlElementProtocol }
+    }
 
     private var canvasElementCancellables: [AnyCancellable] = []
     private var umlConnectorCancellables: [AnyCancellable] = []
@@ -36,25 +40,29 @@ class Canvas: ObservableObject {
             return
         }
 
-        if element is UmlElementProtocol {
-            removeAttachedConnectors(element as? UmlElementProtocol)
+        if let umlElement = element as? UmlElementProtocol {
+            removeAttachedConnectors(umlElement)
         }
         canvasElements.remove(at: index)
         canvasElementCancellables.remove(at: index)
     }
 
-    private func removeAttachedConnectors(_ element: UmlElementProtocol?) {
-        guard let umlElement = element else {
-            return
-        }
+    func replace(canvasElements: [CanvasElementProtocol]) {
+        self.canvasElements
+            .filter { !($0 is UmlElementProtocol) }
+            .forEach(removeElement)
+        canvasElements.forEach(addElement)
+    }
 
-        for connector in umlConnectors {
-            if connector.connects.fromElement !== umlElement
-                    && connector.connects.toElement !== umlElement {
-                continue
-            }
-            removeUmlConnector(connector)
-        }
+    func replace(annotation: AnnotationCanvas) {
+        self.annotationCanvas = annotation
+    }
+
+    func replace(umlElements: [UmlElementProtocol], umlConnectors: [UmlConnector]) {
+        self.umlConnectors.forEach(removeUmlConnector)
+        self.umlElements.forEach(removeElement)
+        umlElements.forEach(addElement)
+        umlConnectors.forEach(addUmlConnector)
     }
 }
 
@@ -74,6 +82,16 @@ extension Canvas {
         }
         umlConnectors.remove(at: index)
         umlConnectorCancellables.remove(at: index)
+    }
+
+    private func removeAttachedConnectors(_ umlElement: UmlElementProtocol) {
+        for connector in umlConnectors {
+            if connector.connects.fromElement !== umlElement
+                    && connector.connects.toElement !== umlElement {
+                continue
+            }
+            removeUmlConnector(connector)
+        }
     }
 }
 

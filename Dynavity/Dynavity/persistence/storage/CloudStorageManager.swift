@@ -2,6 +2,7 @@ import Foundation
 import FirebaseDatabase
 import CodableFirebase
 import Combine
+import PencilKit
 
 struct CloudStorageManager: OnlineStorageManager {
     let encoder = FirebaseEncoder()
@@ -134,6 +135,33 @@ struct CloudStorageManager: OnlineStorageManager {
 
         // return imported canvas
         return canvas
+    }
+
+    func addChangeListeners(model: OnlineCanvas) {
+        let db = database.reference(withPath: "\(model.ownerId)/self/\(model.name)")
+        db.child("canvasElements").observe(.value) { snapshot in
+            guard let value = snapshot.value,
+                  let loaded = try? decoder.decode([TypeWrappedCanvasElementDTO].self, from: value) else {
+                return
+            }
+            model.replace(canvasElements: loaded.map { $0.toModel() })
+        }
+        db.child("annotationCanvas").observe(.value) { snapshot in
+            guard let value = snapshot.value,
+                  let loaded = try? decoder.decode(Data.self, from: value) else {
+                return
+            }
+            let drawing = (try? PKDrawing(data: loaded)) ?? PKDrawing()
+            model.replace(annotation: AnnotationCanvas(drawing: drawing))
+        }
+        db.child("umlDiagram").observe(.value) { snapshot in
+            guard let value = snapshot.value,
+                  let loaded = try? decoder.decode(UmlDiagramDTO.self, from: value) else {
+                return
+            }
+            let diagram = loaded.toModel()
+            model.replace(umlElements: diagram.elements, umlConnectors: diagram.connectors)
+        }
     }
 }
 

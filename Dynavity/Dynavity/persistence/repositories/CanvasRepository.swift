@@ -100,4 +100,8 @@ struct CanvasRepository: Repository {
             return false
         }
     }
+
+    func addCloudChangeListeners(model: OnlineCanvas) {
+        cloudStorageManager.addChangeListeners(model: model)
+    }
 }
