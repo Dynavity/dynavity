@@ -22,4 +22,22 @@ class OnlineCanvas: Canvas {
         self.ownerId = ownerId
         super.init(canvas: canvas)
     }
+
+    func replace(canvasElements: [CanvasElementProtocol]) {
+        self.canvasElements
+            .filter { !($0 is UmlElementProtocol) }
+            .forEach(removeElement)
+        canvasElements.forEach(addElement)
+    }
+
+    func replace(annotation: AnnotationCanvas) {
+        self.annotationCanvas = annotation
+    }
+
+    func replace(umlElements: [UmlElementProtocol], umlConnectors: [UmlConnector]) {
+        self.umlConnectors.forEach(removeUmlConnector)
+        self.umlElements.forEach(removeElement)
+        umlElements.forEach(addElement)
+        umlConnectors.forEach(addUmlConnector)
+    }
 }
