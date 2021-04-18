@@ -6,8 +6,8 @@ struct UmlConnectorView: View {
 
     private let umlConnectorLineWidth: CGFloat = 1.0
     private let umlConnectorLineColor: Color = .black
-    private let umlConnectorHitboxWidth: CGFloat = 20.0
-    private let umlConnectorHitboxOpacity: Double = 0.001
+    private let umlConnectorHitboxWidth: CGFloat = 40.0
+    private let umlConnectorHitboxOpacity: Double = 0.5
 
     private func isSelected(umlConnector: UmlConnector) -> Bool {
         viewModel.selectedUmlConnector === umlConnector
@@ -35,7 +35,7 @@ struct UmlConnectorView: View {
 
         let pathHitbox = generatePathFromPoints(points)
             // Prevent hitbox from covering other connectors, yet allow it to detect touches
-            .stroke(Color.white.opacity(umlConnectorHitboxOpacity), lineWidth: umlConnectorHitboxWidth)
+            .stroke(Color.blue.opacity(umlConnectorHitboxOpacity), lineWidth: umlConnectorHitboxWidth)
 
         return pathHitbox
             .overlay(path)

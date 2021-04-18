@@ -1,6 +1,6 @@
 import SwiftUI
 
-protocol ViewFactory {
+protocol ViewFactoryProtocol {
     associatedtype View
     func createView(element: CanvasElementProtocol) -> View
 }

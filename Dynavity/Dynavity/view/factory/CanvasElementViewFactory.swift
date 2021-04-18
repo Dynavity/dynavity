@@ -1,6 +1,6 @@
 import SwiftUI
 
-class CanvasElementViewFactory: ViewFactory {
+class CanvasElementViewFactory: ViewFactoryProtocol {
     private let umlElementFactory = UmlElementViewFactory()
 
     func createView(element: CanvasElementProtocol) -> some View {
