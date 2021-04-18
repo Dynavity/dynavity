@@ -1,4 +1,4 @@
-protocol UmlElementProtocolDTO: CanvasElementDTOProtocol {
+protocol UmlElementDTOProtocol: CanvasElementDTOProtocol {
     var label: String { get set }
     var umlType: String { get }
     var umlShape: String { get }
