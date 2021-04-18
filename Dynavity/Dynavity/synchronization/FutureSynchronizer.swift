@@ -13,8 +13,8 @@ class FutureSynchronizer<T> {
 
     func blockForValue() -> T? {
         let block = DispatchSemaphore(value: 0)
-        cancel = publisher.sink { value in
-            self.value = value
+        cancel = publisher.sink { [weak self] value in
+            self?.value = value
             block.signal()
         }
         block.wait()

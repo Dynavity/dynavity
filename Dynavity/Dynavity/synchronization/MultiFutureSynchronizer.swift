@@ -14,8 +14,8 @@ class MultiFutureSynchronizer<T> {
     func blockForValue() -> [T] {
         let block = DispatchSemaphore(value: 0)
         for publisher in publishers {
-            let cancel = publisher.sink { value in
-                self.values.append(value)
+            let cancel = publisher.sink { [weak self] value in
+                self?.values.append(value)
                 block.signal()
             }
             cancels.append(cancel)
