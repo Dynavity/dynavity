@@ -14,7 +14,7 @@ enum TypeWrappedUmlElementDTO: Mappable {
         }
     }
 
-    var data: UmlElementProtocolDTO {
+    var data: UmlElementDTOProtocol {
         switch self {
         case .umlActivity(let data):
             return data
