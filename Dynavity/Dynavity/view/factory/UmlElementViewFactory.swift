@@ -1,6 +1,6 @@
 import SwiftUI
 
-class UmlElementViewFactory: ViewFactory {
+class UmlElementViewFactory: ViewFactoryProtocol {
     func createView(element: CanvasElementProtocol) -> some View {
         Group {
             switch element {
