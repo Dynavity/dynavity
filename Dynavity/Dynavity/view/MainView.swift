@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MainView: View {
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var canvasViewModel: CanvasViewModel
     @State private var shouldShowMenu = false
 
@@ -57,7 +58,8 @@ struct MainView: View {
         NavigationView {
             ZStack(alignment: .leading) {
                 VStack(spacing: 0.0) {
-                    ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu)
+                    ToolbarView(viewModel: canvasViewModel, shouldShowSideMenu: $shouldShowMenu,
+                                canvasPresentationMode: presentationMode)
                     Divider()
                     CanvasView(viewModel: canvasViewModel)
                 }

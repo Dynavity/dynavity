@@ -21,6 +21,7 @@ struct ToolbarView: View {
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
+    @Binding var canvasPresentationMode: PresentationMode
 
     let columns = [
         GridItem(.flexible()),
@@ -202,12 +203,11 @@ struct ToolbarView: View {
     }
 
     private var homeButton: some View {
-        NavigationLink(destination: CanvasSelectionView()
-                        .navigationBarHidden(true)
-                        .navigationBarBackButtonHidden(true)) {
+        Button(action: {
+            self.canvasPresentationMode.dismiss()
+        }) {
             Image(systemName: "house")
         }
-        .navigationBarHidden(true)
     }
 
     var body: some View {
@@ -250,7 +250,9 @@ struct ToolbarView: View {
 }
 
 struct ToolbarView_Previews: PreviewProvider {
+    @Environment(\.presentationMode) static var presentation
     static var previews: some View {
-        ToolbarView(viewModel: CanvasViewModel(), shouldShowSideMenu: .constant(true))
+        ToolbarView(viewModel: CanvasViewModel(), shouldShowSideMenu: .constant(true),
+                    canvasPresentationMode: presentation)
     }
 }
