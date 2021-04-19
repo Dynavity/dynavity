@@ -18,6 +18,7 @@ struct ToolbarView: View {
     private let selectorSize: CGFloat = 40.0
     private let spacerWidth: CGFloat = 300.0
 
+    @EnvironmentObject var graphViewModel: GraphViewModel
     @ObservedObject var viewModel: CanvasViewModel
     @State private var activeSheet: ActiveSheet?
     @Binding var shouldShowSideMenu: Bool
@@ -205,6 +206,7 @@ struct ToolbarView: View {
     private var homeButton: some View {
         Button(action: {
             self.canvasPresentationMode.dismiss()
+            self.graphViewModel.longPressedNode = nil
         }) {
             Image(systemName: "house")
         }
